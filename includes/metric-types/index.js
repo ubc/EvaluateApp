@@ -1,12 +1,11 @@
 
-module.exports = {
-	"one-way": require('./one-way'),
-};
+const FILE = require("fs");
 
-/*
-var normalizedPath = require("path").join(__dirname, "routes");
+module.exports = {};
 
-require("fs").readdirSync(normalizedPath).forEach(function(file) {
-  require("./routes/" + file);
-});
-*/
+FILE.readdirSync( __dirname ).forEach( function( file ) {
+	if ( file != "index.js" ) {
+		var object = require( "./" + file );
+		module.exports[ object.slug ] = object;
+	}
+} );
