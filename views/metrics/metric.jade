@@ -13,9 +13,12 @@ html
 		script.
 			data = {
 				vote_url: "/api/vote/#{metric['metric_id']}",
+				transaction_id: "#{transaction_id}",
+				/*
 				metric_id: "#{metric['metric_id']}",
 				context_id: "context",//"#{context_id}",
 				user_id: "user",//#{context_id},
 				nonce: "none", // TODO: Implement nonces
+				*/
 			};
 		script(src="/javascripts/metrics.js")

@@ -32,18 +32,12 @@ jQuery( '.vote  *:input' ).change( function() {
 	var new_vote = extract_value(input);
 
 	console.log( "Sending vote", {
-		nonce: data.nonce,
-		metric_id: data.metric_id,
-		context_id: data.context_id,
-		user_id: data.user_id,
+		transaction_id: data.transaction_id,
 		vote: new_vote,
 	}, "to", data.vote_url );
 	
 	jQuery.post( data.vote_url, {
-		nonce: data.nonce,
-		metric_id: data.metric_id,
-		context_id: data.context_id,
-		user_id: data.user_id,
+		transaction_id: data.transaction_id,
 		vote: new_vote,
 	}, function( response ) {
 		console.log( "Received", response );
