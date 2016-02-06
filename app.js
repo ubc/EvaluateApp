@@ -1,30 +1,36 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const EXPRESS = require('express');
+const PATH = require('path');
+const FAVICON = require('serve-favicon');
+const LOGGER = require('morgan');
+const COOKIEPARSER = require('cookie-parser');
+const BODYPARSER = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+const ROUTES = require('./routes/index');
+const USERS = require('./routes/users');
+const METRICS = require('./routes/metrics');
+const API = require('./routes/api');
+const MANAGE = require('./routes/manage');
 
-var app = express();
+var app = EXPRESS();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('views', PATH.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(FAVICON(PATH.join(__dirname, 'public', 'favicon.ico')));
+app.use(LOGGER('dev'));
+app.use(BODYPARSER.json());
+app.use(BODYPARSER.urlencoded({ extended: true }));
+app.use(COOKIEPARSER());
+app.use(require('less-middleware')(PATH.join(__dirname, 'public')));
+app.use(EXPRESS.static(PATH.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/', ROUTES);
+app.use('/users', USERS);
+app.use('/metric', METRICS);
+app.use('/api', API);
+app.use('/manage', MANAGE);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,6 +62,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

@@ -1,0 +1,34 @@
+extends ./metric.jade
+
+block content
+	-
+		metric_id = metric['metric_id']
+		icon = metric['options']['icon']
+		text_up = metric['options']['text_up']
+		text_down = metric['options']['text_down']
+		value = score['display']
+
+	label.vote
+		input(
+			name = 'metric-'+metric_id
+			type = 'radio'
+			value = 1
+			checked = ( user_vote === 1 )
+			data-previous = ( user_vote == 1 ? "true" : "false" )
+		)
+		i(class = 'icon-'+icon+'-up')
+		span
+			| #{text_up}
+	label.vote
+		input(
+			name = 'metric-'+metric_id
+			type = 'radio'
+			value = -1
+			checked = ( user_vote === -1 )
+			data-previous = ( user_vote == -1 ? "true" : "false" )
+		)
+		i(class = 'icon-'+icon+'-down')
+		span
+			| #{text_down}
+	span.score
+		| #{value}

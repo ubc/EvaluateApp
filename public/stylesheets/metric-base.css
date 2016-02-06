@@ -1,0 +1,1 @@
+.vote{color:#777;cursor:pointer}.vote.active .vote{color:inherit}.vote input:checked+*{color:#333}.vote input[type="radio"],.vote input[type="checkbox"]{display:none}

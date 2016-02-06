@@ -1,0 +1,18 @@
+
+.vote {
+	color: #777;
+	cursor: pointer;
+
+	&.active .vote {
+		color: inherit;
+	}
+
+	input:checked + * {
+		color: #333;
+	}
+
+	input[type="radio"],
+	input[type="checkbox"] {
+		display: none;
+	}
+}

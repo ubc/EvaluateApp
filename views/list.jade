@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	a(href="/manage/create")= "Create"
+	table
+		thead
+			tr
+				th= "Metric"
+				th= "Created On"
+		tbody
+			each metric in metrics
+				tr
+					td
+						a(href="/manage/edit/#{metric['metric_id']}")
+							| #{metric['name']}
+					td= metric['created']

@@ -1,0 +1,49 @@
+extends ./metric.jade
+
+block content
+	-
+		metric_id = metric['metric_id'];
+		icon = metric['options']['icon'];
+		max = metric['options']['max'];
+		value = score['display'];
+
+	if icon === 'slider'
+		label.vote
+			input(
+				name = 'metric-'+metric_id
+				input = 'range'
+				min = '0'
+				step = '1'
+				max = max
+				value = user_vote
+			)
+	else if icon == 'numeric'
+		label.vote
+			input(
+				name = 'metric-'+metric_id
+				input = 'number'
+				min = '0'
+				step = '1'
+				max = max
+				value = user_vote
+				placeholder = '0'
+			)
+			span= "/ " + max + " - "
+	else
+		+step(max, icon, metric_id, user_vote)
+
+mixin step( i, icon, metric_id, user_vote )
+	if i > 0
+		- icon_state = 'up' // ( i <= user_vote ) ? 'up' : 'empty'
+
+		span.vote
+			+step( i - 1, icon, metric_id, user_vote )
+			label
+				input(
+					name = 'metric-'+metric_id
+					type = 'radio'
+					value = i
+					checked = ( user_vote === i )
+					data-previous = ( user_vote == i ? "true" : "false" )
+				)
+				i(class='icon-'+icon+'-'+icon_state)

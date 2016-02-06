@@ -1,0 +1,236 @@
+extends layout
+
+block scripts
+	script(src="/javascripts/editor.js")
+
+block content
+	-
+		metric_types = {
+			'one-way': "One Way",
+			'two-way': "Two Way",
+			'range': "Range",
+			'poll': "Poll",
+			'rubric': "Rubric",
+		}
+
+		name = metric.name || ""
+		title = metric.options['title'] || ""
+		type = metric.options['type'] || "one-way"
+
+	form.pure-form(method="POST")
+		dl
+			if metric_id
+				+field("Metric UUID")
+					span= metric_id
+			+field("Name")
+				input(
+					name= "name"
+					type= "text"
+					value= "#{name}"
+					autocomplete= "off"
+				)
+			+field("Type")
+				select.switch(name="type", data-anchor=".options")
+					each title, slug in metric_types
+						option(value="#{slug}", selected=(type == slug))
+							| #{title}
+			+field("Display Title")
+				input(
+					name= "options[title]"
+					type= "text"
+					value= "#{title}"
+					autocomplete= "off"
+				)
+
+		+options-one-way(type, metric['options'])
+		+options-two-way(type, metric['options'])
+		+options-range(type, metric['options'])
+		+options-poll(type, metric['options'])
+		+options-rubric(type, metric['options'])
+
+		input.pure-button(type="submit", value="Save")
+
+	if metric_id != null
+		br
+		strong= "Preview"
+		br
+		iframe(src="/metric/#{metric_id}")
+
+
+mixin options(slug, active)
+	dl.options(
+		class=slug
+		style=(active ? '' : "display:none;")
+	)
+		block
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+mixin options-one-way(type, options)
+	-
+		slug = 'one-way'
+		icons = {
+			thumbs: "Thumb",
+			stars: "Star",
+			arrows: "Arrow",
+		}
+
+		active = ( type == slug )
+		icon = options['icon'] || "arrows"
+		text = options['text'] || ""
+
+	+options(slug, active)
+		+field("Icon")
+			select(name="options[icon]")
+				each title, slug in icons
+					option(value="#{slug}", selected=(icon == slug))
+						| #{title}
+		+field("Text")
+			input(
+				name= "options[text]"
+				type= "text"
+				value= "#{text}"
+				autocomplete= "off"
+			)
+
+mixin options-two-way(type, options)
+	-
+		slug = 'two-way'
+		icons = {
+			thumbs: "Thumbs",
+			arrows: "Arrows",
+		}
+
+		active = ( type == slug )
+		icon = options['icon'] || "thumbs"
+		text_up = options['text_up'] || ""
+		text_down = options['text_down'] || ""
+
+	+options(slug, active)
+		+field("Icon")
+			select(name="options[icon]")
+				each title, slug in icons
+					option(value="#{slug}", selected=(icon == slug))
+						| #{title}
+		+field("Text")
+			input(
+				name= "options[text_up]"
+				type= "text"
+				value= "#{text_up}"
+				placeholder= "Up"
+				autocomplete= "off"
+			)
+			br
+			input(
+				name= "options[text_down]"
+				type= "text"
+				value= "#{text_down}"
+				placeholder= "Down"
+				autocomplete= "off"
+			)
+
+mixin options-range(type, options)
+	-
+		slug = 'range'
+		icons = {
+			numeric: "Numeric",
+			slider: "Slider",
+			stars: "Stars",
+			thumbs: "Thumbs",
+		}
+
+		active = ( type == slug )
+		icon = options['icon'] || "stars"
+		max = options['max'] || 5
+
+	+options(slug, active)
+		+field("Icon")
+			select(name="options[icon]")
+				each title, slug in icons
+					option(value="#{slug}", selected=(icon == slug))
+						| #{title}
+		+field("Max")
+			input(
+				name= "options[max]"
+				type= "number"
+				value= "#{max}"
+				autocomplete= "off"
+			)
+
+mixin options-poll(type, options)
+	-
+		slug = 'poll'
+
+		active = ( type == slug )
+		answers = options['answers'] || ""
+
+	+options(slug, active)
+		+field("Answers")
+			textarea(
+				name= "options[answers]"
+				value= "#{answerss}"
+				autocomplete= "off"
+			)
+			br
+			small: em= "One answer per line."
+
+mixin options-rubric(type, options)
+	-
+		slug = "rubric"
+		blueprints = {
+			test1: {
+				title: "Sample Blueprint",
+				description: "This is an example definition for a rubric.",
+				fields: {
+					'first': {
+						name: "Sample",
+						type: "One Way",
+						weight: 1.0,
+						options: {
+							title: "Urego",
+							icon: "thumbs",
+							text: "Up",
+						},
+					},
+					'second': {
+						name: "Example",
+						type: "Two Way",
+						weight: 1.0,
+						options: {
+							icon: "arrows",
+							text_up: "Good!",
+							text_down: "Bad!",
+						},
+					},
+				},
+			},
+		}
+
+		active = ( type == slug )
+		blueprint = options['blueprint'] || ""
+		fields = options['fields'] || {}
+
+	+options(slug, active)
+		+field("Blueprint")
+			select.switch(name="blueprint", data-anchor=".blueprint")
+				option(value="")
+					| - Choose a Blueprint -
+				each blueprint, slug in blueprints
+					option(value="#{slug}", selected=(blueprint == slug))
+						| #{blueprint['title']}
+			each blueprint, slug in blueprints
+				div.blueprint(class=slug, style=(blueprint == slug ? '' : "display:none;"))
+					p #{blueprint['description']}
+					ul: each field in blueprint['fields']
+						li= field['name'] + ": " + field['type'] + " with weight " + field['weight'] + " options:<br>" + JSON.stringify(field['options'])
+
+
+
+
+
+
+
+
