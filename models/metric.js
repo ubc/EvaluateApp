@@ -1,7 +1,7 @@
 
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
-const TYPES = require('../includes/metric-types');
+const TYPES = require('../metric-types');
 
 module.exports = DATABASE.define( 'Metric', {
 	metric_id: {

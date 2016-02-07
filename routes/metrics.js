@@ -1,5 +1,6 @@
 
-const PROMISE = require("sequelize").Promise;
+const JADE = require('jade')
+const PROMISE = require('sequelize').Promise;
 const EXPRESS = require('express');
 const METRIC = require('../models/metric');
 const VOTE = require('../models/vote');
@@ -7,6 +8,14 @@ const SCORE = require('../models/score');
 const TRANSACTION = require('../includes/transaction');
 
 var router = EXPRESS.Router();
+
+router.get('/:id/', function( req, res, next ) {
+	METRIC.findById( req.params.id ).then( function( metric ) {
+		res.render( '../metric-types/' + metric.type.slug, {
+			metric: metric,
+		} );
+	} );
+});
 
 router.get('/:id/:user_id', function( req, res, next ) {
 	var promises = [];
@@ -37,6 +46,7 @@ router.get('/:id/:user_id', function( req, res, next ) {
 			user_id: req.params.user_id,
 		}, TRANSACTION.DURATION.ONE_DAY );
 
+		/*
 		res.render( 'metrics/' + metric.type.slug, {
 			transaction_id: transaction_id,
 			metric: metric,
@@ -45,6 +55,20 @@ router.get('/:id/:user_id', function( req, res, next ) {
 				display: score != null ? score.display : "0",
 			},
 		} );
+		*/
+
+		res.render( "test", {} );
+
+		return;
+		var data = {
+			transaction_id: transaction_id,
+			metric: metric,
+			user_vote: ( user_vote != null ? user_vote.value : "" ),
+			score: ( score != null ? score.display : "0" ),
+		};
+
+		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );
+		res.render( "metric", data );
 	})
 });
 

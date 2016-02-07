@@ -6,13 +6,13 @@ html
 		link(rel="stylesheet", href="/fontello/css/animation.css")
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	body
-		strong.title= metric['options']['title']
-		block content
-		pre= JSON.stringify(metric['options'])
+		strong.title= metric.options['title']
+		!{body}
+		pre= JSON.stringify(metric.options)
 	footer
 		script.
 			data = {
-				vote_url: "/api/vote/#{metric['metric_id']}",
+				vote_url: "/api/vote/#{metric.metric_id}",
 				transaction_id: "#{transaction_id}",
 				/*
 				metric_id: "#{metric['metric_id']}",
@@ -21,4 +21,5 @@ html
 				nonce: "none", // TODO: Implement nonces
 				*/
 			};
-		script(src="/javascripts/metrics.js")
+		if transaction_id != null
+			script(src="/javascripts/metrics.js")
