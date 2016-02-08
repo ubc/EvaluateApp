@@ -1,12 +1,12 @@
 
 const DEBUG_VOTE = require('debug')('eval:voting');
-const UTIL = require('../util');
-
-// TODO: Refactor the metric-types into a different structure that unifies this file with display.jade and options.jade
+const UTIL = require('../../includes/util');
 
 module.exports.slug = "one-way";
 
 module.exports.validate_vote = function( new_value, old_value, metric ) {
+	new_value = UTIL.validate_vote( new_value, old_value );
+
 	if ( new_value > 0 ) {
 		return 1;
 	} else {

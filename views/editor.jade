@@ -13,15 +13,22 @@ block content
 			'rubric': "Rubric",
 		}
 
+		options = metric.options
 		name = metric.name || ""
-		title = metric.options['title'] || ""
-		type = metric.options['type'] || "one-way"
+		title = options['title'] || ""
+		type = metric.type.slug || "one-way"
 
 	form.pure-form(method="POST")
 		dl
 			if metric_id
 				+field("Metric UUID")
 					span= metric_id
+					input(
+						name= "id"
+						type= "hidden"
+						value= "#{metric_id}"
+						autocomplete= "off"
+					)
 			+field("Name")
 				input(
 					name= "name"
@@ -42,19 +49,22 @@ block content
 					autocomplete= "off"
 				)
 
-		+options-one-way(type, metric['options'])
-		+options-two-way(type, metric['options'])
-		+options-range(type, metric['options'])
-		+options-poll(type, metric['options'])
-		+options-rubric(type, metric['options'])
+		+options-one-way(type, options)
+		+options-two-way(type, options)
+		+options-range(type, options)
+		+options-poll(type, options)
+		+options-rubric(type, options)
 
 		input.pure-button(type="submit", value="Save")
 
+-
+	/*
 	if metric_id != null
 		br
 		strong= "Preview"
 		br
 		iframe(src="/metric/#{metric_id}")
+	*/
 
 
 mixin options(slug, active)

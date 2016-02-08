@@ -2,6 +2,9 @@
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 const TYPES = require('../metric-types');
+const DEBUG = require('debug')('eval:database');
+
+DEBUG("Metric types", Object.keys(TYPES));
 
 module.exports = DATABASE.define( 'Metric', {
 	metric_id: {
@@ -15,30 +18,27 @@ module.exports = DATABASE.define( 'Metric', {
 		allowNull: false,
 	},
 	type: {
-		type: SEQUELIZE.ENUM(), // TODO: Define this better.
-		values: Object.keys(TYPES),
-		// TODO: Implement get/set?
+		type: SEQUELIZE.ENUM(),
+		values: Object.keys(TYPES), // TODO: If these values change it requires a database upgrade. Figure out some better way to make that work.
 		get: function() {
-			return TYPES[ this.getDataValue('type') ];
-		}
+			return TYPES[ this.getDataValue( 'type' ) ];
+		},
+		set: function( val ) {
+			this.setDataValue( "type", val );
+		},
 	},
 	options: {
 		type: SEQUELIZE.TEXT,
 		get: function() {
-			return JSON.parse( this.getDataValue('options') );
+			return JSON.parse( this.getDataValue( 'options' ) );
 		},
-		set: function(val) {
+		set: function( val ) {
 			val = this.type.validate_options( val );
 			this.setDataValue( 'options', JSON.stringify( val ) );
 		},
 	},
-}/*, {
-	classMethods: {
+} );
 
-	},
-	instanceMethods: {
-
-	},
-}*/ );
+// TODO: Models that rely on this model will not be generated on the first launch (they will give an error). Fix that.
 
 module.exports.sync();

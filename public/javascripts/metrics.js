@@ -40,17 +40,25 @@ jQuery( '.vote  *:input' ).change( function() {
 		transaction_id: data.transaction_id,
 		vote: new_vote,
 	}, function( response ) {
-		console.log( "Received", response );
-		jQuery('.score').text( response.score );
+		console.log( "Received", response, typeof response );
 
-		// TODO: Make this a lot more efficient.
-		if ( response.vote != new_vote ) {
-			jQuery('input').not("[type!='checkbox']").not("[type!='radio']").val(response.vote);
-			jQuery('input[type="radio"][value="'+response.vote+'"]').prop( "checked", true );
-			jQuery('input[type="checkbox"][value="'+response.vote+'"]').prop( "checked", true );
+		if ( typeof response == "object" ) {
+			jQuery('.score').text( response.score );
+
+			// Update to the new transaction id
+			data.transaction_id = response.transaction_id;
+
+			// TODO: Make this a lot more efficient.
+			if ( response.vote != new_vote ) {
+				jQuery('input').not("[type!='checkbox']").not("[type!='radio']").val(response.vote);
+				jQuery('input[type="radio"][value="'+response.vote+'"]').prop( "checked", true );
+				jQuery('input[type="checkbox"][value="'+response.vote+'"]').prop( "checked", true );
+			}
+
+			// TODO: Expand this to work for rubrics.
+		} else {
+			// TODO: Revert the changes if the nonce fails.
 		}
-
-		// TODO: Expand this to work for rubrics.
 	}, 'json' );
 } );
 

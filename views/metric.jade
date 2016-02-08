@@ -7,19 +7,14 @@ html
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	body
 		strong.title= metric.options['title']
-		!{body}
+		| !{body}
 		pre= JSON.stringify(metric.options)
 	footer
 		script.
 			data = {
+				// TODO: metric_id can be incorporated into the transaction, allowing vote_url to be hard coded.
 				vote_url: "/api/vote/#{metric.metric_id}",
 				transaction_id: "#{transaction_id}",
-				/*
-				metric_id: "#{metric['metric_id']}",
-				context_id: "context",//"#{context_id}",
-				user_id: "user",//#{context_id},
-				nonce: "none", // TODO: Implement nonces
-				*/
 			};
 		if transaction_id != null
 			script(src="/javascripts/metrics.js")

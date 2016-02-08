@@ -1,0 +1,32 @@
+
+-
+	options = metric.options
+	metric_id = metric.metric_id
+	icon = options['icon']
+	text_up = options['text_up']
+	text_down = options['text_down']
+
+label.vote
+	input(
+		name = 'metric-'+metric_id
+		type = 'radio'
+		value = 1
+		checked = ( user_vote === 1 )
+		data-previous = ( user_vote == 1 ? "true" : "false" )
+	)
+	i(class = 'icon-'+icon+'-up')
+	span
+		| #{text_up}
+label.vote
+	input(
+		name = 'metric-'+metric_id
+		type = 'radio'
+		value = -1
+		checked = ( user_vote === -1 )
+		data-previous = ( user_vote == -1 ? "true" : "false" )
+	)
+	i(class = 'icon-'+icon+'-down')
+	span
+		| #{text_down}
+span.score
+	| #{score}

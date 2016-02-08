@@ -66,9 +66,7 @@ router.post('/vote/:id', function(req, res, next) {
 				vote.save();
 			}
 
-			score.save({
-				fields: ['count', 'sorting', 'average', 'display', 'data'],
-			});
+			score.save();
 		}
 
 		res.json( {

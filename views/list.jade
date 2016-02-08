@@ -6,11 +6,14 @@ block content
 		thead
 			tr
 				th= "Metric"
+				th= "Actions"
 				th= "Created On"
 		tbody
 			each metric in metrics
 				tr
+					td= metric['name']
 					td
-						a(href="/manage/edit/#{metric['metric_id']}")
-							| #{metric['name']}
-					td= metric['created']
+						a(href="/metric/#{metric['metric_id']}")= "View"
+						| /
+						a(href="/manage/edit/#{metric['metric_id']}")= "Edit"
+					td= new Date( metric['created'] ).toLocaleString()

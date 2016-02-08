@@ -25,6 +25,11 @@ router.get('/edit/:id', function( req, res, next ) {
 	METRIC.findOne( {
 		where: { metric_id: req.params.id },
 	} ).then( function( metric ) {
+		if ( metric == null ) {
+			res.send( "No metric #" + req.params.id + " found." );
+			return;
+		}
+
 		res.render('editor', {
 			metric_id: metric.metric_id,
 			title: "Edit Metric",
@@ -37,6 +42,7 @@ function save_metric( req, res, next ) {
 	var data = req.body;
 
 	if ( data.id == null ) {
+		DEBUG( "Saving metric", data );
 		METRIC.create( data ).then( function( metric ) {
 			DEBUG( "Metric created", metric.metric_id );
 			res.redirect( '/manage/edit/' + metric.metric_id );
@@ -45,6 +51,7 @@ function save_metric( req, res, next ) {
 		metric_id = data.id;
 		delete data.id;
 
+		DEBUG( "Updating metric", metric_id, data );
 		METRIC.update( data, {
 			where: { metric_id: metric_id },
 		} ).then( function( metric ) {

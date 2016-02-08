@@ -39,7 +39,13 @@ module.exports = DATABASE.define( 'Score', {
 	data: {
 		type: SEQUELIZE.TEXT,
 		get: function() {
-			return JSON.parse( this.getDataValue('options') );
+			var val = this.getDataValue('options');
+
+			if ( val == null ) {
+				return {};
+			} else {
+				return JSON.parse( val );
+			}
 		},
 		set: function(val) {
 			this.setDataValue( 'options', JSON.stringify( val ) );

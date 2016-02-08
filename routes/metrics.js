@@ -10,10 +10,20 @@ const TRANSACTION = require('../includes/transaction');
 var router = EXPRESS.Router();
 
 router.get('/:id/', function( req, res, next ) {
+	// TODO: This should also display scores.
+
 	METRIC.findById( req.params.id ).then( function( metric ) {
-		res.render( '../metric-types/' + metric.type.slug, {
+		if ( metric == null ) {
+			res.send( "No metric #" + req.params.id + " found." );
+			return;
+		}
+
+		var data = {
 			metric: metric,
-		} );
+		};
+
+		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );
+		res.render( "metric", data );
 	} );
 });
 
@@ -27,7 +37,7 @@ router.get('/:id/:user_id', function( req, res, next ) {
 		where: { 
 			metric_id: req.params.id,
 			context_id: "context",
-			user_id: "user",
+			user_id: req.params.user_id,
 		},
 	} ) );
 
@@ -40,26 +50,17 @@ router.get('/:id/:user_id', function( req, res, next ) {
 	} ) );
 
 	PROMISE.all( promises ).spread( function( metric, user_vote, score ) {
+		if ( metric == null ) {
+			res.send( "No metric #" + req.params.id + " found." );
+			return;
+		}
+
 		var transaction_id = TRANSACTION.create( TRANSACTION.TYPE.VOTE, {
 			metric_id: metric.metric_id,
 			context_id: "context",
 			user_id: req.params.user_id,
 		}, TRANSACTION.DURATION.ONE_DAY );
 
-		/*
-		res.render( 'metrics/' + metric.type.slug, {
-			transaction_id: transaction_id,
-			metric: metric,
-			user_vote: user_vote != null ? user_vote.value : "",
-			score: {
-				display: score != null ? score.display : "0",
-			},
-		} );
-		*/
-
-		res.render( "test", {} );
-
-		return;
 		var data = {
 			transaction_id: transaction_id,
 			metric: metric,
