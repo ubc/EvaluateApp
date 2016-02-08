@@ -1,30 +1,28 @@
-extends ./metric.jade
+-
+	metric_id = metric.metric_id
+	answers = metric.options['answers'].split( /\r?\n/ )
+	total_votes = score.count || 0
+	votes = score.data || {}
 
-block content
-	-
-		metric_id = metric['metric_id']
-		answers = metric['options']['answers'].match( "/\r\n|\n|\r/" )
-		total_votes = score['count']
-		votes = score['data']['votes']
-
-	ul
-		each text, i in answers
-			- vote_count = empty( votes[i] ) ? 0 : votes[i]
-			li
-				label.vote
-					input(
-						name = 'metric-' + metric_id
-						type = 'radio'
-						value = i
-						checked = ( user_vote == i )
-						data-previous = ( user_vote == i ? "true" : "false" )
-					)
-					span
-						| #{text}
-				span.score
-					| #{vote_count}
-				br
-				progress.score(
-					max = total_votes
-					value = vote_count
+div= JSON.stringify(votes)
+ul
+	each text, i in answers
+		- vote_count = votes[i] || 0
+		li
+			label.vote
+				input(
+					name = 'metric-' + metric_id
+					type = 'radio'
+					value = i
+					checked = ( user_vote === i )
+					data-previous = ( user_vote === i ? "true" : "false" )
 				)
+				span
+					| #{text}
+			//span.score
+			//	| #{vote_count}
+			br
+			progress.score(
+				max = total_votes
+				value = vote_count
+			)

@@ -10,9 +10,19 @@ const TRANSACTION = require('../includes/transaction');
 var router = EXPRESS.Router();
 
 router.get('/:id/', function( req, res, next ) {
-	// TODO: This should also display scores.
+	var promises = [];
 
-	METRIC.findById( req.params.id ).then( function( metric ) {
+	promises.push( METRIC.findById( req.params.id ) );
+
+	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
+		attributes: ['display'],
+		where: { 
+			metric_id: req.params.id,
+			context_id: "context",
+		},
+	} ) );
+
+	PROMISE.all( promises ).spread( function( metric, score ) {
 		if ( metric == null ) {
 			res.send( "No metric #" + req.params.id + " found." );
 			return;
@@ -20,11 +30,12 @@ router.get('/:id/', function( req, res, next ) {
 
 		var data = {
 			metric: metric,
+			score: ( score != null ? score : {} ),
 		};
 
 		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );
 		res.render( "metric", data );
-	} );
+	})
 });
 
 router.get('/:id/:user_id', function( req, res, next ) {
@@ -65,7 +76,7 @@ router.get('/:id/:user_id', function( req, res, next ) {
 			transaction_id: transaction_id,
 			metric: metric,
 			user_vote: ( user_vote != null ? user_vote.value : "" ),
-			score: ( score != null ? score.display : "0" ),
+			score: ( score != null ? score : {} ),
 		};
 
 		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );

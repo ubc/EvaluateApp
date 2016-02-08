@@ -16,7 +16,7 @@ block content
 		options = metric.options
 		name = metric.name || ""
 		title = options['title'] || ""
-		type = metric.type.slug || "one-way"
+		type = metric.type ? metric.type.slug : "one-way"
 
 	form.pure-form(method="POST")
 		dl
@@ -29,6 +29,8 @@ block content
 						value= "#{metric_id}"
 						autocomplete= "off"
 					)
+					br
+					a(href="/metric/#{metric_id}")= "View"
 			+field("Name")
 				input(
 					name= "name"
@@ -181,9 +183,8 @@ mixin options-poll(type, options)
 		+field("Answers")
 			textarea(
 				name= "options[answers]"
-				value= "#{answerss}"
 				autocomplete= "off"
-			)
+			)= answers
 			br
 			small: em= "One answer per line."
 

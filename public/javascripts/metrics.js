@@ -43,6 +43,7 @@ jQuery( '.vote  *:input' ).change( function() {
 		console.log( "Received", response, typeof response );
 
 		if ( typeof response == "object" ) {
+			// TODO: Implement a proper score display for Polls
 			jQuery('.score').text( response.score );
 
 			// Update to the new transaction id

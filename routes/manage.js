@@ -54,9 +54,9 @@ function save_metric( req, res, next ) {
 		DEBUG( "Updating metric", metric_id, data );
 		METRIC.update( data, {
 			where: { metric_id: metric_id },
-		} ).then( function( metric ) {
-			DEBUG( "Metric updated", metric.metric_id );
-			res.redirect( '/manage/edit/' + metric.metric_id );
+		} ).then( function() {
+			DEBUG( "Metric updated", metric_id );
+			res.redirect( '/manage/edit/' + metric_id );
 		} );
 	}
 }

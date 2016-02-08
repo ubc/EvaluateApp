@@ -2,6 +2,7 @@
 	metric_id = metric.metric_id
 	icon = metric.options['icon']
 	text = metric.options['text']
+	display = score.display
 	// TODO: Make sure that Firefox doesn't auto check the input field.
 
 label.vote
@@ -16,5 +17,5 @@ label.vote
 	span
 		| #{text}
 span.score
-	| #{score}
+	| #{display}
 	

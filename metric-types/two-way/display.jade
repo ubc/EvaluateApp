@@ -5,6 +5,7 @@
 	icon = options['icon']
 	text_up = options['text_up']
 	text_down = options['text_down']
+	display = score.display
 
 label.vote
 	input(
@@ -29,4 +30,4 @@ label.vote
 	span
 		| #{text_down}
 span.score
-	| #{score}
+	| #{display}

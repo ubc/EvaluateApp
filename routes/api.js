@@ -47,7 +47,7 @@ router.post('/vote/:id', function(req, res, next) {
 		var score = score_result[0];
 		var old_value = ( vote == null ? null : vote.value );
 
-		new_value = metric.type.validate_vote( new_value, old_value );
+		new_value = metric.type.validate_vote( new_value, old_value, metric );
 
 		if ( new_value != old_value ) {
 			metric.type.adjust_score( score, new_value, old_value, metric );

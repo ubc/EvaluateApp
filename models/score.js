@@ -2,6 +2,7 @@
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 const METRIC = require('./metric');
+const DEBUG = require('debug')('eval:database');
 
 module.exports = DATABASE.define( 'Score', {
 	/*metric: {
@@ -39,7 +40,7 @@ module.exports = DATABASE.define( 'Score', {
 	data: {
 		type: SEQUELIZE.TEXT,
 		get: function() {
-			var val = this.getDataValue('options');
+			var val = this.getDataValue('data');
 
 			if ( val == null ) {
 				return {};
@@ -48,7 +49,7 @@ module.exports = DATABASE.define( 'Score', {
 			}
 		},
 		set: function(val) {
-			this.setDataValue( 'options', JSON.stringify( val ) );
+			this.setDataValue( 'data', JSON.stringify( val ) );
 		},
 	},
 }, {
