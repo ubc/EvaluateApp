@@ -68,3 +68,5 @@ jQuery( '.vote  *:input' ).change( function() {
 jQuery( '.vote a' ).click( function( event ) {
 	event.preventDefault();
 } );
+
+console.log("Loaded");

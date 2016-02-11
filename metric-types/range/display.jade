@@ -1,41 +1,7 @@
-extends ./metric.jade
-
-block content
-	-
-		metric_id = metric['metric_id'];
-		icon = metric['options']['icon'];
-		max = metric['options']['max'];
-		value = score['display'];
-
-	if icon === 'slider'
-		label.vote
-			input(
-				name = 'metric-'+metric_id
-				input = 'range'
-				min = '0'
-				step = '1'
-				max = max
-				value = user_vote
-				autocomplete = "off"
-			)
-	else if icon == 'numeric'
-		label.vote
-			input(
-				name = 'metric-'+metric_id
-				input = 'number'
-				min = '0'
-				step = '1'
-				max = max
-				value = user_vote
-				placeholder = '0'
-				autocomplete = "off"
-			)
-			span= "/ " + max + " - "
-	else
-		+step(max, icon, metric_id, user_vote)
 
 mixin step( i, icon, metric_id, user_vote )
 	if i > 0
+		- // TODO: Consider implementing this state info?
 		- icon_state = 'up' // ( i <= user_vote ) ? 'up' : 'empty'
 
 		span.vote
@@ -50,3 +16,40 @@ mixin step( i, icon, metric_id, user_vote )
 					autocomplete = "off"
 				)
 				i(class='icon-'+icon+'-'+icon_state)
+
+-
+	metric_id = metric.metric_id
+	options = metric.options
+	icon = options['icon']
+	max = options['max']
+	display = score.display
+
+if icon === 'slider'
+	label.vote
+		input(
+			name = 'metric-'+metric_id
+			input = 'range'
+			min = '0'
+			step = '1'
+			max = max
+			value = user_vote
+			autocomplete = "off"
+		)
+else if icon == 'numeric'
+	label.vote
+		input(
+			name = 'metric-'+metric_id
+			input = 'number'
+			min = '0'
+			step = '1'
+			max = max
+			value = user_vote
+			placeholder = '0'
+			autocomplete = "off"
+		)
+		span= "/ " + max + " - "
+else
+	+step(max, icon, metric_id, user_vote)
+
+span.score
+	| #{display}

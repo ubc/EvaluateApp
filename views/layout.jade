@@ -1,6 +1,7 @@
 
 mixin nav(title, nav_path, current_path)
-	- selected = ( current_path != null && current_path.startsWith( nav_path ) == 0 ? "pure-menu-selected" : "" )
+	- selected = ( current_path == nav_path ? "pure-menu-selected" : "" )
+	//- selected = ( current_path != null && current_path.indexOf( nav_path ) == 0 ? "pure-menu-selected" : "" )
 	li.pure-menu-item(class = selected)
 		a.pure-menu-link(href= nav_path)= title
 
@@ -16,12 +17,12 @@ html
 	header
 		h2= "Evaluate - " + title
 		hr
-		div= path
 		nav.pure-menu.pure-menu-horizontal
 			ul.pure-menu-list
-				+nav("Manage", "/manage", path)
-				+nav("Add New", "/manage/create", path)
-				+nav("View Data", "/manage/data", path)
+				+nav("Metrics", "/manage", path)
+				+nav("Add Metric", "/manage/create", path)
+				+nav("Rubrics", "/manage/rubric", path)
+				+nav("View Data", "/data", path)
 	body
 		br
 		block content
