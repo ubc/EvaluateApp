@@ -14,6 +14,7 @@ label.vote
 		value = 1
 		checked = ( user_vote === 1 )
 		data-previous = ( user_vote == 1 ? "true" : "false" )
+		autocomplete = "off"
 	)
 	i(class = 'icon-'+icon+'-up')
 	span
@@ -25,6 +26,7 @@ label.vote
 		value = -1
 		checked = ( user_vote === -1 )
 		data-previous = ( user_vote == -1 ? "true" : "false" )
+		autocomplete = "off"
 	)
 	i(class = 'icon-'+icon+'-down')
 	span

@@ -70,7 +70,7 @@ router.post('/vote/:id', function(req, res, next) {
 		}
 
 		res.json( {
-			transaction_id: TRANSACTION.create( TRANSACTION.TYPE.VOTE, data, TRANSACTION.DURATION.ONE_DAY ), // TODO: Send a new nonce
+			transaction_id: TRANSACTION.create( TRANSACTION.TYPE.VOTE, data, TRANSACTION.DURATION.ONE_DAY ), // Send a new nonce
 			score: score.display,
 			vote: new_value,
 		} );

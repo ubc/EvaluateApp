@@ -4,7 +4,6 @@
 	total_votes = score.count || 0
 	votes = score.data || {}
 
-div= JSON.stringify(votes)
 ul
 	each text, i in answers
 		- vote_count = votes[i] || 0
@@ -16,6 +15,7 @@ ul
 					value = i
 					checked = ( user_vote === i )
 					data-previous = ( user_vote === i ? "true" : "false" )
+					autocomplete = "off"
 				)
 				span
 					| #{text}

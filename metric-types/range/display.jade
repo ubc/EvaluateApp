@@ -16,6 +16,7 @@ block content
 				step = '1'
 				max = max
 				value = user_vote
+				autocomplete = "off"
 			)
 	else if icon == 'numeric'
 		label.vote
@@ -27,6 +28,7 @@ block content
 				max = max
 				value = user_vote
 				placeholder = '0'
+				autocomplete = "off"
 			)
 			span= "/ " + max + " - "
 	else
@@ -45,5 +47,6 @@ mixin step( i, icon, metric_id, user_vote )
 					value = i
 					checked = ( user_vote === i )
 					data-previous = ( user_vote == i ? "true" : "false" )
+					autocomplete = "off"
 				)
 				i(class='icon-'+icon+'-'+icon_state)

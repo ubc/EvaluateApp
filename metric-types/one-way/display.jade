@@ -3,7 +3,6 @@
 	icon = metric.options['icon']
 	text = metric.options['text']
 	display = score.display
-	// TODO: Make sure that Firefox doesn't auto check the input field.
 
 label.vote
 	input(
@@ -12,6 +11,7 @@ label.vote
 		value = 1
 		checked = ( user_vote == 1 )
 		data-previous = ( user_vote == 1 ? "true" : "false" )
+		autocomplete = "off"
 	)
 	i(class = 'icon-'+icon+'-up')
 	span

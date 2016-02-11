@@ -36,6 +36,7 @@ module.exports.redeem = function( id, action ) {
 			delete transaction_list[id];
 
 			if ( transaction.expiration_date >= new Date().getTime() ) {
+				// TODO: Test transaction expiration.
 				return transaction.data;
 			}
 		}
@@ -43,5 +44,3 @@ module.exports.redeem = function( id, action ) {
 
 	return false;
 }
-
-// TODO: Periodically remove expired transactions.
