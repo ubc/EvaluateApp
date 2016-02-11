@@ -43,6 +43,7 @@ block content
 					each title, slug in metric_types
 						option(value="#{slug}", selected=(type == slug))
 							| #{title}
+				div= "Warning! Changing the type will ruining your scoring. TODO: Fix this."
 			+field("Display Title")
 				input(
 					name= "options[title]"

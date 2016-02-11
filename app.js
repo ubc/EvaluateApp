@@ -6,10 +6,10 @@ const COOKIEPARSER = require('cookie-parser');
 const BODYPARSER = require('body-parser');
 
 const ROUTES = require('./routes/index');
-const USERS = require('./routes/users');
 const METRICS = require('./routes/metrics');
-const API = require('./routes/api');
 const MANAGE = require('./routes/manage');
+const API = require('./routes/api');
+const DATA = require('./routes/data');
 
 var app = EXPRESS();
 
@@ -27,10 +27,10 @@ app.use(require('less-middleware')(PATH.join(__dirname, 'public')));
 app.use(EXPRESS.static(PATH.join(__dirname, 'public')));
 
 app.use('/', ROUTES);
-app.use('/users', USERS);
+app.use('/manage', MANAGE);
+app.use('/data', DATA);
 app.use('/metric', METRICS);
 app.use('/api', API);
-app.use('/manage', MANAGE);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

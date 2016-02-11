@@ -7,12 +7,12 @@ var router = EXPRESS.Router();
 
 router.get('/', function( req, res, next ) {
 	METRIC.findAll().then( function( results ) {
-		res.render('list', {
+		res.render( 'list', {
 			title: "Metrics List",
 			path: req.originalUrl,
 			metrics: results,
-		});
-	});
+		} );
+	} );
 });
 
 router.get('/create', function( req, res, next ) {

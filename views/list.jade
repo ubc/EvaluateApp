@@ -10,11 +10,17 @@ block content
 				th= "Created On"
 		tbody
 			each metric in metrics
+				-
+					metric_id = metric.metric_id
+					name = metric.name
+					type = metric.type.slug
+					created = metric.created
+
 				tr
-					td= metric.name
-					td= metric.type.slug
+					td= name
+					td= type
 					td
-						a(href="/manage/edit/#{metric['metric_id']}")= "Edit"
+						a(href="/manage/edit/#{metric_id}")= "Edit"
 						|  / 
-						a(href="/metric/#{metric['metric_id']}")= "View"
-					td= new Date( metric['created'] ).toLocaleString()
+						a(href="/metric/#{metric_id}")= "View"
+					td= new Date( created ).toLocaleString()
