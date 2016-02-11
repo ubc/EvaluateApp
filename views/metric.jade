@@ -12,8 +12,6 @@ html
 	footer
 		script.
 			data = {
-				// TODO: metric_id can be incorporated into the transaction, allowing vote_url to be hard coded.
-				vote_url: "/api/vote/#{metric.metric_id}",
 				transaction_id: "#{transaction_id}",
 			};
 		if transaction_id != null

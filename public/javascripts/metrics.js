@@ -34,9 +34,9 @@ jQuery( '.vote  *:input' ).change( function() {
 	console.log( "Sending vote", {
 		transaction_id: data.transaction_id,
 		vote: new_vote,
-	}, "to", data.vote_url );
+	}, "to /api/vote" );
 	
-	jQuery.post( data.vote_url, {
+	jQuery.post( "/api/vote", {
 		transaction_id: data.transaction_id,
 		vote: new_vote,
 	}, function( response ) {

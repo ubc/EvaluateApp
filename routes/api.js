@@ -9,7 +9,7 @@ const TRANSACTION = require('../includes/transaction');
 
 var router = EXPRESS.Router();
 
-router.post('/vote/:id', function(req, res, next) {
+router.post('/vote', function( req, res, next ) {
 	DEBUG_VOTE('API CALL', "vote", req.body);
 	// TODO: Add nonce check
 	var data = TRANSACTION.redeem( req.body.transaction_id, "vote" );
