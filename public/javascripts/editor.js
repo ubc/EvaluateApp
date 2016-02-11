@@ -1,6 +1,4 @@
 
-console.log('load');
-
 jQuery(function() {
 	jQuery('body').on('change', '.switch', function(event) {
 		var element = jQuery(this);
@@ -19,3 +17,5 @@ jQuery(function() {
 		jQuery( '.options:hidden *:input' ).prop( 'disabled', true );
 	})
 });
+
+console.log('Loaded editor.js');

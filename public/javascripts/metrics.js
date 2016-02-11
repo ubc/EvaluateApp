@@ -69,4 +69,4 @@ jQuery( '.vote a' ).click( function( event ) {
 	event.preventDefault();
 } );
 
-console.log("Loaded");
+console.log("Loaded metrics.js");

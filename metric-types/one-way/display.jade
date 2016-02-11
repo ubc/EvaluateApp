@@ -12,6 +12,7 @@ label.vote
 		checked = ( user_vote == 1 )
 		data-previous = ( user_vote == 1 ? "true" : "false" )
 		autocomplete = "off"
+		disabled = ( transaction_id == null )
 	)
 	i(class = 'icon-'+icon+'-up')
 	span

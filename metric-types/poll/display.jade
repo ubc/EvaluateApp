@@ -16,6 +16,7 @@ ul
 					checked = ( user_vote === i )
 					data-previous = ( user_vote === i ? "true" : "false" )
 					autocomplete = "off"
+					disabled = ( transaction_id == null )
 				)
 				span
 					| #{text}

@@ -14,6 +14,7 @@ mixin step( i, icon, metric_id, user_vote )
 					checked = ( user_vote === i )
 					data-previous = ( user_vote == i ? "true" : "false" )
 					autocomplete = "off"
+					disabled = ( transaction_id == null )
 				)
 				i(class='icon-'+icon+'-'+icon_state)
 
@@ -34,6 +35,7 @@ if icon === 'slider'
 			max = max
 			value = user_vote
 			autocomplete = "off"
+			disabled = ( transaction_id == null )
 		)
 else if icon == 'numeric'
 	label.vote
@@ -46,6 +48,7 @@ else if icon == 'numeric'
 			value = user_vote
 			placeholder = '0'
 			autocomplete = "off"
+			disabled = ( transaction_id == null )
 		)
 		span= "/ " + max + " - "
 else

@@ -59,14 +59,11 @@ block content
 
 		input.pure-button.pure-button-primary(type="submit", value="Save")
 
--
-	/*
 	if metric_id != null
 		br
 		strong= "Preview"
-		br
-		iframe(src="/metric/#{metric_id}")
-	*/
+		hr
+		iframe(src="/metric/#{metric_id}", frameborder="0")
 
 
 mixin options(slug, active)
