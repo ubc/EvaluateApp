@@ -9,6 +9,7 @@ router.get('/', function( req, res, next ) {
 	METRIC.findAll().then( function( results ) {
 		res.render('list', {
 			title: "Metrics List",
+			path: req.path,
 			metrics: results,
 		});
 	});
@@ -17,6 +18,7 @@ router.get('/', function( req, res, next ) {
 router.get('/create', function( req, res, next ) {
 	res.render( 'editor', {
 		title: "Create",
+			path: req.path,
 		metric: { options: {} },
 	 });
 });
@@ -31,8 +33,9 @@ router.get('/edit/:id', function( req, res, next ) {
 		}
 
 		res.render('editor', {
-			metric_id: metric.metric_id,
 			title: "Edit Metric",
+			path: req.path,
+			metric_id: metric.metric_id,
 			metric: metric,
 		});
 	} );

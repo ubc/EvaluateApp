@@ -1,19 +1,20 @@
 extends layout
 
 block content
-	a(href="/manage/create")= "Create"
-	table
+	table.pure-table.pure-table-horizontal
 		thead
 			tr
 				th= "Metric"
+				th= "Type"
 				th= "Actions"
 				th= "Created On"
 		tbody
 			each metric in metrics
 				tr
-					td= metric['name']
+					td= metric.name
+					td= metric.type.slug
 					td
-						a(href="/metric/#{metric['metric_id']}")= "View"
-						| /
 						a(href="/manage/edit/#{metric['metric_id']}")= "Edit"
+						|  / 
+						a(href="/metric/#{metric['metric_id']}")= "View"
 					td= new Date( metric['created'] ).toLocaleString()

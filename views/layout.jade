@@ -1,17 +1,27 @@
+
+mixin nav(title, nav_path, current_path)
+	- selected = ( current_path != null && current_path.startsWith( nav_path ) == 0 ? "pure-menu-selected" : "" )
+	li.pure-menu-item(class = selected)
+		a.pure-menu-link(href= nav_path)= title
+
 doctype html
 html
 	head
 		title= title
-		//link(rel='stylesheet', href='http://yui.yahooapis.com/pure/0.6.0/pure-min.css')
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		link(rel="stylesheet", href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css")
 		link(rel="stylesheet", href="/stylesheets/style.css")
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 		block scripts
 	header
 		h2= "Evaluate - " + title
 		hr
-		nav: ul
-			li: a(href="/manage")= "Manage"
-			li: a(href="/manage/create")= "Add New"
-			li: a= "View Data"
+		div= path
+		nav.pure-menu.pure-menu-horizontal
+			ul.pure-menu-list
+				+nav("Manage", "/manage", path)
+				+nav("Add New", "/manage/create", path)
+				+nav("View Data", "/manage/data", path)
 	body
+		br
 		block content

@@ -22,6 +22,8 @@ block content
 		dl
 			if metric_id
 				+field("Metric UUID")
+					a(href="/metric/#{metric_id}")= "View"
+					| : 
 					span= metric_id
 					input(
 						name= "id"
@@ -29,8 +31,6 @@ block content
 						value= "#{metric_id}"
 						autocomplete= "off"
 					)
-					br
-					a(href="/metric/#{metric_id}")= "View"
 			+field("Name")
 				input(
 					name= "name"
@@ -57,7 +57,7 @@ block content
 		+options-poll(type, options)
 		+options-rubric(type, options)
 
-		input.pure-button(type="submit", value="Save")
+		input.pure-button.pure-button-primary(type="submit", value="Save")
 
 -
 	/*
@@ -184,6 +184,7 @@ mixin options-poll(type, options)
 			textarea(
 				name= "options[answers]"
 				autocomplete= "off"
+				rows= "6"
 			)= answers
 			br
 			small: em= "One answer per line."
