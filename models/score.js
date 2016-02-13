@@ -5,14 +5,6 @@ const METRIC = require('./metric');
 const DEBUG = require('debug')('eval:database');
 
 module.exports = DATABASE.define( 'Score', {
-	/*metric: {
-		type: SEQUELIZE.UUID,
-		allowNull: false,
-		reference: {
-			model: METRIC,
-			key: 'metric_id',
-		}
-	},*/
 	context_id: {
 		type: SEQUELIZE.CHAR(32),
 		allowNull: false,

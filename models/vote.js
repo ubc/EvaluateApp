@@ -4,14 +4,6 @@ const DATABASE = require('../includes/database');
 const METRIC = require('./metric');
 
 module.exports = DATABASE.define( 'Vote', {
-	/*metric: {
-		type: SEQUELIZE.UUID,
-		allowNull: false,
-		reference: {
-			model: METRIC,
-			key: 'metric_id',
-		}
-	},*/
 	context_id: {
 		type: SEQUELIZE.CHAR(32),
 		allowNull: false,

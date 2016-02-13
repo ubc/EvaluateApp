@@ -5,14 +5,6 @@ const TYPES = require('../metric-types');
 const RUBRIC = require('./rubric');
 
 module.exports = DATABASE.define( 'Submetric', {
-	/*rubric: {
-		type: SEQUELIZE.INTEGER(10),
-		allowNull: false,
-		reference: {
-			model: RUBRIC,
-			key: 'rubric_id',
-		}
-	},*/
 	type: {
 		type: SEQUELIZE.ENUM(),
 		values: Object.keys(TYPES), // TODO: If these values change it requires a database upgrade. Figure out some better way to make that work.

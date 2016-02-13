@@ -12,6 +12,8 @@ const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router();
 
+// TODO: Refactor to use router.param
+
 router.use(function( req, res, next ) {
 	if ( AUTH.is_authenticated() || req.path.indexOf('/embed') == 0 ) {
 		next();
@@ -79,6 +81,8 @@ function get_metric_type_options(options) {
 
 function save_metric( req, res ) {
 	var data = req.body;
+
+	// TODO: Validate the data.
 
 	if ( data.id == null ) {
 		DEBUG( "Saving metric", data );
@@ -178,5 +182,7 @@ router.get('/embed/:metric_id/:user_id', function( req, res ) {
 		res.render( "metrics/single", data );
 	})
 });
+
+// TODO: Implement delete.
 
 module.exports = router;

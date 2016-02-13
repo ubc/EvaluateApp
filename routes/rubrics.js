@@ -1,5 +1,6 @@
 
 const EXPRESS = require('express');
+const PROMISE = require('sequelize').Promise;
 const JADE = require('jade')
 const RUBRIC = require('../models/rubric');
 const SUBMETRIC = require('../models/submetric');
@@ -22,7 +23,7 @@ router.get('/', function(req, res, next) {
 router.get('/create', function( req, res ) {
 	var rubric = { options: {} };
 
-	var data = add_metric_types( {
+	var data = add_metric_type_data( {
 		title: "Create Rubric",
 		path: req.originalUrl,
 		rubric: rubric,
@@ -38,9 +39,7 @@ router.get('/edit/:rubric_id', function( req, res ) {
 	promises.push( RUBRIC.findById( req.params.rubric_id ) );
 
 	promises.push( SUBMETRIC.findAll( {
-		where: { 
-			rubric_id: req.params.rubric_id,
-		},
+		where: { rubric_id: req.params.rubric_id },
 	} ) );
 
 	PROMISE.all( promises ).spread( function( rubric, submetrics ) {
@@ -49,7 +48,7 @@ router.get('/edit/:rubric_id', function( req, res ) {
 			return;
 		}
 
-		var data = add_metric_types( {
+		var data = add_metric_type_data( {
 			title: "Edit Rubric",
 			path: req.originalUrl,
 			rubric: rubric,
@@ -60,7 +59,7 @@ router.get('/edit/:rubric_id', function( req, res ) {
 	} );
 });
 
-function add_metric_types( data ) {
+function add_metric_type_data( data ) {
 	// TODO: Cache the results of this call, either manually or using Jade's cache. http://jade-lang.com/api/
 	data['metric_types'] = {};
 
@@ -71,5 +70,39 @@ function add_metric_types( data ) {
 
 	return data;
 }
+
+function save_rubric( req, res, next ) {
+	var data = req.body;
+	var promises = [];
+
+	var rubric_id = data.rubric_id;
+	delete data.rubric_id;
+
+	var submetrics = data.submetrics;
+	delete data.submetrics;
+
+	// TODO: Validate the data input.
+
+	if ( rubric_id == null ) {
+		DEBUG( "Saving rubric", data );
+		promises.push( RUBRIC.create( data ) );
+	} else {
+		DEBUG( "Updating rubric", rubric_id, data );
+		promises.push( RUBRIC.update( data, {
+			where: { rubric_id: rubric_id },
+		} ) );
+	}
+
+	PROMISE.all( promises ).spread( function( rubric ) {
+		rubric_id = rubric_id || rubric.rubric_id;
+		DEBUG( "Rubric stored", rubric_id );
+		res.redirect( '/rubrics/edit/' + rubric_id );
+	} );
+}
+
+router.post( '/edit/:metric_id', save_rubric );
+router.post( '/create', save_rubric );
+
+// TODO: Implement delete
 
 module.exports = router;
