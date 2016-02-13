@@ -25,7 +25,7 @@ block content
 					autocomplete= "off"
 				)= descriptions
 			+field("Fields")
-				ul(style="margin: 0; padding:0; list-style: none;")
+				ul.submetric-list(style="margin: 0; padding:0; list-style: none;")
 					- // TODO: Refactor that inline style ^
 					each submetric in submetrics
 						+submetric(submetric.type, submetric.options, metric_types)
@@ -40,9 +40,9 @@ mixin field(title)
 		block
 
 mixin submetric(type, options, metric_types)
-	li
+	li.submetric(class= type ? "" : "empty")
 		select.switch(name="submetrics[type][]", data-anchor=".submetric-options", data-siblings="true")
-			option= "- Choose -"
+			option= type != "" ? "- Delete -" : "- Choose -"
 			each title, slug in metric_types
 				option(value="#{slug}", selected=(type == slug))
 					| #{title}
