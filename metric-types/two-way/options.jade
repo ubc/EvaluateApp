@@ -1,0 +1,40 @@
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+-
+	// Expects variables metric, slug
+
+	icons = {
+		thumbs: "Thumbs",
+		arrows: "Arrows",
+	}
+
+	options = metric.options || {}
+	icon = options['icon'] || "thumbs"
+	text_up = options['text_up'] || ""
+	text_down = options['text_down'] || ""
+
++field("Icon")
+	select(name="options[icon]")
+		each title, slug in icons
+			option(value="#{slug}", selected=(icon == slug))
+				| #{title}
++field("Text")
+	input(
+		name= "options[text_up]"
+		type= "text"
+		value= "#{text_up}"
+		placeholder= "Up"
+		autocomplete= "off"
+	)
+	br
+	input(
+		name= "options[text_down]"
+		type= "text"
+		value= "#{text_down}"
+		placeholder= "Down"
+		autocomplete= "off"
+	)

@@ -3,6 +3,7 @@ const JADE = require('jade')
 const PROMISE = require('sequelize').Promise;
 const EXPRESS = require('express');
 const METRIC = require('../models/metric');
+const METRIC_TYPES = require('../metric-types');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
 const TRANSACTION = require('../includes/transaction');
@@ -30,10 +31,13 @@ router.get('/', function( req, res, next ) {
 });
 
 router.get('/create', function( req, res, next ) {
+	var metric = { options: {} };
+
 	res.render( 'metrics/editor', {
 		title: "Create",
-			path: req.originalUrl,
-		metric: { options: {} },
+		path: req.originalUrl,
+		metric: metric,
+		metric_types: get_metric_type_options(metric),
 	 });
 });
 
@@ -49,11 +53,29 @@ router.get('/edit/:id', function( req, res, next ) {
 		res.render('metrics/editor', {
 			title: "Edit Metric",
 			path: req.originalUrl,
-			metric_id: metric.metric_id,
 			metric: metric,
+			metric_types: get_metric_type_options(metric),
 		});
 	} );
 });
+
+function get_metric_type_options(metric) {
+	var results = {};
+
+	for ( var slug in METRIC_TYPES ) {
+		var html = JADE.renderFile( __dirname + "/../metric-types/" + slug + "/options.jade", {
+			slug: slug,
+			metric: metric,
+		} );
+
+		results[slug] = {
+			title: METRIC_TYPES[slug].title,
+			html: html,
+		};
+	}
+
+	return results;
+}
 
 function save_metric( req, res, next ) {
 	var data = req.body;

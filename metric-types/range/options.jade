@@ -1,0 +1,32 @@
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+-
+	// Expects variables metric, slug
+
+	icons = {
+		//numeric: "Numeric", // TODO: Implement numeric input
+		//slider: "Slider", // TODO: Implement slider input
+		stars: "Stars",
+		thumbs: "Thumbs",
+	}
+
+	options = metric.options || {}
+	icon = options['icon'] || "stars"
+	max = options['max'] || 5
+
++field("Icon")
+	select(name="options[icon]")
+		each title, slug in icons
+			option(value="#{slug}", selected=(icon == slug))
+				| #{title}
++field("Max")
+	input(
+		name= "options[max]"
+		type= "number"
+		value= "#{max}"
+		autocomplete= "off"
+	)

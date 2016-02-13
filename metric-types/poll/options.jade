@@ -1,0 +1,19 @@
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+-
+	// Expects variables metric, slug
+	options = metric.options || {}
+	answers = options['answers'] || ""
+
++field("Answers")
+	textarea(
+		name= "options[answers]"
+		autocomplete= "off"
+		rows= "6"
+	)= answers
+	br
+	small: em= "One answer per line."

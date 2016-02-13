@@ -1,0 +1,55 @@
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+-
+	// Expects variables metric, slug
+
+	// TODO: Replace this test code.
+	blueprints = {
+		test1: {
+			title: "Sample Blueprint",
+			description: "This is an example definition for a rubric.",
+			fields: {
+				'first': {
+					name: "Sample",
+					type: "One Way",
+					weight: 1.0,
+					options: {
+						title: "Urego",
+						icon: "thumbs",
+						text: "Up",
+					},
+				},
+				'second': {
+					name: "Example",
+					type: "Two Way",
+					weight: 1.0,
+					options: {
+						icon: "arrows",
+						text_up: "Good!",
+						text_down: "Bad!",
+					},
+				},
+			},
+		},
+	}
+
+	options = metric.options || {}
+	blueprint = options['blueprint'] || ""
+
++field("Blueprint")
+	select.switch(name="blueprint", data-anchor=".blueprint")
+		option(value="")
+			| - Choose a Blueprint -
+		each blueprint, slug in blueprints
+			option(value="#{slug}", selected=(blueprint == slug))
+				| #{blueprint['title']}
+
+	each blueprint, slug in blueprints
+		div.blueprint(class=slug, style=( blueprint == slug ? '' : "display:none;" ))
+			p #{blueprint['description']}
+			ul: each field in blueprint['fields']
+				li= field['name'] + ": " + field['type'] + " with weight " + field['weight'] + " options:<br>" + JSON.stringify(field['options'])

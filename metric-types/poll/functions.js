@@ -3,6 +3,7 @@ const DEBUG_VOTE = require('debug')('eval:voting');
 const UTIL = require('../../includes/util');
 
 module.exports.slug = "poll";
+module.exports.title = "Poll";
 
 module.exports.validate_vote = function( new_value, old_value, metric ) {
 	if ( new_value === '' ) {
