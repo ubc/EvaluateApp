@@ -50,20 +50,20 @@ mixin field(title)
 mixin submetric(submetric, metric_types)
 	-
 		submetric_id = submetric.id || ""
-		type = submetric.type || ""
-		title = submetric.title || ""
+		type = submetric.type ? submetric.type.slug : ""
 		options = submetric.options || {}
+		title = options.title || ""
 
 	li.submetric(class= type ? "" : "empty")
 		if submetric_id
 			input(
-				name= "submetric_id"
+				name= "id"
 				type= "hidden"
 				autocomplete= "off"
 				value= submetric_id
 			)
 		select.switch(name="type", autocomplete="off", data-anchor=".options", data-siblings="true")
-			option= type != "" ? "- Delete -" : "- Choose -"
+			option(value="")= type != "" ? "- Delete -" : "- Choose -"
 			each title, slug in metric_types
 				option(value="#{slug}", selected=(type == slug))
 					| #{title}
@@ -74,6 +74,9 @@ mixin submetric(submetric, metric_types)
 			autocomplete= "off"
 			value= title
 		)
+		if submetric_id
+			br
+			small: em= "Warning! Changing the submetric type will seriously mess up your existing votes and scoring. TODO: Fix this"
 
 		each title, slug in metric_types
 			-

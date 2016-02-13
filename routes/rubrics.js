@@ -73,7 +73,7 @@ function add_metric_type_data( data ) {
 
 function save_rubric( req, res, next ) {
 	var data = req.body;
-	var promises = [];
+	var promise = null;
 
 	var rubric_id = data.rubric_id;
 	delete data.rubric_id;
@@ -85,18 +85,51 @@ function save_rubric( req, res, next ) {
 
 	if ( rubric_id == null ) {
 		DEBUG( "Saving rubric", data );
-		promises.push( RUBRIC.create( data ) );
+		promise = RUBRIC.create( data );
 	} else {
 		DEBUG( "Updating rubric", rubric_id, data );
-		promises.push( RUBRIC.update( data, {
+		promise = RUBRIC.update( data, {
 			where: { rubric_id: rubric_id },
-		} ) );
+		} );
 	}
 
-	PROMISE.all( promises ).spread( function( rubric ) {
+	promise.then( function( rubric ) {
 		rubric_id = rubric_id || rubric.rubric_id;
-		DEBUG( "Rubric stored", rubric_id );
-		res.redirect( '/rubrics/edit/' + rubric_id );
+		DEBUG( "Rubric stored", rubric_id, "with", submetrics.length, "submetrics" );
+
+		var submetric_ids = [];
+
+		for ( var i in submetrics ) {
+			var submetric_id = submetrics[i].id;
+			if ( typeof submetric_id !== 'undefined' ) {
+				submetric_ids.push( submetric_id );
+			}
+		}
+
+		// Delete any submetrics which were not updated (meaning they were removed on the front end).
+		SUBMETRIC.destroy( {
+			where: {
+				rubric_id: rubric_id,
+				id: {
+					$notIn: submetric_ids,
+				},
+			},
+		} ).then( function() {
+			// Wait for all deletions before we insert anything.
+			var promises = [];
+
+			// Update or insert all the submetrics that were saved.
+			for ( var i in submetrics ) {
+				var submetric = submetrics[i];
+				submetric.rubric_id = rubric_id
+				DEBUG( "Saving submetric", submetric );
+				promises.push( SUBMETRIC.upsert( submetric ) );
+			}
+
+			PROMISE.all( promises ).spread( function() {
+				res.redirect( '/rubrics/edit/' + rubric_id );
+			} );
+		} );
 	} );
 }
 

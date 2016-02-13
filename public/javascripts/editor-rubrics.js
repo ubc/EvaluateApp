@@ -35,9 +35,10 @@ jQuery(function() {
 					if ( split.length == 2 ) {
 						name = 'submetrics[' + index + '][' + split[0] + '][' + split[1];
 					} else {
-						name = 'submetrics[' + index + ']' + name;
+						name = 'submetrics[' + index + '][' + name + ']';
 					}
 
+					console.log("changed", element.prop( 'name' ), "to", name);
 					element.prop( 'name', name );
 				} );
 			}
