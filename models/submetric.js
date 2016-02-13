@@ -1,6 +1,7 @@
 
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
+const TYPES = require('../metric-types');
 const RUBRIC = require('./rubric');
 
 module.exports = DATABASE.define( 'Submetric', {
@@ -12,10 +13,6 @@ module.exports = DATABASE.define( 'Submetric', {
 			key: 'rubric_id',
 		}
 	},*/
-	name: {
-		type: SEQUELIZE.STRING(64),
-		allowNull: false,
-	},
 	type: {
 		type: SEQUELIZE.ENUM(),
 		values: Object.keys(TYPES), // TODO: If these values change it requires a database upgrade. Figure out some better way to make that work.

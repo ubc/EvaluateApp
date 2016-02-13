@@ -34,11 +34,11 @@ router.get('/create', function( req, res ) {
 	var metric = { options: {} };
 
 	res.render( 'metrics/editor', {
-		title: "Create",
+		title: "Create Metric",
 		path: req.originalUrl,
 		metric: metric,
-		metric_types: get_metric_type_options(metric),
-	 });
+		metric_types: get_metric_type_options(metric.options),
+	});
 });
 
 router.get('/edit/:metric_id', function( req, res ) {
@@ -54,18 +54,18 @@ router.get('/edit/:metric_id', function( req, res ) {
 			title: "Edit Metric",
 			path: req.originalUrl,
 			metric: metric,
-			metric_types: get_metric_type_options(metric),
+			metric_types: get_metric_type_options(metric.options),
 		});
 	} );
 });
 
-function get_metric_type_options(metric) {
+function get_metric_type_options(options) {
 	var results = {};
 
 	for ( var slug in METRIC_TYPES ) {
 		var html = JADE.renderFile( __dirname + "/../metric-types/" + slug + "/options.jade", {
 			slug: slug,
-			metric: metric,
+			options: options,
 		} );
 
 		results[slug] = {

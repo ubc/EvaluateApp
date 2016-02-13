@@ -5,7 +5,7 @@ mixin field(title)
 		block
 
 -
-	// Expects variables metric, slug
+	// Expects variables options, slug
 
 	icons = {
 		//numeric: "Numeric", // TODO: Implement numeric input
@@ -14,7 +14,6 @@ mixin field(title)
 		thumbs: "Thumbs",
 	}
 
-	options = metric.options || {}
 	icon = options['icon'] || "stars"
 	max = options['max'] || 5
 

@@ -5,7 +5,7 @@ mixin field(title)
 		block
 
 -
-	// Expects variables metric, slug
+	// Expects variables options, slug
 	
 	icons = {
 		thumbs: "Thumb",
@@ -13,7 +13,6 @@ mixin field(title)
 		arrows: "Arrow",
 	}
 
-	options = metric.options || {}
 	icon = options['icon'] || "arrows"
 	text = options['text'] || ""
 

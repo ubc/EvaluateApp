@@ -5,7 +5,7 @@ mixin field(title)
 		block
 
 -
-	// Expects variables metric, slug
+	// Expects variables options, slug
 
 	// TODO: Replace this test code.
 	blueprints = {
@@ -37,7 +37,6 @@ mixin field(title)
 		},
 	}
 
-	options = metric.options || {}
 	blueprint = options['blueprint'] || ""
 
 +field("Blueprint")

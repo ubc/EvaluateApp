@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+	table.pure-table.pure-table-horizontal
+		thead
+			tr
+				th= "Metric"
+				th= "Actions"
+				th= "Created On"
+		tbody
+			each rubric in rubrics
+				-
+					rubric_id = rubric.id
+					name = metric.name
+					created = metric.created
+
+				tr
+					td= name
+					td
+						a(href="/rubrics/edit/#{rubric_id}")= "Edit"
+					td= new Date( created ).toLocaleString()
+	a(href="/rubrics/create")= "Create New Rubric"

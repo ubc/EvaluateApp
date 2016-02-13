@@ -1,0 +1,68 @@
+extends ../layout
+
+block scripts
+	script(src="/javascripts/editor.js")
+	script(src="/javascripts/editor-rubrics.js")
+
+block content
+	-
+		// Expects variables: rubric, submetrics
+		name = rubric.name || ""
+		description = rubric.description || ""
+
+	form.pure-form(method="POST")
+		dl
+			+field("Name")
+				input(
+					name= "name"
+					type= "text"
+					value= "#{name}"
+					autocomplete= "off"
+				)
+			+field("Description")
+				textarea(
+					name= "description"
+					autocomplete= "off"
+				)= descriptions
+			+field("Fields")
+				ul(style="margin: 0; padding:0; list-style: none;")
+					- // TODO: Refactor that inline style ^
+					each submetric in submetrics
+						+submetric(submetric.type, submetric.options, metric_types)
+
+					+submetric("", {}, metric_types)
+					
+		input.pure-button.pure-button-primary(type="submit", value="Save")
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+mixin submetric(type, options, metric_types)
+	li
+		select.switch(name="submetrics[type][]", data-anchor=".submetric-options", data-siblings="true")
+			option= "- Choose -"
+			each title, slug in metric_types
+				option(value="#{slug}", selected=(type == slug))
+					| #{title}
+		input(
+			name= "submetrics[options][title][]"
+			placeholder= "Title"
+		)
+
+		each title, slug in metric_types
+			-
+				html = locals['render_'+slug]({
+					slug: slug,
+					options: options,
+				})
+			+options(slug, type)
+				| !{html}
+
+mixin options(slug, active_type)
+	dl.submetric-options(
+		class=slug
+		style=(slug == active_type ? '' : "display:none;")
+	)
+		block
