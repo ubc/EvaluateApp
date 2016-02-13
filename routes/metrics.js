@@ -20,7 +20,7 @@ router.use(function( req, res, next ) {
 	}
 });
 
-router.get('/', function( req, res, next ) {
+router.get('/', function( req, res ) {
 	METRIC.findAll().then( function( results ) {
 		res.render( 'metrics/list', {
 			title: "Metrics List",
@@ -30,7 +30,7 @@ router.get('/', function( req, res, next ) {
 	} );
 });
 
-router.get('/create', function( req, res, next ) {
+router.get('/create', function( req, res ) {
 	var metric = { options: {} };
 
 	res.render( 'metrics/editor', {
@@ -41,12 +41,12 @@ router.get('/create', function( req, res, next ) {
 	 });
 });
 
-router.get('/edit/:id', function( req, res, next ) {
+router.get('/edit/:metric_id', function( req, res ) {
 	METRIC.findOne( {
-		where: { metric_id: req.params.id },
+		where: { metric_id: req.params.metric_id },
 	} ).then( function( metric ) {
 		if ( metric == null ) {
-			res.send( "No metric #" + req.params.id + " found." );
+			res.send( "No metric #" + req.params.metric_id + " found." );
 			return;
 		}
 
@@ -77,7 +77,7 @@ function get_metric_type_options(metric) {
 	return results;
 }
 
-function save_metric( req, res, next ) {
+function save_metric( req, res ) {
 	var data = req.body;
 
 	if ( data.id == null ) {
@@ -100,26 +100,26 @@ function save_metric( req, res, next ) {
 	}
 }
 
-router.post( '/edit/:id', save_metric );
+router.post( '/edit/:metric_id', save_metric );
 router.post( '/create', save_metric );
 
 
-router.get('/embed/:id/', function( req, res, next ) {
+router.get('/embed/:metric_id/', function( req, res ) {
 	var promises = [];
 
-	promises.push( METRIC.findById( req.params.id ) );
+	promises.push( METRIC.findById( req.params.metric_id ) );
 
 	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
 		attributes: ['display'],
 		where: { 
-			metric_id: req.params.id,
+			metric_id: req.params.metric_id,
 			context_id: "context",
 		},
 	} ) );
 
 	PROMISE.all( promises ).spread( function( metric, score ) {
 		if ( metric == null ) {
-			res.status(404).send( "No metric #" + req.params.id + " found." );
+			res.status(404).send( "No metric #" + req.params.metric_id + " found." );
 			return;
 		}
 
@@ -133,15 +133,15 @@ router.get('/embed/:id/', function( req, res, next ) {
 	})
 });
 
-router.get('/embed/:id/:user_id', function( req, res, next ) {
+router.get('/embed/:metric_id/:user_id', function( req, res ) {
 	var promises = [];
 
-	promises.push( METRIC.findById( req.params.id ) );
+	promises.push( METRIC.findById( req.params.metric_id ) );
 
 	promises.push( VOTE.findOne( {
 		attributes: ['value'],
 		where: { 
-			metric_id: req.params.id,
+			metric_id: req.params.metric_id,
 			context_id: "context",
 			user_id: req.params.user_id,
 		},
@@ -150,14 +150,14 @@ router.get('/embed/:id/:user_id', function( req, res, next ) {
 	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
 		attributes: ['display'],
 		where: { 
-			metric_id: req.params.id,
+			metric_id: req.params.metric_id,
 			context_id: "context",
 		},
 	} ) );
 
 	PROMISE.all( promises ).spread( function( metric, user_vote, score ) {
 		if ( metric == null ) {
-			res.status(404).send( "No metric #" + req.params.id + " found." );
+			res.status(404).send( "No metric #" + req.params.metric_id + " found." );
 			return;
 		}
 
