@@ -1,7 +1,7 @@
 
 mixin nav(title, nav_path, current_path)
-	- selected = ( current_path == nav_path ? "pure-menu-selected" : "" )
-	//- selected = ( current_path != null && current_path.indexOf( nav_path ) == 0 ? "pure-menu-selected" : "" )
+	//- selected = ( current_path == nav_path ? "pure-menu-selected" : "" )
+	- selected = ( current_path != null && current_path.indexOf( nav_path ) == 0 ? "pure-menu-selected" : "" )
 	li.pure-menu-item(class = selected)
 		a.pure-menu-link(href= nav_path)= title
 
@@ -15,12 +15,12 @@ html
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 		block scripts
 	header
-		h2= "Evaluate - " + title
+		h2= "Evaluate" + ( title ? " - " + title : "" )
 		hr
 		nav.pure-menu.pure-menu-horizontal
 			ul.pure-menu-list
-				+nav("Metrics", "/manage", path)
-				+nav("Rubrics", "/manage/rubric", path)
+				+nav("Metrics", "/metrics", path)
+				+nav("Rubrics", "/rubrics", path)
 				+nav("View Data", "/data", path)
 	body
 		br

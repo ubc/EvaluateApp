@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block scripts
 	script(src="/javascripts/editor.js")
@@ -22,7 +22,7 @@ block content
 		dl
 			if metric_id
 				+field("Metric UUID")
-					a(href="/metric/#{metric_id}")= "View"
+					a(href="/metrics/embed/#{metric_id}")= "View"
 					| : 
 					span= metric_id
 					input(
@@ -64,7 +64,7 @@ block content
 		br
 		strong= "Preview"
 		hr
-		iframe(src="/metric/#{metric_id}", frameborder="0")
+		iframe(src="/metrics/embed/#{metric_id}", frameborder="0")
 
 
 mixin options(slug, active)

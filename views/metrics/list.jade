@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
 	table.pure-table.pure-table-horizontal
@@ -20,7 +20,8 @@ block content
 					td= name
 					td= type
 					td
-						a(href="/manage/edit/#{metric_id}")= "Edit"
+						a(href="/metrics/edit/#{metric_id}")= "Edit"
 						|  / 
-						a(href="/metric/#{metric_id}")= "View"
+						a(href="/metrics/embed/#{metric_id}")= "View"
 					td= new Date( created ).toLocaleString()
+	a(href="/metrics/create")= "Create New Metric"

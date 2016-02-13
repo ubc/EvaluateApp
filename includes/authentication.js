@@ -5,4 +5,8 @@ module.exports = {
 		return true;
 	},
 
+	is_authorized: function(permission) {
+		return true;
+	},
+
 }

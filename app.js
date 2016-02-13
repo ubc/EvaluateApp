@@ -7,7 +7,7 @@ const BODYPARSER = require('body-parser');
 
 const ROUTES = require('./routes/index');
 const METRICS = require('./routes/metrics');
-const MANAGE = require('./routes/manage');
+const RUBRICS = require('./routes/rubrics');
 const API = require('./routes/api');
 const DATA = require('./routes/data');
 
@@ -27,9 +27,9 @@ app.use(require('less-middleware')(PATH.join(__dirname, 'public')));
 app.use(EXPRESS.static(PATH.join(__dirname, 'public')));
 
 app.use('/', ROUTES);
-app.use('/manage', MANAGE);
 app.use('/data', DATA);
-app.use('/metric', METRICS);
+app.use('/metrics', METRICS);
+app.use('/rubrics', RUBRICS);
 app.use('/api', API);
 
 // catch 404 and forward to error handler

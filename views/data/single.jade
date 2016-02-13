@@ -1,0 +1,42 @@
+extends ../layout
+
+block scripts
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js")
+
+block content
+	-
+		vote_count = votes.length
+		average_score = 0
+
+		for (var i = 0; i < scores.length; i++) {
+			average_score += scores[i].display
+		}
+
+		average_score /= scores.length
+
+
+	div.pure-g
+		dl.pure-u-1-2
+			dt= "Total Votes"
+			dd= vote_count
+			dt= "Average Score"
+			dd= average_score
+		div.pure-u-1-2
+			canvas#vote-chart(width="400", height="400")
+
+
+	pre= "Metric: " + JSON.stringify( metric, null, '\t' )
+	pre= "Votes: " + JSON.stringify( votes, null, '\t' )
+	pre= "Scores: " + JSON.stringify( scores, null, '\t' )
+
+	-// Refactor this into a seperate file
+	script
+		/*
+		Date.prototype.getWeek = function() {
+			var onejan = new Date( this.getFullYear(), 0, 1 );
+			return Math.ceil( ( ( ( this - onejan ) / 86400000 ) + onejan.getDay() + 1 ) / 7 );
+		};
+
+		var context = document.getElementById("vote-chart").getContext("2d");
+		var chart = new Chart( context ).Bar( data, {} );
+		*/
