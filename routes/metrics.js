@@ -12,7 +12,7 @@ const DEBUG = require('debug')('eval:routing');
 var router = EXPRESS.Router();
 
 router.use(function( req, res, next ) {
-	if ( AUTH.is_authenticated() || req.path.startsWith('/embed') ) {
+	if ( AUTH.is_authenticated() || req.path.indexOf('/embed') == 0 ) {
 		next();
 	} else {
 		res.status(403).send( "You are not authorized." );
