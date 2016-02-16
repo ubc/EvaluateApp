@@ -18,5 +18,5 @@ mixin field(title)
 				| #{blueprint.name}
 
 	each blueprint in blueprints
-		div.blueprint(class=blueprint.rubric_id, style=( blueprint.rubric_id == slug ? '' : "display:none;" ))
+		div.blueprint(class=blueprint.rubric_id, style=( blueprint.rubric_id == selected_id ? '' : "display:none;" ))
 			p #{blueprint.description}
