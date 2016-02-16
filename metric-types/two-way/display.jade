@@ -1,8 +1,8 @@
 
 -
-	// Expects variables metric, score, [user_vote], [transaction_id]
+	// Expects variables metric, score, [user_vote], [transaction_id], [name]
+	name = input_name || 'metric-' + metric.metric_id
 	options = metric.options
-	metric_id = metric.metric_id
 	icon = options['icon']
 	text_up = options['text_up']
 	text_down = options['text_down']
@@ -10,7 +10,7 @@
 
 label.vote
 	input(
-		name = 'metric-'+metric_id
+		name = name
 		type = 'radio'
 		value = 1
 		checked = ( user_vote === 1 )
@@ -23,7 +23,7 @@ label.vote
 		| #{text_up}
 label.vote
 	input(
-		name = 'metric-'+metric_id
+		name = name
 		type = 'radio'
 		value = -1
 		checked = ( user_vote === -1 )

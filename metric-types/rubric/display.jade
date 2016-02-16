@@ -2,20 +2,22 @@
 	// Expects variables metric, score, submetrics, [user_vote], [transaction_id]
 	rubric = metric
 	rubric_score = score
-	rubric_user_vote = rubric_user_vote 
+	rubric_user_vote = user_vote 
 	value = rubric_score.display
 
-form(method="POST")
+form
 	each metric, i in submetrics
 		-
-			title = metric.options['title']
-			type = metric.type.slug
+			submetric_id = metric.id
+			input_name = 'submetric-' + submetric_id
+			user_vote = rubric_user_vote[submetric_id]
+			// TODO: Define score
 
-		div
-			strong.title= title
+		div.submetric(id="submetric-" + submetric_id, data-id= submetric_id)
+			strong.title= metric.options['title'] || ""
 
 			-// TODO: Refactor this for any arbitrary metric type
-			case type
+			case metric.type.slug
 				when 'one-way'
 					include ../one-way/display.jade
 				when 'two-way'
@@ -25,6 +27,10 @@ form(method="POST")
 				when 'poll'
 					include ../poll/display.jade
 
-	input(type="submit", value="Submit")
-	button= "Reset"
+	if transaction_id
+		input(type="submit", value="Submit")
+		button.reset(type="button")= "Reset"
 	span.score= value
+
+if transaction_id
+	script(type="text/javascript", src="/javascripts/metric-rubric.js")

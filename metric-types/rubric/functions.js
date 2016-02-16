@@ -6,11 +6,24 @@ module.exports.slug = "rubric";
 module.exports.title = "Rubric";
 
 module.exports.validate_vote = function( new_value, old_value, metric ) {
-	// Validate vote for each submetric.
+	new_value = JSON.parse( new_value );
+
+	if ( typeof new_value === 'object' ) {
+		// Validate vote for each submetric.
+		for ( var i in new_value ) {
+			// TODO: Properly support the submetric types, instead of calling this generic function.
+			new_value[i] = UTIL.validate_vote( new_value[i], old_value[i] );
+		}
+	} else {
+		new_value = null;
+	}
+
+	return new_value;
 }
 
 module.exports.adjust_score = function( score, new_value, old_value, metric ) {
-	// Get score for each submetric.
+	//DEBUG_VOTE("Adjusting rubric score", score);
+	// TODO: Get score for each submetric.
 }
 
 module.exports.validate_options = function( options ) {

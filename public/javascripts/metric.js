@@ -14,6 +14,33 @@ function extract_value( input ) {
 	return result;
 }
 
+function response_handler( response, old_vote, root ) {
+	console.log( "Received", response, typeof response );
+
+	if ( typeof root === 'undefined' ) {
+		root = jQuery('html');
+	}
+
+	if ( typeof response == "object" ) {
+		// TODO: Implement a proper score display for Polls
+		root.find('.score').text( response.score );
+
+		// Update to the new transaction id
+		data.transaction_id = response.transaction_id;
+
+		// TODO: Make this a lot more efficient.
+		if ( response.vote != old_vote ) {
+			root.find('input').not("[type!='checkbox']").not("[type!='radio']").val(response.vote);
+			root.find('input[type="radio"][value="'+response.vote+'"]').prop( "checked", true );
+			root.find('input[type="checkbox"][value="'+response.vote+'"]').prop( "checked", true );
+		}
+
+		// TODO: Expand this to work for rubrics.
+	} else {
+		// TODO: Revert the changes if the nonce fails.
+	}
+}
+
 jQuery( '.vote input[type="radio"]' ).click( function( event ) {
 	var input = jQuery(this);
 
@@ -28,6 +55,7 @@ jQuery( '.vote input[type="radio"]' ).click( function( event ) {
 } );
 
 jQuery( '.vote  *:input' ).change( function() {
+	console.log("vote");
 	var input = jQuery(this);
 	var new_vote = extract_value(input);
 
@@ -40,26 +68,7 @@ jQuery( '.vote  *:input' ).change( function() {
 		transaction_id: data.transaction_id,
 		vote: new_vote,
 	}, function( response ) {
-		console.log( "Received", response, typeof response );
-
-		if ( typeof response == "object" ) {
-			// TODO: Implement a proper score display for Polls
-			jQuery('.score').text( response.score );
-
-			// Update to the new transaction id
-			data.transaction_id = response.transaction_id;
-
-			// TODO: Make this a lot more efficient.
-			if ( response.vote != new_vote ) {
-				jQuery('input').not("[type!='checkbox']").not("[type!='radio']").val(response.vote);
-				jQuery('input[type="radio"][value="'+response.vote+'"]').prop( "checked", true );
-				jQuery('input[type="checkbox"][value="'+response.vote+'"]').prop( "checked", true );
-			}
-
-			// TODO: Expand this to work for rubrics.
-		} else {
-			// TODO: Revert the changes if the nonce fails.
-		}
+		response_handler( response, new_vote );
 	}, 'json' );
 } );
 

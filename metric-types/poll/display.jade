@@ -1,6 +1,6 @@
 -
-	// Expects variables metric, score, [user_vote], [transaction_id]
-	metric_id = metric.metric_id
+	// Expects variables metric, score, [user_vote], [transaction_id], [name]
+	name = input_name || 'metric-' + metric.metric_id
 	answers = metric.options['answers'].split( /\r?\n/ )
 	total_votes = score.count || 0
 	votes = score.data || {}
@@ -11,7 +11,7 @@ ul
 		li
 			label.vote
 				input(
-					name = 'metric-' + metric_id
+					name = name
 					type = 'radio'
 					value = i
 					checked = ( user_vote === i )

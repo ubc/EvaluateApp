@@ -1,14 +1,14 @@
 
-mixin step( i, icon, metric_id, user_vote )
+mixin step( i, icon, name, user_vote )
 	if i > 0
 		- // TODO: Consider implementing this state info?
 		- icon_state = 'up' // ( i <= user_vote ) ? 'up' : 'empty'
 
 		span.vote
-			+step( i - 1, icon, metric_id, user_vote )
+			+step( i - 1, icon, name, user_vote )
 			label
 				input(
-					name = 'metric-'+metric_id
+					name = name
 					type = 'radio'
 					value = i
 					checked = ( user_vote === i )
@@ -19,8 +19,8 @@ mixin step( i, icon, metric_id, user_vote )
 				i(class='icon-'+icon+'-'+icon_state)
 
 -
-	// Expects variables metric, score, [user_vote], [transaction_id]
-	metric_id = metric.metric_id
+	// Expects variables metric, score, [user_vote], [transaction_id], [input_name]
+	name = input_name || 'metric-' + metric.metric_id
 	options = metric.options
 	icon = options['icon']
 	max = options['max']
@@ -29,7 +29,7 @@ mixin step( i, icon, metric_id, user_vote )
 if icon === 'slider'
 	label.vote
 		input(
-			name = 'metric-'+metric_id
+			name = name
 			input = 'range'
 			min = '0'
 			step = '1'
@@ -41,7 +41,7 @@ if icon === 'slider'
 else if icon == 'numeric'
 	label.vote
 		input(
-			name = 'metric-'+metric_id
+			name = name
 			input = 'number'
 			min = '0'
 			step = '1'
@@ -53,7 +53,7 @@ else if icon == 'numeric'
 		)
 		span= "/ " + max + " - "
 else
-	+step(max, icon, metric_id, user_vote)
+	+step(max, icon, name, user_vote)
 
 span.score
 	| #{display}
