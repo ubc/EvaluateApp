@@ -5,50 +5,18 @@ mixin field(title)
 		block
 
 -
-	// Expects variables options, slug
+	// Expects variables options, slug, blueprints
 
-	// TODO: Replace this test code.
-	blueprints = {
-		test1: {
-			title: "Sample Blueprint",
-			description: "This is an example definition for a rubric.",
-			fields: {
-				'first': {
-					name: "Sample",
-					type: "One Way",
-					weight: 1.0,
-					options: {
-						title: "Urego",
-						icon: "thumbs",
-						text: "Up",
-					},
-				},
-				'second': {
-					name: "Example",
-					type: "Two Way",
-					weight: 1.0,
-					options: {
-						icon: "arrows",
-						text_up: "Good!",
-						text_down: "Bad!",
-					},
-				},
-			},
-		},
-	}
-
-	blueprint = options['blueprint'] || ""
+	selected_id = options['blueprint'] || ""
 
 +field("Blueprint")
-	select.switch(name="blueprint", data-anchor=".blueprint")
+	select.switch(name="options[blueprint]", data-anchor=".blueprint")
 		option(value="")
 			| - Choose a Blueprint -
-		each blueprint, slug in blueprints
-			option(value="#{slug}", selected=(blueprint == slug))
-				| #{blueprint['title']}
+		each blueprint in blueprints
+			option(value="#{blueprint.rubric_id}", selected=( selected_id == blueprint.rubric_id))
+				| #{blueprint.name}
 
-	each blueprint, slug in blueprints
-		div.blueprint(class=slug, style=( blueprint == slug ? '' : "display:none;" ))
-			p #{blueprint['description']}
-			ul: each field in blueprint['fields']
-				li= field['name'] + ": " + field['type'] + " with weight " + field['weight'] + " options:<br>" + JSON.stringify(field['options'])
+	each blueprint in blueprints
+		div.blueprint(class=blueprint.rubric_id, style=( blueprint.rubric_id == slug ? '' : "display:none;" ))
+			p #{blueprint.description}

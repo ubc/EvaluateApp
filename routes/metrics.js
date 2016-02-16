@@ -3,6 +3,7 @@ const JADE = require('jade')
 const PROMISE = require('sequelize').Promise;
 const EXPRESS = require('express');
 const METRIC = require('../models/metric');
+const RUBRIC = require('../models/rubric');
 const METRIC_TYPES = require('../metric-types');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
@@ -33,20 +34,29 @@ router.get('/', function( req, res ) {
 });
 
 router.get('/create', function( req, res ) {
-	var metric = { options: {} };
+	var promises = [];
 
-	res.render( 'metrics/editor', {
-		title: "Create Metric",
-		path: req.originalUrl,
-		metric: metric,
-		metric_types: get_metric_type_options(metric.options),
-	});
+	promises.push( RUBRIC.findAll() );
+
+	PROMISE.all( promises ).spread( function( rubrics ) {
+		var metric = { options: {} };
+
+		res.render( 'metrics/editor', {
+			title: "Create Metric",
+			path: req.originalUrl,
+			metric: metric,
+			metric_types: get_metric_type_options(metric.options, rubrics),
+		} );
+	} );
 });
 
 router.get('/edit/:metric_id', function( req, res ) {
-	METRIC.findOne( {
-		where: { metric_id: req.params.metric_id },
-	} ).then( function( metric ) {
+	var promises = [];
+
+	promises.push( METRIC.findById( req.params.metric_id ) );
+	promises.push( RUBRIC.findAll() );
+
+	PROMISE.all( promises ).spread( function( metric, rubrics ) {
 		if ( metric == null ) {
 			res.send( "No metric #" + req.params.metric_id + " found." );
 			return;
@@ -56,19 +66,25 @@ router.get('/edit/:metric_id', function( req, res ) {
 			title: "Edit Metric",
 			path: req.originalUrl,
 			metric: metric,
-			metric_types: get_metric_type_options(metric.options),
+			metric_types: get_metric_type_options(metric.options, rubrics),
 		});
 	} );
 });
 
-function get_metric_type_options(options) {
+function get_metric_type_options(options, rubrics) {
 	var results = {};
 
 	for ( var slug in METRIC_TYPES ) {
-		var html = JADE.renderFile( __dirname + "/../metric-types/" + slug + "/options.jade", {
+		var data = {
 			slug: slug,
 			options: options,
-		} );
+		};
+
+		if ( slug == 'rubric' ) {
+			data['blueprints'] = rubrics;
+		}
+
+		var html = JADE.renderFile( __dirname + "/../metric-types/" + slug + "/options.jade", data );
 
 		results[slug] = {
 			title: METRIC_TYPES[slug].title,

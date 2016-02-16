@@ -2,7 +2,6 @@
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 const TYPES = require('../metric-types');
-const RUBRIC = require('./rubric');
 
 module.exports = DATABASE.define( 'Submetric', {
 	type: {
@@ -24,12 +23,11 @@ module.exports = DATABASE.define( 'Submetric', {
 			this.setDataValue( 'options', JSON.stringify( val ) );
 		},
 	},
+	weight: {
+		type: SEQUELIZE.FLOAT,
+	},
 }, {
 	timestamps: false,
-} );
-
-module.exports.belongsTo( RUBRIC, {
-	foreignKey: "rubric_id",
 } );
 
 module.exports.sync();

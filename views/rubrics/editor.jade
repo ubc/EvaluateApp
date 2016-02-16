@@ -53,6 +53,7 @@ mixin submetric(submetric, metric_types)
 		type = submetric.type ? submetric.type.slug : ""
 		options = submetric.options || {}
 		title = options.title || ""
+		weight = options.weight || 1.0
 
 	li.submetric(class= type ? "" : "empty")
 		if submetric_id
@@ -74,6 +75,14 @@ mixin submetric(submetric, metric_types)
 			autocomplete= "off"
 			value= title
 		)
+		input(
+			name= "weight"
+			type= "text"
+			placeholder= "Weight"
+			autocomplete= "off"
+			value= weight
+		)
+
 		if submetric_id
 			br
 			small: em= "Warning! Changing the submetric type will seriously mess up your existing votes and scoring. TODO: Fix this"

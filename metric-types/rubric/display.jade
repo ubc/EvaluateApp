@@ -3,26 +3,28 @@
 	fields = metric.options['fields']
 	value = score.display
 
-form(method="POST")
-	each field, i in fields
-		-
-			field_title = field['options']['title']
-			field_type = field['type']
-			field_score = {
-				display: null,
-			}
-			//field_user_vote = 
-			//field['metric']
+	/*
+	form(method="POST")
+		each field, i in fields
+			-
+				field_title = field['options']['title']
+				field_type = field['type']
+				field_score = {
+					display: null,
+				}
+				//field_user_vote = 
+				//field['metric']
 
-		div
-			strong.title= field_title
+			div
+				strong.title= field_title
 
-			case field_type
-				when 'one-way'
-					include one-way.jade
-				when 'two-way'
-					include two-way.jade
-				when 'range'
-					include range.jade
-				when 'poll'
-					include poll.jade
+				case field_type
+					when 'one-way'
+						include one-way.jade
+					when 'two-way'
+						include two-way.jade
+					when 'range'
+						include range.jade
+					when 'poll'
+						include poll.jade
+	*/
