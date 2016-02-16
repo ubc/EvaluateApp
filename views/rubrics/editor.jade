@@ -35,7 +35,7 @@ block content
 			+field("Fields")
 				ul.submetric-list(style="margin: 0; padding:0; list-style: none;")
 					- // TODO: Refactor that inline style ^
-					each submetric in submetrics
+					each submetric in rubric.submetrics
 						+submetric(submetric, metric_types)
 
 					+submetric("", metric_types)

@@ -3,7 +3,7 @@ const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 const SUBMETRIC = require('../models/submetric');
 
-module.exports = DATABASE.define( 'Rubric', {
+module.exports = DATABASE.define( 'rubric', {
 	rubric_id: {
 		type: SEQUELIZE.INTEGER(11),
 		autoIncrement: true,

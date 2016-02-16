@@ -36,10 +36,9 @@ router.get('/create', function( req, res ) {
 router.get('/edit/:rubric_id', function( req, res ) {
 	var promises = [];
 
-	promises.push( RUBRIC.findById( req.params.rubric_id ) );
-
-	promises.push( SUBMETRIC.findAll( {
+	promises.push( RUBRIC.findOne( {
 		where: { rubric_id: req.params.rubric_id },
+		include: [{ model: SUBMETRIC }],
 	} ) );
 
 	PROMISE.all( promises ).spread( function( rubric, submetrics ) {
@@ -52,7 +51,6 @@ router.get('/edit/:rubric_id', function( req, res ) {
 			title: "Edit Rubric",
 			path: req.originalUrl,
 			rubric: rubric,
-			submetrics: submetrics,
 		} );
 
 		res.render( 'rubrics/editor', data );

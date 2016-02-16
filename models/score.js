@@ -4,7 +4,7 @@ const DATABASE = require('../includes/database');
 const METRIC = require('./metric');
 const DEBUG = require('debug')('eval:database');
 
-module.exports = DATABASE.define( 'Score', {
+module.exports = DATABASE.define( 'score', {
 	context_id: {
 		type: SEQUELIZE.CHAR(32),
 		allowNull: false,

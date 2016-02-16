@@ -3,7 +3,7 @@ const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 const METRIC = require('./metric');
 
-module.exports = DATABASE.define( 'Vote', {
+module.exports = DATABASE.define( 'vote', {
 	context_id: {
 		type: SEQUELIZE.CHAR(32),
 		allowNull: false,

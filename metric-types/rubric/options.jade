@@ -20,3 +20,16 @@ mixin field(title)
 	each blueprint in blueprints
 		div.blueprint(class=blueprint.rubric_id, style=( blueprint.rubric_id == selected_id ? '' : "display:none;" ))
 			p #{blueprint.description}
+
+			ul
+				each field in blueprint.submetrics
+					-
+						field_options = field.options
+						field_title = field_options['title'] || "Untitled"
+						field_type = field.type ? field.type.title : "no-type"
+						field_weight = field_weight || 1
+					li
+						strong= field_title
+						|  with type #{field_type} and weight x#{field_weight}
+						br
+						| #{JSON.stringify(field.options)}

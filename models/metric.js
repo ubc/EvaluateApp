@@ -6,7 +6,7 @@ const DEBUG = require('debug')('eval:database');
 
 DEBUG("Metric types", Object.keys(TYPES));
 
-module.exports = DATABASE.define( 'Metric', {
+module.exports = DATABASE.define( 'metric', {
 	metric_id: {
 		type: SEQUELIZE.UUID,
 		defaultValue: SEQUELIZE.UUIDV4,

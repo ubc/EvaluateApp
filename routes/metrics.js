@@ -3,6 +3,7 @@ const JADE = require('jade')
 const PROMISE = require('sequelize').Promise;
 const EXPRESS = require('express');
 const METRIC = require('../models/metric');
+const SUBMETRIC = require('../models/submetric');
 const RUBRIC = require('../models/rubric');
 const METRIC_TYPES = require('../metric-types');
 const VOTE = require('../models/vote');
@@ -36,7 +37,9 @@ router.get('/', function( req, res ) {
 router.get('/create', function( req, res ) {
 	var promises = [];
 
-	promises.push( RUBRIC.findAll() );
+	promises.push( RUBRIC.findAll( {
+		include: [{ model: SUBMETRIC }],
+	} ) );
 
 	PROMISE.all( promises ).spread( function( rubrics ) {
 		var metric = { options: {} };
@@ -54,7 +57,9 @@ router.get('/edit/:metric_id', function( req, res ) {
 	var promises = [];
 
 	promises.push( METRIC.findById( req.params.metric_id ) );
-	promises.push( RUBRIC.findAll() );
+	promises.push( RUBRIC.findAll({
+		include: [ SUBMETRIC ],
+	}) );
 
 	PROMISE.all( promises ).spread( function( metric, rubrics ) {
 		if ( metric == null ) {
@@ -124,7 +129,7 @@ router.post( '/edit/:metric_id', save_metric );
 router.post( '/create', save_metric );
 
 
-router.get('/embed/:metric_id/', function( req, res ) {
+router.get( '/embed/:metric_id/', function( req, res ) {
 	var promises = [];
 
 	promises.push( METRIC.findById( req.params.metric_id ) );
@@ -151,9 +156,9 @@ router.get('/embed/:metric_id/', function( req, res ) {
 		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );
 		res.render( "metrics/single", data );
 	})
-});
+} );
 
-router.get('/embed/:metric_id/:user_id', function( req, res ) {
+router.get( '/embed/:metric_id/:user_id', function( req, res ) {
 	var promises = [];
 
 	promises.push( METRIC.findById( req.params.metric_id ) );
@@ -197,7 +202,7 @@ router.get('/embed/:metric_id/:user_id', function( req, res ) {
 		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );
 		res.render( "metrics/single", data );
 	})
-});
+} );
 
 // TODO: Implement delete.
 
