@@ -1,30 +1,30 @@
 -
-	metric_id = metric.metric_id
-	fields = metric.options['fields']
-	value = score.display
+	// Expects variables metric, score, submetrics, [user_vote], [transaction_id]
+	rubric = metric
+	rubric_score = score
+	rubric_user_vote = rubric_user_vote 
+	value = rubric_score.display
 
-	/*
-	form(method="POST")
-		each field, i in fields
-			-
-				field_title = field['options']['title']
-				field_type = field['type']
-				field_score = {
-					display: null,
-				}
-				//field_user_vote = 
-				//field['metric']
+form(method="POST")
+	each metric, i in submetrics
+		-
+			title = metric.options['title']
+			type = metric.type.slug
 
-			div
-				strong.title= field_title
+		div
+			strong.title= title
 
-				case field_type
-					when 'one-way'
-						include one-way.jade
-					when 'two-way'
-						include two-way.jade
-					when 'range'
-						include range.jade
-					when 'poll'
-						include poll.jade
-	*/
+			-// TODO: Refactor this for any arbitrary metric type
+			case type
+				when 'one-way'
+					include ../one-way/display.jade
+				when 'two-way'
+					include ../two-way/display.jade
+				when 'range'
+					include ../range/display.jade
+				when 'poll'
+					include ../poll/display.jade
+
+	input(type="submit", value="Submit")
+	button= "Reset"
+	span.score= value

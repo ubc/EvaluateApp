@@ -128,6 +128,10 @@ function save_metric( req, res ) {
 router.post( '/edit/:metric_id', save_metric );
 router.post( '/create', save_metric );
 
+function render_metric( res, type_slug, data ) {
+	data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + type_slug + "/display.jade", data );
+	res.render( "metrics/single", data );
+}
 
 router.get( '/embed/:metric_id/', function( req, res ) {
 	var promises = [];
@@ -153,8 +157,18 @@ router.get( '/embed/:metric_id/', function( req, res ) {
 			score: ( score != null ? score : {} ),
 		};
 
-		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );
-		res.render( "metrics/single", data );
+		var type_slug = metric.type.slug;
+
+		if ( type_slug == 'rubric' ) {
+			SUBMETRIC.findAll( {
+				where: { rubric_id: metric.options['blueprint'] },
+			} ).then( function( submetrics ) {
+				data['submetrics'] = submetrics;
+				render_metric( res, type_slug, data );
+			} );
+		} else {
+			render_metric( res, type_slug, data );
+		}
 	})
 } );
 
@@ -199,8 +213,18 @@ router.get( '/embed/:metric_id/:user_id', function( req, res ) {
 			score: ( score != null ? score : {} ),
 		};
 
-		data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + metric.type.slug + "/display.jade", data );
-		res.render( "metrics/single", data );
+		var type_slug = metric.type.slug;
+
+		if ( type_slug == 'rubric' ) {
+			SUBMETRIC.findAll( {
+				where: { rubric_id: metric.options['blueprint'] },
+			} ).then( function( submetrics ) {
+				data['submetrics'] = submetrics;
+				render_metric( res, type_slug, data );
+			} );
+		} else {
+			render_metric( res, type_slug, data );
+		}
 	})
 } );
 
