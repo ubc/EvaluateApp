@@ -6,6 +6,7 @@ module.exports.slug = "poll";
 module.exports.title = "Poll";
 
 module.exports.validate_vote = function( new_value, old_value, metric ) {
+	DEBUG_VOTE("Validating poll vote", new_value, old_value, metric.options)
 	if ( new_value === '' ) {
 		return null;
 	}

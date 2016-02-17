@@ -32,3 +32,16 @@ module.exports.keep = function( object, keys ) {
 
 	return object;
 }
+
+module.exports.select_from = function( list, where ) {
+	loop:
+	for ( var i in list ) {
+		for ( var k in where ) {
+			if ( list[i][k] != where[k] ) {
+				continue loop;
+			}
+		}
+
+		return list[i];
+	}
+}
