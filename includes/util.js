@@ -1,17 +1,19 @@
 
 module.exports.defaults = function( map_defaults, map_values ) {
-	console.log("defaults", map_defaults);
-	for ( var key in map_defaults ) {
-		console.log("check for", key, "in", map_values);
-		if ( map_values.hasOwnProperty( key ) ) {
-			console.log("found", key, "in", map_values);
-			map_defaults[key] = map_values[key];
+	if ( map_values != null ) {
+		console.log("defaults", map_defaults);
+		for ( var key in map_defaults ) {
+			console.log("check for", key, "in", map_values);
+			if ( map_values.hasOwnProperty( key ) ) {
+				console.log("found", key, "in", map_values);
+				map_defaults[key] = map_values[key];
+			}
 		}
 	}
 
 	console.log("results", map_defaults);
 	return map_defaults;
-};
+}
 
 module.exports.validate_vote = function( new_value, old_value ) {
 	new_value = parseInt( new_value );

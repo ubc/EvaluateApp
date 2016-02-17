@@ -16,6 +16,9 @@ module.exports.validate_vote = function( new_value, old_value, metric ) {
 }
 
 module.exports.adjust_score = function( score, new_value, old_value, metric ) {
+	score.count = score.count || 0;
+	score.average = score.average || 0;
+	
 	if ( new_value !== old_value ) {
 		if ( new_value === null ) {
 			score.count--;

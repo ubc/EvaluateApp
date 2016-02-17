@@ -20,8 +20,9 @@ module.exports.validate_vote = function( new_value, old_value, metric ) {
 }
 
 module.exports.adjust_score = function( score, new_value, old_value, metric ) {
+	score.count = score.count || 0;
+	score.average = score.average ? score.average * score.count : 0;
 	vote_diff = new_value - old_value;
-	score.average = score.average * score.count;
 
 	if ( new_value !== old_value ) {
 		if ( new_value === null ) {

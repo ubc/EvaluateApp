@@ -23,8 +23,39 @@ module.exports.validate_vote = function( new_value, old_value, metric, submetric
 }
 
 module.exports.adjust_score = function( score, new_value, old_value, metric, submetrics ) {
-	//DEBUG_VOTE("Adjusting rubric score", score);
-	// TODO: Get score for each submetric.
+	old_value = old_value || {}
+
+	var submetric_data = score.data || {};
+	score.count = score.count || 0;
+	score.average = 0;
+
+	if ( new_value !== old_value ) {
+		if ( new_value === null ) {
+			score.count--;
+		} else if ( old_value === null ) {
+			score.count++;
+		}
+	}
+
+	// Adjust the score for each submetric.
+	for ( var i in submetrics ) {
+		var submetric = submetrics[i];
+		var submetric_id = submetric.id;
+		var submetric_score = submetric_data[submetric_id] || {};
+		var submetric_new_value = typeof new_value[submetric_id] !== 'undefined' ? new_value[submetric_id] : null;
+		var submetric_old_value = typeof old_value[submetric_id] !== 'undefined' ? old_value[submetric_id] : null;
+
+		submetric.type.adjust_score( submetric_score, submetric_new_value, submetric_old_value, submetric );
+
+		submetric_data[submetric_id] = submetric_score;
+		score.average += submetric_score.average * submetric.weight;
+	}
+
+	// Average the score of each submetric.
+	score.average /= submetrics.length;
+	score.sorting = score.average;
+	score.display = score.average;
+	score.data = submetric_data;
 }
 
 module.exports.validate_options = function( options ) {

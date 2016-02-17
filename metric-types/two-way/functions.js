@@ -18,21 +18,26 @@ module.exports.validate_vote = function( new_value, old_value, metric ) {
 }
 
 module.exports.adjust_score = function( score, new_value, old_value, metric ) {
+	var positive_votes = score.data || 0;
+	score.count = score.count || 0;
+	score.average = score.average || 0;
+	
 	if ( new_value !== old_value ) {
 		if ( new_value === null ) {
 			score.count--;
 			new_value = 0;
-			if ( old_value > 0 ) score.data['positive_votes']--;
+			if ( old_value > 0 ) positive_votes--;
 		} else if ( old_value === null ) {
 			score.count++;
 			old_value = 0;
-			if ( new_value > 0 ) score.data['positive_votes']++;
+			if ( new_value > 0 ) positive_votes++;
 		}
 	}
 
 	vote_diff = new_value - old_value;
 	score.average += vote_diff;
 	score.display = score.average;
+	score.data = positive_votes;
 
 	// TODO: Implement proper sorting algorithm. Currently returns an error.
 	score.sorting = score.average; //calculate_wilson_score( score.data['positive_votes'], score.count );

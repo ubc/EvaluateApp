@@ -5,6 +5,8 @@ const UTIL = require('../../includes/util');
 module.exports.slug = "poll";
 module.exports.title = "Poll";
 
+// TODO: allow users to define meaningful values to each poll option - or exclude polls from Rubrics.
+
 module.exports.validate_vote = function( new_value, old_value, metric ) {
 	DEBUG_VOTE("Validating poll vote", new_value, old_value, metric.options)
 	if ( new_value === '' ) {
@@ -22,8 +24,16 @@ module.exports.validate_vote = function( new_value, old_value, metric ) {
 }
 
 module.exports.adjust_score = function( score, new_value, old_value, metric ) {
-	new_value = UTIL.validate_vote( new_value, old_value );
 	var votes = score.data;
+	score.count = score.count || 0;
+
+	if ( new_value !== old_value ) {
+		if ( new_value === null ) {
+			score.count--;
+		} else if ( old_value === null ) {
+			score.count++;
+		}
+	}
 
 	// Initialize the data array
 	if ( ! ( votes instanceof Array ) ) {
