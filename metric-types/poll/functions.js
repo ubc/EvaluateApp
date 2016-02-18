@@ -2,8 +2,11 @@
 const DEBUG_VOTE = require('debug')('eval:voting');
 const UTIL = require('../../includes/util');
 
-module.exports.slug = "poll";
-module.exports.title = "Poll";
+module.exports = {
+	title: "Poll",
+	slug: "poll",
+	valid_as_submetric: false,
+};
 
 // TODO: allow users to define meaningful values to each poll option - or exclude polls from Rubrics.
 

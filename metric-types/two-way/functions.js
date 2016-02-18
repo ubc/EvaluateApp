@@ -2,8 +2,10 @@
 const DEBUG_VOTE = require('debug')('eval:voting');
 const UTIL = require('../../includes/util');
 
-module.exports.slug = "two-way";
-module.exports.title = "Two Way";
+module.exports = {
+	title: "Two Way",
+	slug: "two-way",
+};
 
 module.exports.validate_vote = function( new_value, old_value, metric ) {
 	new_value = UTIL.validate_vote( new_value, old_value );

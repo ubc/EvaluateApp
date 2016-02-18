@@ -62,7 +62,7 @@ function add_metric_type_data( data ) {
 	data['metric_types'] = {};
 
 	for ( var slug in SUBMETRIC_TYPES ) {
-		if ( slug != 'rubric' ) {
+		if ( SUBMETRIC_TYPES[slug].valid_as_submetric !== false ) {
 			data['metric_types'][slug] = SUBMETRIC_TYPES[slug].title;
 			data['render_'+slug] = JADE.compileFile( __dirname + "/../metric-types/" + slug + "/options.jade" );
 		}

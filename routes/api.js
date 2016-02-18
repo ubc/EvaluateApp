@@ -41,8 +41,7 @@ router.post('/vote', function( req, res, next ) {
 			},
 		} ) );
 
-		// TODO: Make the rubric type more generic. metric.type.has_submetrics
-		if ( metric.type.slug == 'rubric' ) {
+		if ( metric.type.has_submetrics === true ) {
 			promises.push( SUBMETRIC.findAll( {
 				where: { rubric_id: metric.options.blueprint },
 			} ) );

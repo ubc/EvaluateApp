@@ -85,6 +85,7 @@ function get_metric_type_options(options, rubrics) {
 			options: options,
 		};
 
+		// TODO: Refactor rubrics to avoid the name clash between the metric type and the model.
 		if ( slug == 'rubric' ) {
 			data['blueprints'] = rubrics;
 		}
@@ -159,7 +160,7 @@ router.get( '/embed/:metric_id/', function( req, res ) {
 
 		var type_slug = metric.type.slug;
 
-		if ( type_slug == 'rubric' ) {
+		if ( metric.type.has_submetrics === true ) {
 			SUBMETRIC.findAll( {
 				where: { rubric_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {
@@ -215,7 +216,7 @@ router.get( '/embed/:metric_id/:user_id', function( req, res ) {
 
 		var type_slug = metric.type.slug;
 
-		if ( type_slug == 'rubric' ) {
+		if ( metric.type.has_submetrics === true ) {
 			SUBMETRIC.findAll( {
 				where: { rubric_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {

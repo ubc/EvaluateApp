@@ -2,8 +2,12 @@
 const DEBUG_VOTE = require('debug')('eval:voting');
 const UTIL = require('../../includes/util');
 
-module.exports.slug = "rubric";
-module.exports.title = "Rubric";
+module.exports = {
+	title: "Rubric",
+	slug: "rubric",
+	valid_as_submetric: false,
+	has_submetrics: true,
+};
 
 module.exports.validate_vote = function( new_value, old_value, metric, submetrics ) {
 	new_value = JSON.parse( new_value );

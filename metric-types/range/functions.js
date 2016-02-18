@@ -2,8 +2,10 @@
 const DEBUG_VOTE = require('debug')('eval:voting');
 const UTIL = require('../../includes/util');
 
-module.exports.slug = "range";
-module.exports.title = "Range";
+module.exports = {
+	title: "Range",
+	slug: "range",
+};
 
 // TODO: Make front end changes so that if you vote over the maximum the front end display is corrected.
 
