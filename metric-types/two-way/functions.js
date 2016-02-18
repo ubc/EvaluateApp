@@ -18,7 +18,8 @@ module.exports.validate_vote = function( new_value, old_value, metric ) {
 }
 
 module.exports.adjust_score = function( score, new_value, old_value, metric ) {
-	var positive_votes = score.data || 0;
+	var positive_votes = typeof score.data === 'number' ? score.data : 0;
+	DEBUG_VOTE("positive_votes", positive_votes);
 	score.count = score.count || 0;
 	score.average = score.average || 0;
 	
@@ -39,8 +40,7 @@ module.exports.adjust_score = function( score, new_value, old_value, metric ) {
 	score.display = score.average;
 	score.data = positive_votes;
 
-	// TODO: Implement proper sorting algorithm. Currently returns an error.
-	score.sorting = score.average; //calculate_wilson_score( score.data['positive_votes'], score.count );
+	score.sorting = calculate_wilson_score( positive_votes, score.count );
 }
 
 module.exports.validate_options = function( options ) {
@@ -58,6 +58,7 @@ module.exports.validate_options = function( options ) {
 function calculate_wilson_score( positive, count, z, base_votes ) {
 	if ( typeof z === 'undefined' ) z = 1.959964;
 	if ( typeof base_votes === 'undefined' ) base_votes = 10;
+	DEBUG_VOTE("Wilson score vars", positive, count, z, base_votes);
 
 	// This means that every metric will be treated as if it has 10 (or user defined) votes to start with.
 	// This is used to make unrated content appear higher than negatively rated content.
@@ -68,5 +69,6 @@ function calculate_wilson_score( positive, count, z, base_votes ) {
 	p = 1.0 * positive / count;
 	numerator = p + z * z / (2 * count) - z * Math.sqrt((p * (1 - p) + z * z / (4 * count)) / count);
 	denominator = 1 + z * z / count;
+	DEBUG_VOTE("Wilson score", numerator, "/", denominator, "=", numerator / denominator);
 	return numerator / denominator;
 }
