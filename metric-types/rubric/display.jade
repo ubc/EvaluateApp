@@ -11,7 +11,7 @@ form
 			submetric_id = metric.id
 			input_name = 'submetric-' + submetric_id
 			user_vote = rubric_user_vote[submetric_id]
-			// TODO: Define score
+			score = rubric_score.data[submetric_id] || {}
 
 		div.submetric(id="submetric-" + submetric_id, data-id= submetric_id)
 			strong.title= metric.options['title'] || ""
@@ -30,7 +30,7 @@ form
 	if transaction_id
 		input(type="submit", value="Submit")
 		button.reset(type="button")= "Reset"
-	span.score= value
+	span.rubric-score= value
 
 if transaction_id
 	script(type="text/javascript", src="/javascripts/metric-rubric.js")

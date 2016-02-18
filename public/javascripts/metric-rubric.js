@@ -33,13 +33,16 @@ jQuery( 'form' ).submit( function( event ) {
 	}, function( response ) {
 		console.log( "Received", response, typeof response );
 
-		for ( var i in response.vote ) {
+		for ( var i in response.score_data ) {
+			console.log( "Processing response for", i );
 			response_handler( {
-				transaction_id: response.transaction_id,
 				vote: response.vote[i],
-				//score: response.score[i],
+				score: response.score_data[i].display,
 			}, new_vote, jQuery( '#submetric-' + i ) );
 		}
+
+		data.transaction_id = response.transaction_id;
+		jQuery('.rubric-score').text( response.score );
 	}, 'json' );
 
 	event.preventDefault();

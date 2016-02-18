@@ -79,6 +79,7 @@ router.post('/vote', function( req, res, next ) {
 			res.json( {
 				transaction_id: TRANSACTION.create( TRANSACTION.TYPE.VOTE, data, TRANSACTION.DURATION.ONE_DAY ), // Send a new nonce
 				score: score.display,
+				score_data: score.data,
 				vote: new_value,
 			} );
 		} );
