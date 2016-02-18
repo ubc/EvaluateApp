@@ -4,10 +4,11 @@ const FILE = require("fs");
 module.exports = {};
 
 FILE.readdirSync( __dirname ).forEach( function( file ) {
-	if ( file != "index.js" ) { // TODO: Enable and implement Rubrics.
+	if ( file != "index.js" ) {
 		var object = require( "./" + file + "/functions.js" );
 
-		// TODO: Check the file exists and do not include if slug is undefined.
-		module.exports[ object.slug ] = object;
+		if ( typeof object !== 'undefined' && object.slug != null ) {
+			module.exports[ object.slug ] = object;
+		}
 	}
 } );
