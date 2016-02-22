@@ -38,7 +38,7 @@ router.get('/:metric_id', function(req, res, next) {
 		}
 
 		res.render( 'data/single', {
-			title: "Data for Metric #" + metric.metric_id,
+			title: "Data for " + metric.name,
 			path: req.originalUrl,
 			metric: metric,
 			votes: votes,

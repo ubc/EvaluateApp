@@ -12,7 +12,7 @@ var router = EXPRESS.Router();
 
 router.post('/vote', function( req, res, next ) {
 	DEBUG_VOTE('API CALL', "vote", req.body);
-	// TODO: Add nonce check
+
 	var data = TRANSACTION.redeem( req.body.transaction_id, "vote" );
 	var new_value = req.body.vote;
 

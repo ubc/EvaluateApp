@@ -14,8 +14,6 @@ const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router();
 
-// TODO: Refactor to use router.param
-
 router.use(function( req, res, next ) {
 	if ( AUTH.is_authenticated() || req.path.indexOf('/embed') == 0 ) {
 		next();

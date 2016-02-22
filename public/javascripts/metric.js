@@ -22,7 +22,6 @@ function response_handler( response, old_vote, root ) {
 	}
 
 	if ( typeof response == "object" ) {
-		// TODO: Implement a proper score display for Polls
 		root.find('.score').text( response.score );
 
 		// Update to the new transaction id
@@ -34,8 +33,6 @@ function response_handler( response, old_vote, root ) {
 			root.find('input[type="radio"][value="'+response.vote+'"]').prop( "checked", true );
 			root.find('input[type="checkbox"][value="'+response.vote+'"]').prop( "checked", true );
 		}
-
-		// TODO: Expand this to work for rubrics.
 	} else {
 		// TODO: Revert the changes if the nonce fails.
 	}
