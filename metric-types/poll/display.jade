@@ -21,8 +21,8 @@ ul
 				)
 				span
 					| #{text}
-			//span.score
-			//	| #{vote_count}
+			span.score(title="Total")
+				| #{vote_count}
 			br
 			progress.score(
 				max = total_votes

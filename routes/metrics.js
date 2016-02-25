@@ -138,7 +138,7 @@ router.get( '/embed/:metric_id/', function( req, res ) {
 	promises.push( METRIC.findById( req.params.metric_id ) );
 
 	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
-		attributes: ['display', 'data'],
+		attributes: ['count', 'display', 'data'],
 		where: { 
 			metric_id: req.params.metric_id,
 			context_id: "context",
@@ -186,7 +186,7 @@ router.get( '/embed/:metric_id/:user_id', function( req, res ) {
 	} ) );
 
 	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
-		attributes: ['display', 'data'],
+		attributes: ['count', 'display', 'data'],
 		where: { 
 			metric_id: req.params.metric_id,
 			context_id: "context",

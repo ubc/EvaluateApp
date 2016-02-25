@@ -5,7 +5,6 @@ mixin step( i, icon, name, user_vote )
 		- icon_state = 'up' // ( i <= user_vote ) ? 'up' : 'empty'
 
 		span.vote
-			+step( i - 1, icon, name, user_vote )
 			label
 				input(
 					name = name
@@ -16,6 +15,7 @@ mixin step( i, icon, name, user_vote )
 					autocomplete = "off"
 					disabled = ( transaction_id == null )
 				)
+				+step( i - 1, icon, name, user_vote )
 				i(class='icon-'+icon+'-'+icon_state)
 
 -
@@ -43,18 +43,18 @@ else if icon == 'numeric'
 	label.vote
 		input(
 			name = name
-			type = 'number'
-			min = '0'
-			step = '1'
-			max = max
+			type = 'text'
+			size = max.toString().length
 			value = user_vote
 			placeholder = '0'
 			autocomplete = "off"
 			disabled = ( transaction_id == null )
 		)
-		span= "/ " + max + " - "
+		span= " / " + max + " -"
 else
 	+step(max, icon, name, user_vote)
 
-span.score
+span.score(title="Average")
 	| #{display}
+
+-//link(rel="stylesheet", href="/stylesheets/metric-slider.css")

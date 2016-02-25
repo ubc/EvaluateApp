@@ -2,7 +2,7 @@
 	// Expects variables metric, score, submetrics, [user_vote], [transaction_id]
 	rubric = metric
 	rubric_score = score
-	rubric_user_vote = user_vote 
+	rubric_user_vote = user_vote || {}
 	value = rubric_score.display
 
 form
@@ -27,10 +27,11 @@ form
 				when 'poll'
 					include ../poll/display.jade
 
-	if transaction_id
-		input(type="submit", value="Submit")
-		button.reset(type="button")= "Reset"
-	span.rubric-score= value
+	div.rubric-meta
+		if transaction_id
+			input(type="submit", value="Submit")
+			button.reset(type="button")= "Reset"
+		span.rubric-score(title="Average")= value
 
 if transaction_id
 	script(type="text/javascript", src="/javascripts/metric-rubric.js")
