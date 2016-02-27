@@ -227,6 +227,45 @@ router.get( '/embed/:metric_id/:user_id', function( req, res ) {
 	})
 } );
 
-// TODO: Implement delete.
+router.get( '/destroy/:metric_id', function( req, res ) {
+	var metric_id = req.params.metric_id;
+
+	METRIC.findById( metric_id ).then( function( metric ) {
+		if ( metric != null ) {
+			res.render( 'metrics/destroy', {
+				title: "Delete Metric",
+				metric: metric,
+			} );
+		} else {
+			res.status(404).render('error', {
+				message: "There is no Metric with id #" + metric_id,
+				error: {
+					status: "404 Metric Not Found",
+				},
+			});
+		}
+	} );
+} );
+
+router.post( '/destroy/:metric_id', function( req, res ) {
+	var metric_id = req.params.metric_id;
+	var promises = [];
+
+	promises.push( VOTE.destroy( {
+		where: { metric_id: metric_id },
+	} ) );
+
+	promises.push( SCORE.destroy( {
+		where: { metric_id: metric_id },
+	} ) );
+
+	promises.push( METRIC.destroy( {
+		where: { metric_id: metric_id },
+	} ) );
+	
+	PROMISE.all( promises ).spread( function() {
+		res.redirect( '/metrics' );
+	} );
+} );
 
 module.exports = router;

@@ -155,18 +155,9 @@ router.get( '/destroy/:rubric_id', function( req, res ) {
 } );
 
 router.post( '/destroy/:rubric_id', function( req, res ) {
-	var rubric_id = req.params.rubric_id;
-	var promises = [];
-
-	promises.push( RUBRIC.destroy( {
-		where: { rubric_id: rubric_id },
-	} ) );
-
-	promises.push( SUBMETRIC.destroy( {
-		where: { rubric_id: rubric_id },
-	} ) );
-
-	PROMISE.all( promises ).spread( function() {
+	RUBRIC.destroy( {
+		where: { rubric_id: req.params.rubric_id },
+	} ).then( function() {
 		res.redirect( '/rubrics' );
 	} );
 } );

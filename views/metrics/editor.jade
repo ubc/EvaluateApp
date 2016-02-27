@@ -53,12 +53,14 @@ block content
 				| !{object.html}
 
 		input.pure-button.pure-button-primary(type="submit", value="Save")
+		if metric_id
+			a.pure-button(href="/metrics/destroy/#{metric_id}")= "Delete"
 
-	if metric.metric_id
+	if metric_id
 		br
 		strong= "Preview"
 		hr
-		iframe(src="/metrics/embed/#{metric.metric_id}", frameborder="0")
+		iframe(src="/metrics/embed/#{metric_id}", frameborder="0")
 
 
 mixin options(slug, active_type)

@@ -20,6 +20,7 @@ module.exports = DATABASE.define( 'rubric', {
 
 module.exports.hasMany( SUBMETRIC, {
 	foreignKey: "rubric_id",
+	onDelete: 'cascade',
 } );
 
 module.exports.sync();
