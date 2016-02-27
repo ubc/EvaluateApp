@@ -1,7 +1,6 @@
 
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
-const SUBMETRIC = require('../models/submetric');
 
 module.exports = DATABASE.define( 'rubric', {
 	rubric_id: {
@@ -17,10 +16,3 @@ module.exports = DATABASE.define( 'rubric', {
 		type: SEQUELIZE.STRING,
 	},
 } );
-
-module.exports.hasMany( SUBMETRIC, {
-	foreignKey: "rubric_id",
-	onDelete: 'cascade',
-} );
-
-module.exports.sync();

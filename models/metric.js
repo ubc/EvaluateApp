@@ -41,5 +41,3 @@ module.exports = DATABASE.define( 'metric', {
 
 // TODO: Models that rely on this model will not be generated on the first launch (they will give an error). Fix that.
 // TODO: Swap the relationship between this and score/votes - then add { onDelete: 'cascade' }
-
-module.exports.sync();

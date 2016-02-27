@@ -1,7 +1,6 @@
 
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
-const METRIC = require('./metric');
 
 module.exports = DATABASE.define( 'vote', {
 	context_id: {
@@ -28,11 +27,5 @@ module.exports = DATABASE.define( 'vote', {
 			unique: true,
 			fields: ["metric_id", "context_id", "user_id"],
 		}
-	]
+	],
 } );
-
-module.exports.belongsTo( METRIC, {
-	foreignKey: "metric_id",
-} );
-
-module.exports.sync();

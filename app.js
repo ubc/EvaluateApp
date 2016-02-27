@@ -6,11 +6,15 @@ const LOGGER = require('morgan');
 const COOKIEPARSER = require('cookie-parser');
 const BODYPARSER = require('body-parser');
 
+const MODELS = require('./models');
+
 const ROUTES = require('./routes/index');
 const METRICS = require('./routes/metrics');
 const RUBRICS = require('./routes/rubrics');
 const API = require('./routes/api');
 const DATA = require('./routes/data');
+
+MODELS.install();
 
 var app = EXPRESS();
 

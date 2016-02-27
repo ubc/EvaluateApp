@@ -1,7 +1,6 @@
 
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
-const METRIC = require('./metric');
 const DEBUG = require('debug')('eval:database');
 
 module.exports = DATABASE.define( 'score', {
@@ -50,11 +49,5 @@ module.exports = DATABASE.define( 'score', {
 			unique: true,
 			fields: ["metric_id", "context_id"],
 		}
-	]
+	],
 } );
-
-module.exports.belongsTo( METRIC, {
-	foreignKey: "metric_id",
-} );
-
-module.exports.sync();

@@ -29,5 +29,3 @@ module.exports = DATABASE.define( 'submetric', {
 }, {
 	timestamps: false,
 } );
-
-module.exports.sync();
