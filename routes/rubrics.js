@@ -9,6 +9,8 @@ const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router();
 
+// TODO: Check authorization on these handlers.
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	RUBRIC.findAll().then( function( results ) {
@@ -72,16 +74,12 @@ function add_metric_type_data( data ) {
 }
 
 function save_rubric( req, res, next ) {
+	var rubric_id = req.params.rubric_id || null;
 	var data = req.body;
+
 	var promise = null;
-
-	var rubric_id = data.rubric_id;
-	delete data.rubric_id;
-
 	var submetrics = data.submetrics;
 	delete data.submetrics;
-
-	// TODO: Validate the data input.
 
 	if ( rubric_id == null ) {
 		DEBUG( "Saving rubric", data );
@@ -133,9 +131,44 @@ function save_rubric( req, res, next ) {
 	} );
 }
 
-router.post( '/edit/:metric_id', save_rubric );
+router.post( '/edit/:rubric_id', save_rubric );
 router.post( '/create', save_rubric );
 
-// TODO: Implement delete
+router.get( '/destroy/:rubric_id', function( req, res ) {
+	var rubric_id = req.params.rubric_id;
+
+	RUBRIC.findById( rubric_id ).then( function( rubric ) {
+		if ( rubric != null ) {
+			res.render( 'rubrics/destroy', {
+				title: "Delete Rubric",
+				rubric: rubric,
+			} );
+		} else {
+			res.status(404).render('error', {
+				message: "There is no Rubric with id #" + rubric_id,
+				error: {
+					status: "404 Rubric Not Found",
+				},
+			});
+		}
+	} );
+} );
+
+router.post( '/destroy/:rubric_id', function( req, res ) {
+	var rubric_id = req.params.rubric_id;
+	var promises = [];
+
+	promises.push( RUBRIC.destroy( {
+		where: { rubric_id: rubric_id },
+	} ) );
+
+	promises.push( SUBMETRIC.destroy( {
+		where: { rubric_id: rubric_id },
+	} ) );
+
+	PROMISE.all( promises ).spread( function() {
+		res.redirect( '/rubrics' );
+	} );
+} );
 
 module.exports = router;

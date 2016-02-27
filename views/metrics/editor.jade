@@ -6,6 +6,7 @@ block scripts
 block content
 	-
 		// Expects variables: metric, metric_types
+		metric_id = metric.metric_id || null
 		options = metric.options
 		name = metric.name || ""
 		title = options['title'] || ""
@@ -13,15 +14,15 @@ block content
 
 	form.pure-form(method="POST")
 		dl
-			if metric.metric_id
+			if metric_id
 				+field("Metric UUID")
 					a(href="/metrics/embed/#{metric.metric_id}")= "View"
 					| : 
-					span= metric.metric_id
+					span= metric_id
 					input(
 						name= "id"
 						type= "hidden"
-						value= "#{metric.metric_id}"
+						value= "#{metric_id}"
 						autocomplete= "off"
 					)
 			+field("Name")
@@ -32,11 +33,11 @@ block content
 					autocomplete= "off"
 				)
 			+field("Type")
-				select.switch(name="type", data-anchor=".options")
+				select.switch(name="type", data-anchor=".options", disabled=(metric_id != null))
 					each object, slug in metric_types
 						option(value="#{slug}", selected=(type == slug))
 							| #{object.title}
-				if metric.metric_id
+				if metric_id
 					br
 					small: em= "Warning! Changing the type will ruining your existing votes and scoring. TODO: Fix this."
 			+field("Display Title")

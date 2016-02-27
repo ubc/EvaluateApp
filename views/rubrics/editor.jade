@@ -10,15 +10,17 @@ block content
 		rubric_id = rubric.rubric_id || null
 		name = rubric.name || ""
 		description = rubric.description || ""
+		submetrics = rubric.submetrics || []
 
 	form.pure-form(method="POST")
-		if rubric_id
+		-
+			/*if rubric_id
 			input(
 				name= "rubric_id"
 				type= "hidden"
 				value= "#{rubric_id}"
 				autocomplete= "off"
-			)
+			)*/
 		dl
 			+field("Name")
 				input(
@@ -33,14 +35,15 @@ block content
 					autocomplete= "off"
 				)= description
 			+field("Fields")
-				ul.submetric-list(style="margin: 0; padding:0; list-style: none;")
-					- // TODO: Refactor that inline style ^
-					each submetric in rubric.submetrics
+				ul.submetric-list
+					each submetric in submetrics
 						+submetric(submetric, metric_types)
 
 					+submetric("", metric_types)
 					
 		input.pure-button.pure-button-primary(type="submit", value="Save")
+		if rubric_id
+			a.pure-button(href="/rubrics/destroy/#{rubric_id}")= "Delete"
 
 mixin field(title)
 	dt= title
@@ -49,7 +52,7 @@ mixin field(title)
 
 mixin submetric(submetric, metric_types)
 	-
-		submetric_id = submetric.id || ""
+		submetric_id = submetric.id || null
 		type = submetric.type ? submetric.type.slug : ""
 		options = submetric.options || {}
 		title = options.title || ""
@@ -63,7 +66,7 @@ mixin submetric(submetric, metric_types)
 				autocomplete= "off"
 				value= submetric_id
 			)
-		select.switch(name="type", autocomplete="off", data-anchor=".options", data-siblings="true")
+		select.switch(name="type", autocomplete="off", data-anchor=".options", data-siblings="true", disabled=(submetric_id != null))
 			option(value="")= type != "" ? "- Delete -" : "- Choose -"
 			each title, slug in metric_types
 				option(value="#{slug}", selected=(type == slug))
