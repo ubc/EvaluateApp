@@ -8,7 +8,6 @@ module.exports = {
 	valid_as_submetric: false,
 };
 
-// TODO: allow users to define meaningful values to each poll option - or exclude polls from Rubrics.
 // TODO: Make polls update properly.
 
 module.exports.validate_vote = function( new_value, old_value, metric ) {

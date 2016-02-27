@@ -102,8 +102,6 @@ function get_metric_type_options(options, rubrics) {
 function save_metric( req, res ) {
 	var data = req.body;
 
-	// TODO: Validate the data.
-
 	if ( data.id == null ) {
 		DEBUG( "Saving metric", data );
 		METRIC.create( data ).then( function( metric ) {
@@ -128,6 +126,13 @@ router.post( '/edit/:metric_id', save_metric );
 router.post( '/create', save_metric );
 
 function render_metric( res, type_slug, data ) {
+	/*if ( data['submetrics'] ) {
+		for ( var k in data['submetrics'] ) {
+			// This should be cached somehow. Made just compile and store it in the metric type. Same for options.jade
+			data['submetrics']['render'] = JADE.compileFile( __dirname + "/../metric-types/" + slug + "/display.jade" );
+		}
+	}*/
+
 	data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + type_slug + "/display.jade", data );
 	res.render( "metrics/single", data );
 }

@@ -6,26 +6,21 @@
 	value = rubric_score.display
 
 form
-	each metric, i in submetrics
+	each submetric, i in submetrics
 		-
-			submetric_id = metric.id
-			input_name = 'submetric-' + submetric_id
-			user_vote = rubric_user_vote[submetric_id]
-			score = rubric_score.data[submetric_id] || {}
+			submetric_id = submetric.id
+			title = submetric.options['title'] || ""
+			html = submetric.type.render_display({
+				transaction_id: transaction_id,
+				metric: submetric,
+				input_name: 'submetric-' + submetric_id,
+				user_vote: rubric_user_vote[submetric_id],
+				score: rubric_score.data ? rubric.data[submetric_id] : {},
+			});
 
 		div.submetric(id="submetric-" + submetric_id, data-id= submetric_id)
-			strong.title= metric.options['title'] || ""
-
-			-// TODO: Refactor this for any arbitrary metric type
-			case metric.type.slug
-				when 'one-way'
-					include ../one-way/display.jade
-				when 'two-way'
-					include ../two-way/display.jade
-				when 'range'
-					include ../range/display.jade
-				when 'poll'
-					include ../poll/display.jade
+			strong.title= title
+			| !{html}
 
 	div.rubric-meta
 		if transaction_id
