@@ -1,7 +1,6 @@
 
 const EXPRESS = require('express');
 const PROMISE = require('sequelize').Promise;
-const JADE = require('jade')
 const RUBRIC = require('../models/rubric');
 const SUBMETRIC = require('../models/submetric');
 const SUBMETRIC_TYPES = require('../metric-types');
@@ -24,15 +23,21 @@ router.get('/', function(req, res, next) {
 
 router.get('/create', function( req, res ) {
 	var rubric = { options: {} };
+	var metric_types = [];
 
-	var data = add_metric_type_data( {
+	for ( var slug in SUBMETRIC_TYPES ) {
+		if ( SUBMETRIC_TYPES[slug].valid_as_submetric !== false ) {
+			metric_types.push( SUBMETRIC_TYPES[slug] );
+		}
+	}
+
+	res.render( 'rubrics/editor', {
 		title: "Create Rubric",
 		path: req.originalUrl,
 		rubric: rubric,
 		submetrics: [],
+		metric_types: metric_types,
 	} );
-
-	res.render( 'rubrics/editor', data );
 });
 
 router.get('/edit/:rubric_id', function( req, res ) {
@@ -49,29 +54,21 @@ router.get('/edit/:rubric_id', function( req, res ) {
 			return;
 		}
 
-		var data = add_metric_type_data( {
+		var metric_types = [];
+		for ( var slug in SUBMETRIC_TYPES ) {
+			if ( SUBMETRIC_TYPES[slug].valid_as_submetric !== false ) {
+				metric_types.push( SUBMETRIC_TYPES[slug] );
+			}
+		}
+
+		res.render( 'rubrics/editor', {
 			title: "Edit Rubric",
 			path: req.originalUrl,
 			rubric: rubric,
+			metric_types: metric_types,
 		} );
-
-		res.render( 'rubrics/editor', data );
 	} );
 });
-
-function add_metric_type_data( data ) {
-	// TODO: Cache the results of this call, either manually or using Jade's cache. http://jade-lang.com/api/
-	data['metric_types'] = {};
-
-	for ( var slug in SUBMETRIC_TYPES ) {
-		if ( SUBMETRIC_TYPES[slug].valid_as_submetric !== false ) {
-			data['metric_types'][slug] = SUBMETRIC_TYPES[slug].title;
-			data['render_'+slug] = JADE.compileFile( __dirname + "/../metric-types/" + slug + "/options.jade" );
-		}
-	}
-
-	return data;
-}
 
 function save_rubric( req, res, next ) {
 	var rubric_id = req.params.rubric_id || null;

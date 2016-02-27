@@ -48,9 +48,16 @@ block content
 					autocomplete= "off"
 				)
 
-		each object, slug in metric_types
-			+options(slug, type)
-				| !{object.html}
+		each metric_type in metric_types
+			-
+				html = metric_type.render_options({
+					slug: metric_type.slug,
+					options: metric.options,
+					blueprints: blueprints,
+				});
+
+			+options(metric_type.slug, type)
+				| !{html}
 
 		input.pure-button.pure-button-primary(type="submit", value="Save")
 		if metric_id

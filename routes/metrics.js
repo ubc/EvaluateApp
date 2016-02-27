@@ -1,5 +1,4 @@
 
-const JADE = require('jade')
 const PROMISE = require('sequelize').Promise;
 const EXPRESS = require('express');
 const METRIC = require('../models/metric');
@@ -46,7 +45,8 @@ router.get('/create', function( req, res ) {
 			title: "Create Metric",
 			path: req.originalUrl,
 			metric: metric,
-			metric_types: get_metric_type_options(metric.options, rubrics),
+			metric_types: METRIC_TYPES,
+			blueprints: rubrics,
 		} );
 	} );
 });
@@ -69,35 +69,11 @@ router.get('/edit/:metric_id', function( req, res ) {
 			title: "Edit Metric",
 			path: req.originalUrl,
 			metric: metric,
-			metric_types: get_metric_type_options(metric.options, rubrics),
+			metric_types: METRIC_TYPES,
+			blueprints: rubrics,
 		});
 	} );
 });
-
-function get_metric_type_options(options, rubrics) {
-	var results = {};
-
-	for ( var slug in METRIC_TYPES ) {
-		var data = {
-			slug: slug,
-			options: options,
-		};
-
-		// TODO: Refactor rubrics to avoid the name clash between the metric type and the model.
-		if ( slug == 'rubric' ) {
-			data['blueprints'] = rubrics;
-		}
-
-		var html = JADE.renderFile( __dirname + "/../metric-types/" + slug + "/options.jade", data );
-
-		results[slug] = {
-			title: METRIC_TYPES[slug].title,
-			html: html,
-		};
-	}
-
-	return results;
-}
 
 function save_metric( req, res ) {
 	var data = req.body;
@@ -124,18 +100,6 @@ function save_metric( req, res ) {
 
 router.post( '/edit/:metric_id', save_metric );
 router.post( '/create', save_metric );
-
-function render_metric( res, type_slug, data ) {
-	/*if ( data['submetrics'] ) {
-		for ( var k in data['submetrics'] ) {
-			// This should be cached somehow. Made just compile and store it in the metric type. Same for options.jade
-			data['submetrics']['render'] = JADE.compileFile( __dirname + "/../metric-types/" + slug + "/display.jade" );
-		}
-	}*/
-
-	data['body'] = JADE.renderFile( __dirname + "/../metric-types/" + type_slug + "/display.jade", data );
-	res.render( "metrics/single", data );
-}
 
 router.get( '/embed/:metric_id/', function( req, res ) {
 	var promises = [];
@@ -168,10 +132,10 @@ router.get( '/embed/:metric_id/', function( req, res ) {
 				where: { rubric_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {
 				data['submetrics'] = submetrics;
-				render_metric( res, type_slug, data );
+				res.render( "metrics/single", data );
 			} );
 		} else {
-			render_metric( res, type_slug, data );
+			res.render( "metrics/single", data );
 		}
 	})
 } );
@@ -224,10 +188,10 @@ router.get( '/embed/:metric_id/:user_id', function( req, res ) {
 				where: { rubric_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {
 				data['submetrics'] = submetrics;
-				render_metric( res, type_slug, data );
+				res.render( "metrics/single", data );
 			} );
 		} else {
-			render_metric( res, type_slug, data );
+			res.render( "metrics/single", data );
 		}
 	})
 } );

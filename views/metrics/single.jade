@@ -7,7 +7,7 @@ html
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	body.metric(class= metric.type.slug + ( transaction_id == null ? " disabled" : "" ))
 		strong.title= metric.options['title']
-		| !{body}
+		| !{metric.type.render_display( locals )}
 		-// pre= JSON.stringify(metric.options)
 	footer
 		script.
