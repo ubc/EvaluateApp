@@ -9,16 +9,20 @@ block content
 						th= "Metric"
 						th= "Type"
 				tbody
-					each metric in metrics
-						-
-							metric_id = metric.metric_id
-							name = metric.name
-							type = metric.type.slug
+					if metrics.length > 0
+						each metric in metrics
+							-
+								metric_id = metric.metric_id
+								name = metric.name
+								type = metric.type.slug
 
+							tr
+								td
+									a(href="/data/#{metric_id}")= name
+								td= type
+					else
 						tr
-							td
-								a(href="/data/#{metric_id}")= name
-							td= type
+							td(colspan="2"): em= "There's nothing here."
 		div.pure-u-1-2
 			dl
 				dt= "Total Metrics"

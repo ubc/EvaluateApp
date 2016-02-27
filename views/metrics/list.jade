@@ -9,19 +9,24 @@ block content
 				th= "Actions"
 				th= "Created On"
 		tbody
-			each metric in metrics
-				-
-					metric_id = metric.metric_id
-					name = metric.name
-					type = metric.type.slug
-					created = metric.created
+			if metrics.length > 0
+				each metric in metrics
+					-
+						metric_id = metric.metric_id
+						name = metric.name
+						type = metric.type.slug
+						created = metric.created
 
+					tr
+						td= name
+						td= type
+						td
+							a(href="/metrics/edit/#{metric_id}")= "Edit"
+							|  / 
+							a(href="/metrics/embed/#{metric_id}")= "View"
+						td= new Date( created ).toLocaleString()
+			else
 				tr
-					td= name
-					td= type
-					td
-						a(href="/metrics/edit/#{metric_id}")= "Edit"
-						|  / 
-						a(href="/metrics/embed/#{metric_id}")= "View"
-					td= new Date( created ).toLocaleString()
+					td(colspan="4"): em= "There's nothing here."
+	br
 	a(href="/metrics/create")= "Create New Metric"

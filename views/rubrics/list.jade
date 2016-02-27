@@ -9,16 +9,21 @@ block content
 				th= "Actions"
 				th= "Created On"
 		tbody
-			each rubric in rubrics
-				-
-					rubric_id = rubric.rubric_id
-					name = rubric.name
-					created = rubric.created
+			if rubrics.length > 0
+				each rubric in rubrics
+					-
+						rubric_id = rubric.rubric_id
+						name = rubric.name
+						created = rubric.created
 
+					tr
+						td= rubric_id
+						td= name
+						td
+							a(href="/rubrics/edit/#{rubric_id}")= "Edit"
+						td= new Date( created ).toLocaleString()
+			else
 				tr
-					td= rubric_id
-					td= name
-					td
-						a(href="/rubrics/edit/#{rubric_id}")= "Edit"
-					td= new Date( created ).toLocaleString()
+					td(colspan="4"): em= "There's nothing here."
+	br
 	a(href="/rubrics/create")= "Create New Rubric"
