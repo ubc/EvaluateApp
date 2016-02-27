@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+	-
+		metric_id = metric.metric_id
+		title = metric.name || ""
+		type = metric.type ? metric.type.slug : ""
+		options = metric.options
+
+	form.pure-form(method="POST")
+		p
+			| Are you sure that you want to delete Metric ##{metric_id}?
+		p
+			strong= title
+			br
+			em= type
+			br
+			| #{JSON.stringify(options)}
+		ul
+			li= "All scoring data related to this metric will be deleted."
+			li= "All votes on this metric will be deleted."
+
+		input.pure-button.pure-button-primary(type="submit", value="Delete")
+		a.pure-button(href="/rubrics/edit/#{metric_id}")= "Back"

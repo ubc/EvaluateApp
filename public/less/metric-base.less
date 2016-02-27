@@ -1,0 +1,88 @@
+
+@accent: rgb(76, 179, 235);
+@muted: #C9C9C9;
+@bold: #333333;
+
+body {
+	font-size: 1em;
+}
+
+ul {
+	margin: 0;
+	margin-top: 4px;
+	padding-left: 24px;
+}
+
+.title {
+	display: block;
+}
+
+form .title {
+	font-size: 90%;
+	margin-top: 0.4em;
+}
+
+.vote {
+	color: #777777;
+	cursor: pointer;
+
+	input:checked ~ *,
+	input[type="text"] {
+		color: @bold;
+		font-weight: bold;
+
+		.vote {
+			color: inherit;
+		}
+	}
+
+	input[type="radio"],
+	input[type="checkbox"] {
+		display: none;
+	}
+
+	input[type="text"] {
+		font-size: 0.9em;
+		text-align: right;
+		border: none;
+		border-bottom: solid 2px @muted;
+		transition: border 0.3s;
+	
+		&:focus,
+		&.focus {
+			border-bottom: solid 2px @accent;
+			outline: none;
+		}
+	}
+}
+
+// TODO: Style the progress bars and sliders.
+
+.rubric-score,
+.score {
+	margin-left: 3px;
+	font-weight: 400;
+	font-style: sans-serif;
+	color: @accent;
+
+	&[title]:hover:after {
+		color: black;
+		content: " - " attr(title);
+		font-size: 80%;
+	}
+}
+
+progress.score {
+	display: block;
+	margin: 0;
+	margin-top: -5px;
+	margin-bottom: 3px;
+}
+
+.rubric-meta {
+	margin-top: 0.5em;
+}
+
+body.disabled .vote {
+	cursor: default;
+}

@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+	-
+		rubric_id = rubric.rubric_id
+		title = rubric.name || ""
+		description = rubric.description || ""
+
+	form.pure-form(method="POST")
+		p
+			| Are you sure that you want to delete Rubric ##{rubric_id}?
+		p
+			strong= title
+			br
+			| #{description}
+		ul
+			li= "All metrics associated with this rubric will be disabled."
+			li= "All submetrics will be deleted."
+
+		input.pure-button.pure-button-primary(type="submit", value="Delete")
+		a.pure-button(href="/rubrics/edit/#{rubric_id}")= "Back"
