@@ -21,7 +21,7 @@ mixin step( i, icon, name, user_vote )
 	options = metric.options
 	icon = options['icon']
 	max = options['max']
-	display = score.display
+	display = score.display || 0
 
 if icon === 'slider'
 	label.vote

@@ -29,7 +29,7 @@ function response_handler( response, old_vote, root ) {
 
 		// TODO: Make this a lot more efficient.
 		if ( response.vote != old_vote ) {
-			root.find('input').not("[type!='checkbox']").not("[type!='radio']").val(response.vote);
+			root.find('input').not("[type='checkbox']").not("[type='radio']").val(response.vote);
 			root.find('input[type="radio"][value="'+response.vote+'"]').prop( "checked", true );
 			root.find('input[type="checkbox"][value="'+response.vote+'"]').prop( "checked", true );
 		}

@@ -7,16 +7,13 @@ module.exports = {
 	slug: "range",
 };
 
-// TODO: Make front end changes so that if you vote over the maximum the front end display is corrected.
-
 module.exports.validate_vote = function( new_value, old_value, metric ) {
 	new_value = UTIL.validate_vote( new_value, old_value );
 	options = metric.options;
 
 	if ( new_value <= 0 ) {
 		// Set the minimum value
-		// TODO: Make this work for numeric and slider types.
-		return ['numeric', 'slider'].indexOf( options['icon'] ) > -1 ? 1 : 0;
+		return ['numeric', 'slider'].indexOf( options['icon'] ) > -1 ? 0 : 1;
 	} else if ( new_value > options['max'] ) {
 		return parseInt( options['max'] );
 	} else {

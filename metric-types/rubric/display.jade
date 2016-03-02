@@ -3,7 +3,7 @@
 	rubric = metric
 	rubric_score = score
 	rubric_user_vote = user_vote || {}
-	value = rubric_score.display
+	value = rubric_score.display || 0
 
 form
 	each submetric, i in submetrics
