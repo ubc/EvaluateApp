@@ -1,9 +1,6 @@
 
 mixin step( i, icon, name, user_vote )
 	if i > 0
-		- // TODO: Consider implementing this state info?
-		- icon_state = 'up' // ( i <= user_vote ) ? 'up' : 'empty'
-
 		span.vote
 			label
 				input(
@@ -16,7 +13,7 @@ mixin step( i, icon, name, user_vote )
 					disabled = ( transaction_id == null )
 				)
 				+step( i - 1, icon, name, user_vote )
-				i(class='icon-'+icon+'-'+icon_state)
+				i(class='icon-'+icon+'-up')
 
 -
 	// Expects variables metric, score, [user_vote], [transaction_id], [input_name]
