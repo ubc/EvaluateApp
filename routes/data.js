@@ -4,6 +4,7 @@ const PROMISE = require('sequelize').Promise;
 const METRIC = require('../models/metric');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
+const AUTH = require('../includes/authentication');
 
 var router = EXPRESS.Router();
 

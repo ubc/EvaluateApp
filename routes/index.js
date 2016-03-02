@@ -1,13 +1,19 @@
 
 const EXPRESS = require('express');
+const AUTH = require('../includes/authentication');
 
 var router = EXPRESS.Router();
 
-router.use(function(req, res, next) {
-	var err = new Error('Not Found');
-	err.status = 404;
-	next(err);
-});
+router.use( function( req, res, next ) {
+	if ( AUTH.is_authenticated() ) {
+		next();
+	} else {
+		res.status(403).render('error', {
+			message: "You are not authorized.",
+			error: {},
+		});
+	}
+} );
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
