@@ -8,7 +8,7 @@ const METRIC_TYPES = require('../metric-types');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
 const TRANSACTION = require('../includes/transaction');
-const AUTH = require('../includes/authentication')
+const AUTH = require('../includes/authentication');
 const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router();
@@ -17,7 +17,10 @@ router.use(function( req, res, next ) {
 	if ( AUTH.is_authenticated() || req.path.indexOf('/embed') == 0 ) {
 		next();
 	} else {
-		res.status(403).send( "You are not authorized." );
+		res.status(403).render('error', {
+			message: "You are not authorized.",
+			error: {},
+		});
 	}
 });
 

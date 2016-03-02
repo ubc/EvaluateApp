@@ -5,10 +5,20 @@ const RUBRIC = require('../models/rubric');
 const SUBMETRIC = require('../models/submetric');
 const SUBMETRIC_TYPES = require('../metric-types');
 const DEBUG = require('debug')('eval:routing');
+const AUTH = require('../includes/authentication');
 
 var router = EXPRESS.Router();
 
-// TODO: Check authorization on these handlers.
+router.use( function( req, res, next ) {
+	if ( AUTH.is_authenticated() ) {
+		next();
+	} else {
+		res.status(403).render('error', {
+			message: "You are not authorized.",
+			error: {},
+		});
+	}
+} );
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

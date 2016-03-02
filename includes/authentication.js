@@ -5,7 +5,7 @@ module.exports = {
 		return true;
 	},
 
-	is_authorized: function(permission) {
+	has_permission: function(permission) {
 		return true;
 	},
 

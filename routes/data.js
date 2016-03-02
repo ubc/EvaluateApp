@@ -7,6 +7,17 @@ const SCORE = require('../models/score');
 
 var router = EXPRESS.Router();
 
+router.use( function( req, res, next ) {
+	if ( AUTH.is_authenticated() ) {
+		next();
+	} else {
+		res.status(403).render('error', {
+			message: "You are not authorized.",
+			error: {},
+		});
+	}
+} );
+
 router.get('/', function(req, res, next) {
 	METRIC.findAll().then( function( results ) {
 		res.render( 'data/list', {
