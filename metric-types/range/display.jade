@@ -31,7 +31,7 @@ if icon === 'slider'
 			min = '0'
 			step = '1'
 			max = max
-			value = user_vote
+			value = user_vote || 0
 			autocomplete = "off"
 			disabled = ( transaction_id == null )
 		)
@@ -54,4 +54,20 @@ else
 span.score(title="Average")
 	| #{display}
 
--//link(rel="stylesheet", href="/stylesheets/metric-slider.css")
+script.
+	jQuery('.metric-range').on( 'evaluate-update', function( event, data, choice ) {
+		var element = jQuery(this);
+		element.find('.score').text( data.score );
+
+		if ( data.vote != choice ) {
+			if ( '#{icon}' == 'slider' || '#{icon}' == 'numeric' ) {
+				element.find( 'input' ).val( data.vote );
+			} else if ( data.vote != null ) {
+				element.find( 'input[value="' + data.vote + '"]' ).prop( 'checked', true );
+			} else {
+				element.find( 'input:checked' ).prop( 'checked', false );
+			}
+		}
+		
+		event.stopPropagation();
+	} );

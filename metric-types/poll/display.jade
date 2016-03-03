@@ -21,10 +21,31 @@ ul
 				)
 				span
 					| #{text}
-			span.score(title="Total")
+			span.score(class="score-" + i, title="Total")
 				| #{vote_count}
 			br
-			progress.score(
+			progress(
+				class = "score-" + i
 				max = total_votes
 				value = vote_count
 			)
+
+script.
+	jQuery('.metric-poll').on( 'evaluate-update', function( event, data, choice ) {
+		for ( var k in data.score_data ) {
+			var value = data.score_data[k];
+			var score = jQuery( 'span.score-' + k );
+			var progress = jQuery( 'progress.score-' + k )
+
+			score.text( value );
+			progress.attr( 'value', value );
+			progress.attr( 'max', data.total );
+		}
+
+		if ( data.vote != choice ) {
+			jQuery( 'input[value="' + data.vote + '"]' ).prop( 'checked', true );
+		}
+
+		// Prevent the default evaluate-update event
+		event.stopImmediatePropagation();
+	} );

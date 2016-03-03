@@ -33,7 +33,7 @@ block content
 					autocomplete= "off"
 				)
 			+field("Type")
-				select.switch(name="type", data-anchor=".options", disabled=(metric_id != null))
+				select.switch(name="type", data-anchor=".options")
 					each object, slug in metric_types
 						option(value="#{slug}", selected=(type == slug))
 							| #{object.title}

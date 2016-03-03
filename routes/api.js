@@ -10,6 +10,7 @@ const TRANSACTION = require('../includes/transaction');
 
 var router = EXPRESS.Router();
 
+// TODO: Change vote nullification to be on the front end only.
 router.post('/vote', function( req, res, next ) {
 	DEBUG_VOTE('API CALL', "vote", req.body);
 
@@ -80,6 +81,7 @@ router.post('/vote', function( req, res, next ) {
 				score: score.display,
 				score_data: score.data,
 				vote: new_value,
+				total: score.count,
 			} );
 		} );
 	} );

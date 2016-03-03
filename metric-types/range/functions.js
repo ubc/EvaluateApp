@@ -11,7 +11,9 @@ module.exports.validate_vote = function( new_value, old_value, metric ) {
 	new_value = UTIL.validate_vote( new_value, old_value );
 	options = metric.options;
 
-	if ( new_value <= 0 ) {
+	if ( new_value === null ) {
+		return null;
+	} else if ( new_value <= 0 ) {
 		// Set the minimum value
 		return ['numeric', 'slider'].indexOf( options['icon'] ) > -1 ? 0 : 1;
 	} else if ( new_value > options['max'] ) {

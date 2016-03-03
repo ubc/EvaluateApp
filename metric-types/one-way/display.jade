@@ -9,7 +9,7 @@
 label.vote
 	input(
 		name = name
-		type = 'radio'
+		type = 'checkbox'
 		value = 1
 		checked = ( user_vote == 1 )
 		data-previous = ( user_vote == 1 ? "true" : "false" )
@@ -21,4 +21,17 @@ label.vote
 		| #{text}
 span.score(title="Total")
 	| #{display}
-	
+
+// TODO: Make these scripts only render once (in the case of rubrics)
+script.
+	jQuery('.metric-one-way').on( 'evaluate-update', function( event, data, choice ) {
+		var element = jQuery(this);
+		element.find('.score').text( data.score );
+
+		if ( data.vote != choice ) {
+			var input = element.find( 'input' );
+			input.prop( 'checked', data.vote == 1 );
+		}
+		
+		event.stopPropagation();
+	} );

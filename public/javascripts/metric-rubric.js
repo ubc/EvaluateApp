@@ -1,49 +1,34 @@
 
-jQuery( '.vote  *:input' ).change( function( event ) {
-	event.stopImmediatePropagation();
-	// Prevent default voting from working.
-} );
-
+// Enable the reset button
 jQuery( '.reset' ).click( function() {
 	jQuery( 'form' )[0].reset();
 } );
 
-jQuery( 'form' ).submit( function( event ) {
-	var new_vote = {};
+// Prevent default voting from working.
+jQuery( '.vote  *:input' ).change( function( event ) {
+	event.stopImmediatePropagation();
+} );
 
+// Submit a vote
+jQuery( 'form' ).submit( function( event ) {
+	var choices = {};
+
+	// Collect values from each submetric.
 	jQuery(this).children( '.submetric' ).each( function( index, submetric ) {
 		var element = jQuery(submetric);
 		var id = element.data('id');
-		console.log("data", element.data());
+
+		// Loop through each input for the valid input.
 		element.find( '.vote *:input' ).each( function( index, input ) {
 			var value = extract_value( jQuery(input) );
 
-			console.log("Testing", value, "for", id);
 			if ( value != null ) {
-				new_vote[ id ] = value;
+				choices[ id ] = value;
 			}
 		} );
 	} );
 
-	console.log("Sending vote", new_vote);
-
-	jQuery.post( "/api/vote", {
-		transaction_id: data.transaction_id,
-		vote: JSON.stringify( new_vote ),
-	}, function( response ) {
-		console.log( "Received", response, typeof response );
-
-		for ( var i in response.score_data ) {
-			console.log( "Processing response for", i );
-			response_handler( {
-				vote: response.vote[i],
-				score: response.score_data[i].display,
-			}, new_vote, jQuery( '#submetric-' + i ) );
-		}
-
-		data.transaction_id = response.transaction_id;
-		jQuery('.rubric-score').text( response.score );
-	}, 'json' );
+	Evaluate.send_vote( choices );
 
 	event.preventDefault();
 } );
