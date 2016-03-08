@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+	</head>
+	<body>
+		<form>
+			Metric ID: <input type="text" name="metric_id" value="d3d3645b-9061-4b78-ae46-269d32f53501"></input>
+			<br>
+			API Key: <input type="text" name="api_key" value="test-key"></input>
+			<br>
+			User ID: <input type="text" name="user_id" value="user"></input>
+			<br>
+			Context ID: <input type="text" name="context_id" value="context"></input>
+			<br>
+			<input type="submit">
+		</form>
+
+		Log:
+		<ul>
+		</ul>
+		<script type="text/javascript">
+			var container = jQuery('ul');
+
+			function show(message) {
+				container.append("<li>"+message+"</li>");
+			}
+
+			function getParameterByName(name, url) {
+				if (!url) url = window.location.href;
+				name = name.replace(/[\[\]]/g, "\\$&");
+				var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+				var results = regex.exec(url);
+				if (!results) return null;
+				if (!results[2]) return '';
+				return decodeURIComponent(results[2].replace(/\+/g, " "));
+			}
+
+			jQuery('form').submit( function( event ) {
+				container.html("");
+				event.preventDefault();
+				var querystring = "?"+jQuery(this).serialize();
+				show("Starting script with data: "+querystring);
+
+				var params = {
+					metric_id: getParameterByName("metric_id", querystring),
+					user_id: getParameterByName("user_id", querystring),
+					context_id: getParameterByName("context_id", querystring),
+					api_key: getParameterByName("api_key", querystring),
+				}
+
+				show("Preview for #"+params.metric_id);
+				show("<iframe src=\"http://localhost:3000/api/preview/"+params.metric_id+"\" />")
+
+				var data = {
+					metric_id: params.metric_id,
+					user_id: params.user_id,
+					context_id: params.context_id,
+				}
+
+				show("Requesting Transaction ID, using api key: \""+params.api_key+"\" and data: "+JSON.stringify(data));
+
+				jQuery.get( {
+					url: "http://localhost:3000/api/auth/" + params.api_key,
+					data: data,
+					success: function(response) {
+						console.log("Got "+response);
+						show("Got "+response);
+
+						var url = "http://localhost:3000/api/embed/"+response;
+						show("Embedding URL: "+url)
+						show("<iframe src=\""+url+"\"/>")
+					},
+				} );
+			} );
+		</script>
+	</body>
+</html>

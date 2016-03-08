@@ -14,18 +14,30 @@ module.exports.TYPE = {
 	VOTE: "vote",
 };
 
-module.exports.create = function( action, data, duration ) {
+module.exports.create = function( args ) {
 	var id = UUID();
 	transaction_list[id] = {
-		action: action,
-		data: data,
-		expiration_date: new Date().getTime() + duration,
+		action: args.action,
+		data: args.data,
+		expiration_date: new Date().getTime() + args.duration,
+		limit: args.limit,
 	}
 
-	DEBUG("Created transaction", id, action);
+	DEBUG("Created transaction", id, transaction_list[id]);
 	return id;
 }
 
+module.exports.data = function( id ) {
+	if ( id in transaction_list ) {
+		DEBUG( "Retrieving transaction", id, transaction_list[id].data );
+		return transaction_list[id].data;
+	} else {
+		DEBUG( "No transaction", id );
+		return false;
+	}
+}
+
+// TODO: Implement limit checks.
 module.exports.redeem = function( id, action ) {
 	DEBUG( "Redeeming transaction", id, action );
 	if ( id in transaction_list ) {

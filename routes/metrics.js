@@ -14,7 +14,7 @@ const DEBUG = require('debug')('eval:routing');
 var router = EXPRESS.Router();
 
 router.use(function( req, res, next ) {
-	if ( AUTH.is_authenticated() || req.path.indexOf('/embed') == 0 ) {
+	if ( AUTH.is_authenticated() ) {
 		next();
 	} else {
 		res.status(403).render('error', {
@@ -103,101 +103,6 @@ function save_metric( req, res ) {
 
 router.post( '/edit/:metric_id', save_metric );
 router.post( '/create', save_metric );
-
-router.get( '/embed/:metric_id/', function( req, res ) {
-	var promises = [];
-
-	promises.push( METRIC.findById( req.params.metric_id ) );
-
-	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
-		attributes: ['count', 'display', 'data'],
-		where: { 
-			metric_id: req.params.metric_id,
-			context_id: "context",
-		},
-	} ) );
-
-	PROMISE.all( promises ).spread( function( metric, score ) {
-		if ( metric == null ) {
-			res.status(404).send( "No metric #" + req.params.metric_id + " found." );
-			return;
-		}
-
-		var data = {
-			metric: metric,
-			score: ( score != null ? score : {} ),
-		};
-
-		var type_slug = metric.type.slug;
-
-		if ( metric.type.has_submetrics === true ) {
-			SUBMETRIC.findAll( {
-				where: { rubric_id: metric.options['blueprint'] },
-			} ).then( function( submetrics ) {
-				data['submetrics'] = submetrics;
-				res.render( "metrics/single", data );
-			} );
-		} else {
-			res.render( "metrics/single", data );
-		}
-	})
-} );
-
-router.get( '/embed/:metric_id/:user_id', function( req, res ) {
-	var promises = [];
-
-	promises.push( METRIC.findById( req.params.metric_id ) );
-
-	promises.push( VOTE.findOne( {
-		attributes: ['value'],
-		where: { 
-			metric_id: req.params.metric_id,
-			context_id: "context",
-			user_id: req.params.user_id,
-		},
-	} ) );
-
-	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
-		attributes: ['count', 'display', 'data'],
-		where: { 
-			metric_id: req.params.metric_id,
-			context_id: "context",
-		},
-	} ) );
-
-	PROMISE.all( promises ).spread( function( metric, user_vote, score ) {
-		if ( metric == null ) {
-			res.status(404).send( "No metric #" + req.params.metric_id + " found." );
-			return;
-		}
-
-		var transaction_id = TRANSACTION.create( TRANSACTION.TYPE.VOTE, {
-			metric_id: metric.metric_id,
-			context_id: "context",
-			user_id: req.params.user_id,
-		}, TRANSACTION.DURATION.ONE_DAY );
-
-		var data = {
-			transaction_id: transaction_id,
-			metric: metric,
-			user_vote: ( user_vote != null ? user_vote.value : "" ),
-			score: ( score != null ? score : {} ),
-		};
-
-		var type_slug = metric.type.slug;
-
-		if ( metric.type.has_submetrics === true ) {
-			SUBMETRIC.findAll( {
-				where: { rubric_id: metric.options['blueprint'] },
-			} ).then( function( submetrics ) {
-				data['submetrics'] = submetrics;
-				res.render( "metrics/single", data );
-			} );
-		} else {
-			res.render( "metrics/single", data );
-		}
-	})
-} );
 
 router.get( '/destroy/:metric_id', function( req, res ) {
 	var metric_id = req.params.metric_id;

@@ -23,7 +23,7 @@ block content
 						td
 							a(href="/metrics/edit/#{metric_id}")= "Edit"
 							|  / 
-							a(href="/metrics/embed/#{metric_id}")= "View"
+							a(href="/api/preview/#{metric_id}")= "View"
 						td= new Date( created ).toLocaleString()
 			else
 				tr

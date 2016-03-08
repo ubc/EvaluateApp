@@ -16,7 +16,7 @@ block content
 		dl
 			if metric_id
 				+field("Metric UUID")
-					a(href="/metrics/embed/#{metric.metric_id}")= "View"
+					a(href="/api/preview/#{metric.metric_id}")= "View"
 					| : 
 					span= metric_id
 					input(
@@ -67,7 +67,7 @@ block content
 		br
 		strong= "Preview"
 		hr
-		iframe(src="/metrics/embed/#{metric_id}", frameborder="0")
+		iframe(src="/api/preview/#{metric_id}", frameborder="0")
 
 
 mixin options(slug, active_type)
