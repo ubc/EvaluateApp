@@ -16,6 +16,7 @@ router.post('/vote', function( req, res, next ) {
 	DEBUG_VOTE('API CALL', "vote", req.body);
 
 	var data = TRANSACTION.redeem( req.body.transaction_id, "vote" );
+	DEBUG_VOTE('Got transaction data', data);
 	var new_value = req.body.vote;
 
 	if ( data == false ) {
@@ -78,7 +79,6 @@ router.post('/vote', function( req, res, next ) {
 			}
 
 			res.json( {
-				transaction_id: TRANSACTION.create( TRANSACTION.TYPE.VOTE, data, TRANSACTION.DURATION.ONE_DAY ), // Send a new nonce
 				score: score.display,
 				score_data: score.data,
 				vote: new_value,
@@ -107,7 +107,7 @@ router.get('/auth/:api_key', function( req, res, next ) {
 				user_id: req.query.user_id,
 			},
 			duration: TRANSACTION.DURATION.ONE_DAY,
-			limit: 1,
+			limit: 5,
 		} );
 
 		res.send(transaction_id);
@@ -186,12 +186,6 @@ router.get( '/embed/:transaction_id', function( req, res ) {
 			res.status(404).send( "No metric #" + transaction.metric_id + " found." );
 			return;
 		}
-
-		/*var transaction_id = TRANSACTION.create( TRANSACTION.TYPE.VOTE, {
-			metric_id: metric.metric_id,
-			context_id: transaction.context_id,
-			user_id: transaction.user_id,
-		}, TRANSACTION.DURATION.ONE_DAY );*/
 
 		var data = {
 			transaction_id: req.params.transaction_id,

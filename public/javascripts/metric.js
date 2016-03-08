@@ -30,9 +30,9 @@ var Evaluate = {
 			console.log( "Received", response, typeof response );
 
 			if ( typeof response === 'object' ) {
-				data.transaction_id = response.transaction_id;
 				jQuery( '#metric' ).trigger( 'evaluate-update', [response, choice] );
 			} else {
+				// TODO: Give some indication that the page needs to be refreshed.
 				console.log( response );
 			}
 		}, 'json' );

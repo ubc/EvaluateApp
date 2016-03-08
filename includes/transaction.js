@@ -42,15 +42,22 @@ module.exports.redeem = function( id, action ) {
 	DEBUG( "Redeeming transaction", id, action );
 	if ( id in transaction_list ) {
 		var transaction = transaction_list[id];
+		DEBUG( "Transaction limit", transaction.limit );
 
 		if ( transaction.action == action ) {
-			// The transaction will either be redeemed or expired, so go ahead and delete it.
-			delete transaction_list[id];
-
 			if ( transaction.expiration_date >= new Date().getTime() ) {
-				// TODO: Test transaction expiration.
-				return transaction.data;
+				if ( transaction.limit > 1 ) {
+
+					transaction.limit--;
+					return transaction.data;
+				} else if ( transaction.limit == 1 ) {
+					delete transaction_list[id];
+					return transaction.data;
+				}
 			}
+
+			// If we haven't already returned data then the transaction is no longer valid, delete it.
+			delete transaction_list[id];
 		}
 	}
 
