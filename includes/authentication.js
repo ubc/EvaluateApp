@@ -46,6 +46,7 @@ PASSPORT.use( new LTI( {
 		// https://github.com/omsmith/ims-lti#nonce-stores
 		// nonceStore: new RedisNonceStore('testconsumerkey', redisClient)
 	}, function( lti, done ) {
+		DEBUG( "LTI Authentication", lti );
 		// LTI launch parameters
 		// console.dir(lti);
 		// Perform local authentication if necessary

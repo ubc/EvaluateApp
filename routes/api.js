@@ -10,6 +10,13 @@ const TRANSACTION = require('../includes/transaction');
 
 var router = EXPRESS.Router();
 
+router.post('/saml',
+	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+	function(req, res) {
+		res.redirect('/');
+	}
+);
+
 // TODO: Use appropriate HTTP status codes on all responses.
 // TODO: Change vote nullification to be on the front end only.
 router.post('/vote', function( req, res, next ) {

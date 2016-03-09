@@ -5,10 +5,11 @@ const METRIC = require('../models/metric');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
 const AUTH = require('../includes/authentication');
+const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
 
-router.use( function( req, res, next ) {
+/*router.use( function( req, res, next ) {
 	if ( AUTH.is_authenticated() ) {
 		next();
 	} else {
@@ -17,7 +18,11 @@ router.use( function( req, res, next ) {
 			error: {},
 		});
 	}
-} );
+} );*/
+
+router.use( PASSPORT.authenticate( ['saml', 'cas', 'lti'], {
+	// TODO: Define redirects
+} ) );
 
 router.get('/', function(req, res, next) {
 	METRIC.findAll().then( function( results ) {
