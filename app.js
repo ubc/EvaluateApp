@@ -5,6 +5,8 @@ const FAVICON = require('serve-favicon');
 const LOGGER = require('morgan');
 const COOKIEPARSER = require('cookie-parser');
 const BODYPARSER = require('body-parser');
+const PASSPORT = require('passport');
+const SESSION = require('express-session');
 
 const MODELS = require('./models');
 
@@ -28,10 +30,16 @@ app.use( LOGGER('dev') );
 app.use( BODYPARSER.json() );
 app.use( BODYPARSER.urlencoded( { extended: true } ) );
 app.use( COOKIEPARSER() );
+app.use( SESSION( {
+	secret: "575p54BpD5AxWxTMN0su",
+	cookie: { maxAge: 1000 * 60 * 5 },
+} ) );
 app.use( require('less-middleware')( '/less', {
 	dest: '/stylesheets',
 	pathRoot: PATH.join(__dirname, 'public')
 } ) );
+app.use( PASSPORT.initialize() );
+app.use( PASSPORT.session() );
 app.use( EXPRESS.static( PATH.join( __dirname, 'public' ) ));
 
 app.use( '/', ROUTES );

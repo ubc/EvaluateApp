@@ -5,14 +5,17 @@ const METRIC = require('../models/metric');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
 const SUBMETRIC = require('../models/submetric')
+const DEBUG = require('debug')('eval:api');
 const DEBUG_VOTE = require('debug')('eval:voting');
 const TRANSACTION = require('../includes/transaction');
+const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
 
 router.post('/saml',
-	passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+	PASSPORT.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
 	function(req, res) {
+		DEBUG("Got /api/saml hit");
 		res.redirect('/');
 	}
 );

@@ -6,6 +6,7 @@ const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
 const AUTH = require('../includes/authentication');
 const PASSPORT = require('passport');
+const DEBUG = require('debug')('eval:data');
 
 var router = EXPRESS.Router();
 
@@ -20,9 +21,12 @@ var router = EXPRESS.Router();
 	}
 } );*/
 
-router.use( PASSPORT.authenticate( ['saml', 'cas', 'lti'], {
+router.use( PASSPORT.authenticate( ['saml'], {
 	// TODO: Define redirects
-} ) );
+} ), function( req, res, next ) {
+	DEBUG( "User Authenticated", req.session.passport.user );
+	next();
+} );
 
 router.get('/', function(req, res, next) {
 	METRIC.findAll().then( function( results ) {
