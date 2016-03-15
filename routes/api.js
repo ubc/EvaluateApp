@@ -14,7 +14,7 @@ var router = EXPRESS.Router();
 
 router.post('/saml',
 	PASSPORT.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
-	function(req, res) {
+	function(req, res, next) {
 		DEBUG("Got /api/saml hit");
 		res.redirect('/');
 	}

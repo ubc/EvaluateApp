@@ -1,4 +1,6 @@
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const EXPRESS = require('express');
 const PATH = require('path');
 const FAVICON = require('serve-favicon');
@@ -27,9 +29,9 @@ app.set( 'view engine', 'jade' );
 // uncomment after placing your favicon in /public
 //app.use(FAVICON(PATH.join(__dirname, 'public', 'favicon.ico')));
 app.use( LOGGER('dev') );
+app.use( COOKIEPARSER() );
 app.use( BODYPARSER.json() );
 app.use( BODYPARSER.urlencoded( { extended: true } ) );
-app.use( COOKIEPARSER() );
 app.use( SESSION( {
 	secret: "575p54BpD5AxWxTMN0su",
 	cookie: { maxAge: 1000 * 60 * 5 },

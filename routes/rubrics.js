@@ -5,19 +5,19 @@ const RUBRIC = require('../models/rubric');
 const SUBMETRIC = require('../models/submetric');
 const SUBMETRIC_TYPES = require('../metric-types');
 const DEBUG = require('debug')('eval:routing');
-const AUTH = require('../includes/authentication');
+const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
 
-router.use( function( req, res, next ) {
-	if ( AUTH.is_authenticated() ) {
-		next();
-	} else {
-		res.status(403).render('error', {
-			message: "You are not authorized.",
-			error: {},
-		});
-	}
+router.use( PASSPORT.authenticate( ['saml'], {
+	// TODO: Define redirects
+	successRedirect: "/rubrics",
+	failureRedirect: "/error",
+	successFlash: "Welcome!",
+	failureFlash: "Failed to authenticate",
+} ), function( req, res, next ) {
+	DEBUG( "User Authenticated", req.session.passport.user );
+	next();
 } );
 
 /* GET home page. */

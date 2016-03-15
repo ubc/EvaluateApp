@@ -10,6 +10,8 @@ const DEBUG = require('debug')('eval:data');
 
 var router = EXPRESS.Router();
 
+// TODO: Instead of login in on every request, we are supposed to provide a login url and just check req.user on each request.
+
 /*router.use( function( req, res, next ) {
 	if ( AUTH.is_authenticated() ) {
 		next();
@@ -21,7 +23,7 @@ var router = EXPRESS.Router();
 	}
 } );*/
 
-router.use( PASSPORT.authenticate( ['saml'], {
+router.use( PASSPORT.authenticate( ['cas'], {
 	// TODO: Define redirects
 } ), function( req, res, next ) {
 	DEBUG( "User Authenticated", req.session.passport.user );
