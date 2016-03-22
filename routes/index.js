@@ -1,27 +1,36 @@
 
+const PASSPORT = require('passport');
 const EXPRESS = require('express');
 const AUTH = require('../includes/authentication');
+const DEBUG = require('debug')('eval:login');
 
 var router = EXPRESS.Router();
 
-router.use( function( req, res, next ) {
-	if ( AUTH.is_authenticated() ) {
-		next();
-	} else {
-		res.status(403).render('error', {
-			message: "You are not authorized.",
-			error: {},
-		});
-	}
-} );
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	res.render('index', { title: 'Express' });
+	res.render('login', { title: 'Login' });
 });
 
-router.get('/login', function(req, res, next) {
-	res.render('index', { title: 'Login' });
-});
+router.all('/login/cas',
+	PASSPORT.authenticate('cas', { failureRedirect: '/login', failureFlash: true }),
+	function(req, res, next) {
+		DEBUG("Got /login/cas hit");
+		res.redirect('/');
+	}
+);
+
+router.all('/login/saml',
+	PASSPORT.authenticate('saml', { failureRedirect: '/login', failureFlash: true }),
+	function(req, res, next) {
+		DEBUG("Got /login/saml hit");
+		res.redirect('/');
+	}
+);
+
+router.post('/logout',
+	function(req, res, next) {
+		res.send('TODO Implement this.');
+	}
+);
 
 module.exports = router;

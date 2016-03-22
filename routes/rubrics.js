@@ -6,9 +6,12 @@ const SUBMETRIC = require('../models/submetric');
 const SUBMETRIC_TYPES = require('../metric-types');
 const DEBUG = require('debug')('eval:routing');
 const PASSPORT = require('passport');
+const AUTH = require('../includes/authentication')
 
 var router = EXPRESS.Router();
 
+router.use( AUTH.require_login )
+/*
 router.use( PASSPORT.authenticate( ['saml'], {
 	// TODO: Define redirects
 	successRedirect: "/rubrics",
@@ -19,6 +22,7 @@ router.use( PASSPORT.authenticate( ['saml'], {
 	DEBUG( "User Authenticated", req.session.passport.user );
 	next();
 } );
+*/
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

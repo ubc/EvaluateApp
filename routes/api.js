@@ -12,14 +12,6 @@ const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
 
-router.post('/saml',
-	PASSPORT.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
-	function(req, res, next) {
-		DEBUG("Got /api/saml hit");
-		res.redirect('/');
-	}
-);
-
 // TODO: Use appropriate HTTP status codes on all responses.
 // TODO: Change vote nullification to be on the front end only.
 router.post('/vote', function( req, res, next ) {

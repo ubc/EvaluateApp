@@ -13,16 +13,7 @@ const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router();
 
-router.use(function( req, res, next ) {
-	if ( AUTH.is_authenticated() ) {
-		next();
-	} else {
-		res.status(403).render('error', {
-			message: "You are not authorized.",
-			error: {},
-		});
-	}
-});
+router.use( AUTH.require_login );
 
 router.get('/', function( req, res ) {
 	METRIC.findAll().then( function( results ) {

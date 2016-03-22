@@ -11,7 +11,7 @@ const DEBUG = require('debug')('eval:auth');
 // https://www.samltool.com/sp_metadata.php
 
 PASSPORT.use( new SAML( {
-	callbackUrl: 'http://localhost:3000/api/saml',
+	callbackUrl: 'http://localhost:3000/login/saml',
 	// URL of Identity Provider
 	entryPoint: 'https://idp.testshib.org/idp/profile/SAML2/Redirect/SSO',
 	// Public Key of Identity Provider
@@ -91,6 +91,16 @@ module.exports = {
 
 	has_permission: function(permission) {
 		return true;
+	},
+
+	require_login: function(req, res, next) {
+		if (req.user) {
+			DEBUG("User Is Logged In", req.user);
+			next();
+		} else {
+			DEBUG("User Is NOT Logged In");
+			res.redirect("/");
+		}
 	},
 
 }
