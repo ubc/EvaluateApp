@@ -1,9 +1,14 @@
 extends layout
 
 block content
-	h3
-		| Login with 
-		a(href="/login/saml")= "SAML"
-	h3
-		| Login with 
-		a(href="/login/cas")= "CAS"
+	if user
+		div= "You are logged in."
+		pre= JSON.stringify(user)
+		pre= JSON.stringify(account)
+	else
+		h3
+			| Login with 
+			a(href="/login/saml")= "SAML"
+		h3
+			| Login with 
+			a(href="/login/cas")= "CAS"

@@ -17,12 +17,17 @@ html
 	header
 		h2= "Evaluate" + ( title ? " - " + title : "" )
 		hr
-		nav.pure-menu.pure-menu-horizontal
-			ul.pure-menu-list
-				+nav("Login", "/", path)
-				+nav("Metrics", "/metrics", path)
-				+nav("Rubrics", "/rubrics", path)
-				+nav("View Data", "/data", path)
+		if user
+			nav.pure-menu.pure-menu-horizontal
+				ul.pure-menu-list
+					+nav("Login", "/", path)
+					+nav("Metrics", "/metrics", path)
+					+nav("Rubrics", "/rubrics", path)
+					+nav("View Data", "/data", path)
 	body
 		br
+		if alerts
+			ul.alerts
+				each alert, key in alerts
+					li(class=key)= alert
 		block content

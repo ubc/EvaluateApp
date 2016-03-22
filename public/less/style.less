@@ -34,3 +34,26 @@ iframe {
 	margin-right: 2px;
 	vertical-align: bottom;
 }
+
+.alerts {
+	list-style: none;
+	margin-top: 0;
+	padding-left: 0;
+
+	li {
+		border: 2px solid lightblue;
+		background: lighten(lightblue, 10%);
+		margin-bottom: 2px;
+		padding: 0.5em;
+
+		&.info {
+			border-color: lightgreen;
+			background-color: lighten(lightgreen, 10%);
+		}
+
+		&.error {
+			border-color: lighten(red, 30%);
+			background-color: pink;
+		}
+	}
+}

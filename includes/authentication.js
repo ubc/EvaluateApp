@@ -95,9 +95,10 @@ module.exports = {
 
 	require_login: function(req, res, next) {
 		if (req.user) {
-			DEBUG("User Is Logged In", req.user);
+			DEBUG("User Is Logged In", req.user, req.account);
 			next();
 		} else {
+			req.flash("error", "You must log in.")
 			DEBUG("User Is NOT Logged In");
 			res.redirect("/");
 		}

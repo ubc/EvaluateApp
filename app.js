@@ -10,6 +10,7 @@ const COOKIEPARSER = require('cookie-parser');
 const BODYPARSER = require('body-parser');
 const PASSPORT = require('passport');
 const SESSION = require('express-session');
+const FLASH = require('connect-flash-light');
 
 const MODELS = require('./models');
 
@@ -37,6 +38,7 @@ app.use( SESSION( {
 	secret: "575p54BpD5AxWxTMN0su",
 	cookie: { maxAge: 1000 * 60 * 5 },
 } ) );
+app.use( FLASH() );
 app.use( require('less-middleware')( '/less', {
 	dest: '/stylesheets',
 	pathRoot: PATH.join(__dirname, 'public')
@@ -75,11 +77,15 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
+	/*
 	res.status(err.status || 500);
 	res.render('error', {
 		message: err.message,
 		error: {}
 	});
+	*/
+	req.flash('error', err.message);
+	res.redirect("/");
 });
 
 module.exports = app;
