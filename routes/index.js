@@ -12,6 +12,7 @@ router.use( function( req, res, next ) {
 	next();
 } );
 
+// TODO: Remove this test path.
 router.all('/flash', function(req, res, next) {
 	req.flash('info', 'Flash is back!');
 	req.flash('info2', 'Back for life!');
@@ -22,7 +23,7 @@ router.all('/flash', function(req, res, next) {
 /* GET home page. */
 router.all('/', function(req, res, next) {
 	DEBUG("Flash", req.flash());
-	res.render('login', { title: 'Login', alerts: req.flash() });
+	res.status(200).render('login', { title: 'Login', alerts: req.flash() });
 });
 
 router.all('/login/cas',
@@ -30,7 +31,7 @@ router.all('/login/cas',
 	PASSPORT.authorize('lti', { failureRedirect: '/', failureFlash: true, successFlash: true }),
 	function(req, res, next) {
 		DEBUG("Got /login/cas hit", req.user, req.account);
-		res.redirect('/');
+		res.status(303).redirect('/');
 	}
 );
 
@@ -39,13 +40,13 @@ router.all('/login/saml',
 	PASSPORT.authorize('lti', { failureRedirect: '/', failureFlash: true, successFlash: true }),
 	function(req, res, next) {
 		DEBUG("Got /login/saml hit", req.user, req.account);
-		res.redirect('/');
+		res.status(303).redirect('/');
 	}
 );
 
 router.post('/logout',
 	function(req, res, next) {
-		res.send('TODO Implement this.');
+		res.status(200).send('TODO Implement this.');
 	}
 );
 

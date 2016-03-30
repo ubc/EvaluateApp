@@ -17,7 +17,7 @@ router.use( AUTH.require_login );
 
 router.get('/', function( req, res ) {
 	METRIC.findAll().then( function( results ) {
-		res.render( 'metrics/list', {
+		res.status(200).render( 'metrics/list', {
 			title: "Metrics List",
 			path: req.originalUrl,
 			metrics: results,
@@ -35,7 +35,7 @@ router.get('/create', function( req, res ) {
 	PROMISE.all( promises ).spread( function( rubrics ) {
 		var metric = { options: {} };
 
-		res.render( 'metrics/editor', {
+		res.status(200).render( 'metrics/editor', {
 			title: "Create Metric",
 			path: req.originalUrl,
 			metric: metric,
@@ -55,11 +55,11 @@ router.get('/edit/:metric_id', function( req, res ) {
 
 	PROMISE.all( promises ).spread( function( metric, rubrics ) {
 		if ( metric == null ) {
-			res.send( "No metric #" + req.params.metric_id + " found." );
+			res.status(404).send( "No metric #" + req.params.metric_id + " found." );
 			return;
 		}
 
-		res.render('metrics/editor', {
+		res.status(200).render('metrics/editor', {
 			title: "Edit Metric",
 			path: req.originalUrl,
 			metric: metric,
@@ -76,7 +76,7 @@ function save_metric( req, res ) {
 		DEBUG( "Saving metric", data );
 		METRIC.create( data ).then( function( metric ) {
 			DEBUG( "Metric created", metric.metric_id );
-			res.redirect( '/metrics/edit/' + metric.metric_id );
+			res.status(201).redirect( '/metrics/edit/' + metric.metric_id );
 		} );
 	} else {
 		metric_id = data.id;
@@ -87,7 +87,7 @@ function save_metric( req, res ) {
 			where: { metric_id: metric_id },
 		} ).then( function() {
 			DEBUG( "Metric updated", metric_id );
-			res.redirect( '/metrics/edit/' + metric_id );
+			res.status(200).redirect( '/metrics/edit/' + metric_id );
 		} );
 	}
 }
@@ -100,7 +100,7 @@ router.get( '/destroy/:metric_id', function( req, res ) {
 
 	METRIC.findById( metric_id ).then( function( metric ) {
 		if ( metric != null ) {
-			res.render( 'metrics/destroy', {
+			res.status(200).render( 'metrics/destroy', {
 				title: "Delete Metric",
 				metric: metric,
 			} );
@@ -132,7 +132,7 @@ router.post( '/destroy/:metric_id', function( req, res ) {
 	} ) );
 	
 	PROMISE.all( promises ).spread( function() {
-		res.redirect( '/metrics' );
+		res.status(303).redirect( '/metrics' );
 	} );
 } );
 

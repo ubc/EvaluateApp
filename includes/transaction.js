@@ -37,7 +37,6 @@ module.exports.data = function( id ) {
 	}
 }
 
-// TODO: Implement limit checks.
 module.exports.redeem = function( id, action ) {
 	DEBUG( "Redeeming transaction", id, action );
 	if ( id in transaction_list ) {
@@ -47,7 +46,6 @@ module.exports.redeem = function( id, action ) {
 		if ( transaction.action == action ) {
 			if ( transaction.expiration_date >= new Date().getTime() ) {
 				if ( transaction.limit > 1 ) {
-
 					transaction.limit--;
 					return transaction.data;
 				} else if ( transaction.limit == 1 ) {

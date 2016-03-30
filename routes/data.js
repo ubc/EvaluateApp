@@ -14,7 +14,7 @@ router.use( AUTH.require_login );
 
 router.get('/', function(req, res, next) {
 	METRIC.findAll().then( function( results ) {
-		res.render( 'data/list', {
+		res.status(200).render( 'data/list', {
 			title: 'Data',
 			path: req.originalUrl,
 			metrics: results,
@@ -38,11 +38,11 @@ router.get('/:metric_id', function(req, res, next) {
 
 	PROMISE.all( promises ).spread( function( metric, votes, scores ) {
 		if ( metric == null ) {
-			res.send( "No metric #" + metric_id + " found." );
+			res.status(404).send( "No metric #" + metric_id + " found." );
 			return;
 		}
 
-		res.render( 'data/single', {
+		res.status(200).render( 'data/single', {
 			title: "Data for " + metric.name,
 			path: req.originalUrl,
 			metric: metric,

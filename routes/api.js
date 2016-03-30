@@ -12,7 +12,6 @@ const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
 
-// TODO: Use appropriate HTTP status codes on all responses.
 // TODO: Change vote nullification to be on the front end only.
 router.post('/vote', function( req, res, next ) {
 	DEBUG_VOTE('API CALL', "vote", req.body);
@@ -23,7 +22,7 @@ router.post('/vote', function( req, res, next ) {
 
 	if ( data == false ) {
 		// This means that the transaction authorization failed.
-		res.json( "Nonce check failed. Your session may have expired, try refreshing the page." ); // Return a failure.
+		res.status(401).json( "Nonce check failed. Your session may have expired, try refreshing the page." ); // Return a failure.
 		return;
 	}
 
@@ -80,7 +79,7 @@ router.post('/vote', function( req, res, next ) {
 				score.save();
 			}
 
-			res.json( {
+			res.status(200).json( {
 				score: score.display,
 				score_data: score.data,
 				vote: new_value,
@@ -112,7 +111,7 @@ router.get('/auth/:api_key', function( req, res, next ) {
 			limit: 5,
 		} );
 
-		res.send(transaction_id);
+		res.status(201).send(transaction_id);
 	}
 } );
 
@@ -147,10 +146,10 @@ router.get( '/preview/:metric_id/', function( req, res ) {
 				where: { rubric_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {
 				data['submetrics'] = submetrics;
-				res.render( "metrics/single", data );
+				res.status(200).render( "metrics/single", data );
 			} );
 		} else {
-			res.render( "metrics/single", data );
+			res.status(200).render( "metrics/single", data );
 		}
 	})
 } );
@@ -203,10 +202,10 @@ router.get( '/embed/:transaction_id', function( req, res ) {
 				where: { rubric_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {
 				data['submetrics'] = submetrics;
-				res.render( "metrics/single", data );
+				res.status(200).render( "metrics/single", data );
 			} );
 		} else {
-			res.render( "metrics/single", data );
+			res.status(200).render( "metrics/single", data );
 		}
 	})
 } );

@@ -10,24 +10,12 @@ const AUTH = require('../includes/authentication')
 
 var router = EXPRESS.Router();
 
-router.use( AUTH.require_login )
-/*
-router.use( PASSPORT.authenticate( ['saml'], {
-	// TODO: Define redirects
-	successRedirect: "/rubrics",
-	failureRedirect: "/error",
-	successFlash: "Welcome!",
-	failureFlash: "Failed to authenticate",
-} ), function( req, res, next ) {
-	DEBUG( "User Authenticated", req.session.passport.user );
-	next();
-} );
-*/
+router.use( AUTH.require_login );
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	RUBRIC.findAll().then( function( results ) {
-		res.render( 'rubrics/list', {
+		res.status(200).render( 'rubrics/list', {
 			title: "Rubrics List",
 			path: req.originalUrl,
 			rubrics: results,
@@ -45,7 +33,7 @@ router.get('/create', function( req, res ) {
 		}
 	}
 
-	res.render( 'rubrics/editor', {
+	res.status(200).render( 'rubrics/editor', {
 		title: "Create Rubric",
 		path: req.originalUrl,
 		rubric: rubric,
@@ -64,7 +52,7 @@ router.get('/edit/:rubric_id', function( req, res ) {
 
 	PROMISE.all( promises ).spread( function( rubric, submetrics ) {
 		if ( rubric == null ) {
-			res.send( "No rubric #" + req.params.rubric_id + " found." );
+			res.status(404).send( "No rubric #" + req.params.rubric_id + " found." );
 			return;
 		}
 
@@ -75,7 +63,7 @@ router.get('/edit/:rubric_id', function( req, res ) {
 			}
 		}
 
-		res.render( 'rubrics/editor', {
+		res.status(200).render( 'rubrics/editor', {
 			title: "Edit Rubric",
 			path: req.originalUrl,
 			rubric: rubric,
@@ -136,7 +124,7 @@ function save_rubric( req, res, next ) {
 			}
 
 			PROMISE.all( promises ).spread( function() {
-				res.redirect( '/rubrics/edit/' + rubric_id );
+				res.status(303).redirect( '/rubrics/edit/' + rubric_id );
 			} );
 		} );
 	} );
@@ -150,7 +138,7 @@ router.get( '/destroy/:rubric_id', function( req, res ) {
 
 	RUBRIC.findById( rubric_id ).then( function( rubric ) {
 		if ( rubric != null ) {
-			res.render( 'rubrics/destroy', {
+			res.status(200).render( 'rubrics/destroy', {
 				title: "Delete Rubric",
 				rubric: rubric,
 			} );
@@ -169,7 +157,7 @@ router.post( '/destroy/:rubric_id', function( req, res ) {
 	RUBRIC.destroy( {
 		where: { rubric_id: req.params.rubric_id },
 	} ).then( function() {
-		res.redirect( '/rubrics' );
+		res.status(303).redirect( '/rubrics' );
 	} );
 } );
 

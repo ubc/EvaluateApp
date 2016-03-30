@@ -94,6 +94,11 @@ module.exports = {
 	},
 
 	require_login: function(req, res, next) {
+		// TODO: Remove this test code.
+		req.user = true;
+		res.locals.user = req.user;
+		// ---
+
 		if (req.user) {
 			DEBUG("User Is Logged In", req.user, req.account);
 			next();

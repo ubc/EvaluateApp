@@ -8,8 +8,6 @@ module.exports = {
 	valid_as_submetric: false,
 };
 
-// TODO: Make polls update properly.
-
 module.exports.validate_vote = function( new_value, old_value, metric ) {
 	DEBUG_VOTE("Validating poll vote", new_value, old_value, metric.options)
 	if ( new_value === '' ) {
