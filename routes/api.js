@@ -100,6 +100,7 @@ router.get('/auth/:api_key', function( req, res, next ) {
 	} else if ( ! ( req.query.metric_id && req.query.context_id && req.query.user_id ) ) {
 		res.status(404).send("Metric, User, or Context is not specified");
 	} else {
+		// TODO: Although users should be able to vote up to 5 times, they should really only be able to load the page once.
 		var transaction_id = TRANSACTION.create( {
 			action: TRANSACTION.TYPE.VOTE,
 			data: {

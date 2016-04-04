@@ -22,6 +22,9 @@ module.exports.validate_vote = function( new_values, old_values, metric ) {
 	for (var i = new_values.length - 1; i >= 0; i--) {
 		if ( new_values[i] == null || new_values[i] < 0 || new_values[i] > answers_count ) {
 			delete new_values[i];
+		} else {
+			// TODO: Make all validate_vote functions take a stance on string vs number.
+			new_values[i] = parseInt( new_values[i] );
 		}
 	}
 

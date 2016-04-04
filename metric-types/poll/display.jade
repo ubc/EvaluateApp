@@ -10,14 +10,15 @@
 ul
 	each text, i in answers
 		- vote_count = votes[i] || 0
+		- user_selected = ( user_vote instanceof Array ? user_vote.indexOf(i) > -1 : user_vote === i )
 		li
 			label.vote
 				input(
 					name = name
 					type = ( multiselect == 'on' ? 'checkbox' : 'radio' )
 					value = i
-					checked = ( user_vote === i )
-					data-previous = ( user_vote === i ? "true" : "false" )
+					checked = ( user_selected )
+					data-previous = ( user_selected ? "true" : "false" )
 					autocomplete = "off"
 					disabled = ( transaction_id == null )
 				)
