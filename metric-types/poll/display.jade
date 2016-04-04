@@ -1,7 +1,9 @@
 -
 	// Expects variables metric, score, [user_vote], [transaction_id], [name]
 	name = input_name || 'metric-' + metric.metric_id
-	answers = metric.options['answers'].split( /\r?\n/ )
+	options = metric.options || {}
+	answers = options['answers'] ? options['answers'].split( /\r?\n/ ) : []
+	multiselect = options['multiselect'] || false
 	total_votes = score.count || 0
 	votes = score.data || {}
 
@@ -12,7 +14,7 @@ ul
 			label.vote
 				input(
 					name = name
-					type = 'radio'
+					type = ( multiselect == 'on' ? 'checkbox' : 'radio' )
 					value = i
 					checked = ( user_vote === i )
 					data-previous = ( user_vote === i ? "true" : "false" )

@@ -4,9 +4,11 @@ mixin field(title)
 	dd
 		block
 
+
 -
 	// Expects variables options, slug
 	answers = options['answers'] || ""
+	multiselect = options['multiselect'] || false
 
 +field("Answers")
 	textarea(
@@ -16,3 +18,14 @@ mixin field(title)
 	)= answers
 	br
 	small: em= "One answer per line."
+
++field("Allow Multiple Selections")
+	label
+		input(
+			name= "options[multiselect]"
+			type= "checkbox"
+			value= "on"
+			autocomplete= "off"
+			checked= (multiselect == "on")
+		)
+		|  Enabled

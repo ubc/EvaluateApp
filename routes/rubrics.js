@@ -8,6 +8,8 @@ const DEBUG = require('debug')('eval:routing');
 const PASSPORT = require('passport');
 const AUTH = require('../includes/authentication')
 
+// TODO: Rename Rubrics as "Blueprints" - at least in the code.
+
 var router = EXPRESS.Router();
 
 router.use( AUTH.require_login );

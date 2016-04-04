@@ -5,15 +5,33 @@ var Evaluate = {
 	extract_value: function( input ) {
 		var tag = input.prop('tagName').toLowerCase();
 		var type = input.attr('type')
-		var result;
+		var result = null;
 
-		if ( tag != 'input' || ( ( type == 'checkbox' || type == 'radio' ) && ! input.prop('checked') ) ) {
-			result = null;
-		} else {
-			result = input.val();
+		if ( tag == 'input' ) {
+			switch (type) {
+				case 'checkbox':
+					result = [];
+
+					console.log("Checkbox gives", result);
+					jQuery( "[name='" + input.prop('name') + "']" ).each( function( index, ele ) {
+						var element = jQuery(ele);
+						if ( element.prop('checked') == true ) {
+							result.push(element.val())
+						}
+					} );
+					console.log("Checkbox gives", result);
+					break;
+				case 'radio':
+					if ( input.prop('checked') != true ) {
+						break;
+					}
+				default:
+					result = input.val();
+					break;
+			}
 		}
-		console.log("extract value", tag, type, input.val(), result);
 
+		console.log("extract value", tag, type, input.val(), result);
 		return result;
 	},
 
