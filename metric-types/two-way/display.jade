@@ -14,7 +14,6 @@ label.vote
 		type = 'radio'
 		value = 1
 		checked = ( user_vote === 1 )
-		data-previous = ( user_vote == 1 ? "true" : "false" )
 		autocomplete = "off"
 		disabled = ( transaction_id == null )
 	)
@@ -27,7 +26,6 @@ label.vote
 		type = 'radio'
 		value = -1
 		checked = ( user_vote === -1 )
-		data-previous = ( user_vote == -1 ? "true" : "false" )
 		autocomplete = "off"
 		disabled = ( transaction_id == null )
 	)

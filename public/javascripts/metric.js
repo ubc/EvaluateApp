@@ -2,6 +2,44 @@
 // TODO: Evaluate the quality of the javascript code.
 
 var Evaluate = {
+	init: function() {
+		
+		// Radio button deselection functionality
+		jQuery( '.vote input[type="radio"]' ).each( function() {
+			var input = jQuery(this);
+			input.data( 'previous', this.checked );
+		} );
+
+		jQuery( '.vote input[type="radio"]' ).click( function( event ) {
+			var input = jQuery(this);
+
+			if ( input.data( 'previous' ) == "true" ) {
+				input.data( 'previous', 'false' );
+				input.attr( 'checked', false );
+				input.change();
+			} else {
+				jQuery( 'input[name="'+input.attr('name')+'"]' ).data( 'previous', 'false' );
+				input.data( 'previous', 'true' );
+			}
+		} );
+
+		// Voting capture
+		jQuery( '.vote  *:input' ).change( function() {
+			console.log("vote");
+			var choice = Evaluate.extract_value( jQuery(this) );
+			Evaluate.send_vote( choice );
+		} );
+
+		// TODO: Actually implement the no-JS fallback
+		// Prevent the no-JS fallback
+		jQuery( '.vote a' ).click( function( event ) {
+			event.preventDefault();
+		} );
+
+		// -----
+		console.log("Loaded metrics.js");
+	},
+
 	extract_value: function( input ) {
 		var tag = input.prop('tagName').toLowerCase();
 		var type = input.attr('type')
@@ -57,33 +95,4 @@ var Evaluate = {
 	},
 }
 
-// Radio button deselection functionality
-// TODO: Properly define initial state: "data-previous".
-jQuery( '.vote input[type="radio"]' ).click( function( event ) {
-	var input = jQuery(this);
-
-	if ( input.data( 'previous' ) == "true" ) {
-		input.data( 'previous', 'false' );
-		input.attr( 'checked', false );
-		input.change();
-	} else {
-		jQuery( 'input[name="'+input.attr('name')+'"]' ).data( 'previous', 'false' );
-		input.data( 'previous', 'true' );
-	}
-} );
-
-// Voting capture
-jQuery( '.vote  *:input' ).change( function() {
-	console.log("vote");
-	var choice = Evaluate.extract_value( jQuery(this) );
-	Evaluate.send_vote( choice );
-} );
-
-// TODO: Actually implement the no-JS fallback
-// Prevent the no-JS fallback
-jQuery( '.vote a' ).click( function( event ) {
-	event.preventDefault();
-} );
-
-// -----
-console.log("Loaded metrics.js");
+jQuery(document).ready( Evaluate.init );

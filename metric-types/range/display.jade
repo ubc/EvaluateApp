@@ -8,7 +8,6 @@ mixin step( i, icon, name, user_vote )
 					type = 'radio'
 					value = i
 					checked = ( user_vote === i )
-					data-previous = ( user_vote == i ? "true" : "false" )
 					autocomplete = "off"
 					disabled = ( transaction_id == null )
 				)
