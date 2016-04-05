@@ -51,19 +51,19 @@ function create_tables() {
 		"PRIMARY KEY (metric_id)",
 	] );
 	
-	create_table( DATABASE.tables.rubric_fields, [
-		"rubric_id INT(11) NOT NULL",
+	create_table( DATABASE.tables.blueprint_fields, [
+		"blueprint_id INT(11) NOT NULL",
 		"name VARCHAR(64) NOT NULL",
 		"type VARCHAR(10) NOT NULL",
 		"options BLOB NOT NULL",
-		"PRIMARY KEY (rubric_id)",
+		"PRIMARY KEY (blueprint_id)",
 	] );
 
-	create_table( DATABASE.tables.rubrics, [
-		"rubric_id INT(11) NOT NULL AUTO_INCREMENT",
+	create_table( DATABASE.tables.blueprints, [
+		"blueprint_id INT(11) NOT NULL AUTO_INCREMENT",
 		"name VARCHAR(64) NOT NULL",
 		"description TINYTEXT",
-		"PRIMARY KEY (rubric_id)",
+		"PRIMARY KEY (blueprint_id)",
 	] );
 	
 	create_table( DATABASE.tables.votes, [

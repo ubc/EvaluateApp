@@ -3,7 +3,7 @@ const PROMISE = require('sequelize').Promise;
 const EXPRESS = require('express');
 const METRIC = require('../models/metric');
 const SUBMETRIC = require('../models/submetric');
-const RUBRIC = require('../models/rubric');
+const BLUEPRINT = require('../models/blueprint');
 const METRIC_TYPES = require('../metric-types');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
@@ -28,11 +28,11 @@ router.get('/', function( req, res ) {
 router.get('/create', function( req, res ) {
 	var promises = [];
 
-	promises.push( RUBRIC.findAll( {
+	promises.push( BLUEPRINT.findAll( {
 		include: [{ model: SUBMETRIC }],
 	} ) );
 
-	PROMISE.all( promises ).spread( function( rubrics ) {
+	PROMISE.all( promises ).spread( function( blueprints ) {
 		var metric = { options: {} };
 
 		res.status(200).render( 'metrics/editor', {
@@ -40,7 +40,7 @@ router.get('/create', function( req, res ) {
 			path: req.originalUrl,
 			metric: metric,
 			metric_types: METRIC_TYPES,
-			blueprints: rubrics,
+			blueprints: blueprints,
 		} );
 	} );
 });
@@ -49,11 +49,11 @@ router.get('/edit/:metric_id', function( req, res ) {
 	var promises = [];
 
 	promises.push( METRIC.findById( req.params.metric_id ) );
-	promises.push( RUBRIC.findAll({
+	promises.push( BLUEPRINT.findAll({
 		include: [ SUBMETRIC ],
 	}) );
 
-	PROMISE.all( promises ).spread( function( metric, rubrics ) {
+	PROMISE.all( promises ).spread( function( metric, blueprints ) {
 		if ( metric == null ) {
 			res.status(404).send( "No metric #" + req.params.metric_id + " found." );
 			return;
@@ -64,7 +64,7 @@ router.get('/edit/:metric_id', function( req, res ) {
 			path: req.originalUrl,
 			metric: metric,
 			metric_types: METRIC_TYPES,
-			blueprints: rubrics,
+			blueprints: blueprints,
 		});
 	} );
 });

@@ -3,7 +3,7 @@ const METRIC = require('./metric');
 const SCORE = require('./score');
 const VOTE = require('./vote');
 
-const RUBRIC = require('./rubric');
+const BLUEPRINT = require('./blueprint');
 const SUBMETRIC = require('./submetric');
 
 module.exports.install = function() {
@@ -25,13 +25,13 @@ module.exports.install = function() {
 		foreignKey: 'metric_id',
 	} );
 
-	RUBRIC.hasMany( SUBMETRIC, {
-		foreignKey: "rubric_id",
+	BLUEPRINT.hasMany( SUBMETRIC, {
+		foreignKey: 'blueprint_id',
 		onDelete: 'cascade',
 	} );
 
-	SUBMETRIC.belongsTo( RUBRIC, {
-		foreignKey: "rubric_id",
+	SUBMETRIC.belongsTo( BLUEPRINT, {
+		foreignKey: 'blueprint_id',
 	} );
 
 	METRIC.sync().then( function() {
@@ -39,7 +39,7 @@ module.exports.install = function() {
 		VOTE.sync();
 	} );
 
-	RUBRIC.sync().then( function() {
+	BLUEPRINT.sync().then( function() {
 		SUBMETRIC.sync();
 	} );
 };

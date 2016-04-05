@@ -8,14 +8,17 @@
 form
 	each submetric, i in submetrics
 		-
+			console.log("Rubric score", rubric_score.data, i)
 			submetric_id = submetric.id
 			title = submetric.options['title'] || ""
+			score = rubric_score.data ? rubric_score.data[submetric_id] : {}
+
 			html = submetric.type.render_display({
 				transaction_id: transaction_id,
 				metric: submetric,
 				input_name: 'submetric-' + submetric_id,
 				user_vote: rubric_user_vote[submetric_id],
-				score: rubric_score.data ? rubric_score.data[submetric_id] : {},
+				score: score != null ? rubric_score.data[submetric_id] : {},
 			});
 
 		div.submetric(id= "submetric-" + submetric_id, class= "metric-"+submetric.type.slug, data-id= submetric_id)

@@ -16,7 +16,7 @@ const MODELS = require('./models');
 
 const ROUTES = require('./routes/index');
 const METRICS = require('./routes/metrics');
-const RUBRICS = require('./routes/rubrics');
+const BLUEPRINTS = require('./routes/blueprints');
 const API = require('./routes/api');
 const DATA = require('./routes/data');
 
@@ -50,7 +50,7 @@ app.use( EXPRESS.static( PATH.join( __dirname, 'public' ) ));
 app.use( '/', ROUTES );
 app.use( '/data', DATA );
 app.use( '/metrics', METRICS );
-app.use( '/rubrics', RUBRICS );
+app.use( '/blueprints', BLUEPRINTS );
 app.use( '/api', API );
 
 // catch 404 and forward to error handler

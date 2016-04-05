@@ -46,7 +46,7 @@ router.post('/vote', function( req, res, next ) {
 
 		if ( metric.type.has_submetrics === true ) {
 			promises.push( SUBMETRIC.findAll( {
-				where: { rubric_id: metric.options.blueprint },
+				where: { blueprint_id: metric.options.blueprint },
 			} ) );
 		}
 
@@ -143,7 +143,7 @@ router.get( '/preview/:metric_id/', function( req, res ) {
 
 		if ( metric.type.has_submetrics === true ) {
 			SUBMETRIC.findAll( {
-				where: { rubric_id: metric.options['blueprint'] },
+				where: { blueprint_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {
 				data['submetrics'] = submetrics;
 				res.status(200).render( "metrics/single", data );
@@ -199,7 +199,7 @@ router.get( '/embed/:transaction_id', function( req, res ) {
 
 		if ( metric.type.has_submetrics === true ) {
 			SUBMETRIC.findAll( {
-				where: { rubric_id: metric.options['blueprint'] },
+				where: { blueprint_id: metric.options['blueprint'] },
 			} ).then( function( submetrics ) {
 				data['submetrics'] = submetrics;
 				res.status(200).render( "metrics/single", data );
