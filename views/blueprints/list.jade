@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+	table.pure-table.pure-table-horizontal
+		thead
+			tr
+				th= "ID"
+				th= "Metric"
+				th= "Actions"
+				th= "Created On"
+		tbody
+			if blueprints.length > 0
+				each blueprint in blueprints
+					-
+						blueprint_id = blueprint.blueprint_id
+						name = blueprint.name
+						created = blueprint.created
+
+					tr
+						td= blueprint_id
+						td= name
+						td
+							a(href="/blueprints/edit/#{blueprint_id}")= "Edit"
+						td= new Date( created ).toLocaleString()
+			else
+				tr
+					td(colspan="4"): em= "There's nothing here."
+	br
+	a(href="/blueprints/create")= "Create New Rubric"

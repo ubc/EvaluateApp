@@ -1,0 +1,99 @@
+extends ../layout
+
+block scripts
+	script(src="/javascripts/editor.js")
+	script(src="/javascripts/editor-blueprint.js")
+
+block content
+	-
+		// Expects variables: blueprint, submetrics
+		blueprint_id = blueprint.blueprint_id || null
+		name = blueprint.name || ""
+		description = blueprint.description || ""
+		submetrics = blueprint.submetrics || []
+
+	form.pure-form(method="POST")
+		dl
+			+field("Name")
+				input(
+					name= "name"
+					type= "text"
+					value= "#{name}"
+					autocomplete= "off"
+				)
+			+field("Description")
+				textarea(
+					name= "description"
+					autocomplete= "off"
+				)= description
+			+field("Fields")
+				ul.submetric-list
+					each submetric in submetrics
+						+submetric(submetric, metric_types)
+
+					+submetric("", metric_types)
+					
+		input.pure-button.pure-button-primary(type="submit", value="Save")
+		if blueprint_id
+			a.pure-button(href="/blueprints/destroy/#{blueprint_id}")= "Delete"
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+mixin submetric(submetric, metric_types)
+	-
+		submetric_id = submetric.id || null
+		type = submetric.type ? submetric.type.slug : ""
+		options = submetric.options || {}
+		title = options.title || ""
+		weight = options.weight || 1.0
+
+	li.submetric(class= type ? "" : "empty")
+		if submetric_id
+			input(
+				name= "id"
+				type= "hidden"
+				autocomplete= "off"
+				value= submetric_id
+			)
+		select.switch(name="type", autocomplete="off", data-anchor=".options", data-siblings="true")
+			option(value="")= "- Choose -"
+			each metric_type in metric_types
+				option(value="#{metric_type.slug}", selected=(type == metric_type.slug))
+					| #{metric_type.title}
+		input(
+			name= "options[title]"
+			type= "text"
+			placeholder= "Title"
+			autocomplete= "off"
+			value= title
+		)
+		input(
+			name= "weight"
+			type= "text"
+			placeholder= "Weight"
+			autocomplete= "off"
+			value= weight
+		)
+
+		if submetric_id
+			br
+			small: em= "Warning! Changing the submetric type will seriously mess up your existing votes and scoring. TODO: Fix this"
+
+		each metric_type in metric_types
+			-
+				html = metric_type.render_options({
+					slug: metric_type.slug,
+					options: options,
+				})
+			+options(metric_type.slug, type)
+				| !{html}
+
+mixin options(slug, active_type)
+	dl.options(
+		class=slug
+		style=(slug == active_type ? '' : "display:none;")
+	)
+		block
