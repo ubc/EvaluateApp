@@ -1,6 +1,13 @@
 
-jQuery(function() {
-	jQuery('body').on('change', '.switch', function(event) {
+var Evaluate_Editor = {
+
+	init: function() {
+		jQuery('body').on( 'change', '.switch', Evaluate_Editor.on_switch_change );
+		jQuery('form').on( 'submit', Evaluate_Editor.on_form_submit );
+		console.log('Loaded editor.js');
+	},
+
+	on_switch_change: function() {
 		var element = jQuery(this);
 		var anchor = element.data('anchor');
 		var siblings_only = element.data('siblings');
@@ -20,11 +27,11 @@ jQuery(function() {
 				jQuery(anchor+'.'+value).show();
 			}
 		}
-	});
+	},
 
-	jQuery('form').submit(function() {
+	on_form_submit: function() {
 		jQuery( '.options:hidden *:input' ).prop( 'disabled', true );
-	})
-});
+	},
+};
 
-console.log('Loaded editor.js');
+jQuery(document).ready( Evaluate_Editor.init );

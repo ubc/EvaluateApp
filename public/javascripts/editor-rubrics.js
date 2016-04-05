@@ -1,9 +1,20 @@
 
-jQuery(function() {
-	var submetric_list = jQuery('.submetric-list');
-	var submetric_template = jQuery('.submetric.empty').first().clone();
+var Evaluate_Editor_Rubrics = {
 
-	submetric_list.on( 'change', 'select.switch', function() {
+	submetric_list: null,
+	submetric_template: null,
+
+	init: function() {
+		submetric_list = jQuery('.submetric-list');
+		submetric_template = jQuery('.submetric.empty').first().clone();
+
+		submetric_list.on( 'change', 'select.switch', Evaluate_Editor_Rubrics.on_switch_change );
+		jQuery('form').on( 'submit', Evaluate_Editor_Rubrics.on_form_submit );
+		console.log('Loaded editor-rubrics.js');
+	},
+
+	on_switch_change: function() {
+		console.log("on_switch_change");
 		var element = jQuery(this);
 		var value = element.val();
 		var submetric = element.closest('.submetric');
@@ -15,9 +26,9 @@ jQuery(function() {
 			element.children().first().text("- Delete -");
 			submetric_list.append( submetric_template.clone() );
 		}
-	} );
+	},
 
-	jQuery('form').submit(function() {
+	on_form_submit: function() {
 		jQuery( '.submetric.empty *:input' ).prop( 'disabled', true );
 
 		jQuery( '.submetric' ).each( function( index, submetric ) {
@@ -43,5 +54,7 @@ jQuery(function() {
 				} );
 			}
 		} );
-	})
-});
+	},
+};
+
+jQuery(document).ready( Evaluate_Editor_Rubrics.init );

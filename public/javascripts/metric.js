@@ -1,43 +1,41 @@
 
-// TODO: Evaluate the quality of the javascript code.
+var Evaluate_Metric = {
 
-var Evaluate = {
 	init: function() {
-		
 		// Radio button deselection functionality
-		jQuery( '.vote input[type="radio"]' ).each( function() {
+		jQuery( 'input[type="radio"]' ).each( function() {
 			var input = jQuery(this);
 			input.data( 'previous', this.checked );
 		} );
 
-		jQuery( '.vote input[type="radio"]' ).click( function( event ) {
-			var input = jQuery(this);
+		jQuery( 'input[type="radio"]' ).on( 'click', Evaluate_Metric.on_radio_click );
+		jQuery( '.vote  *:input' ).on( 'change', Evaluate_Metric.on_vote_change );
 
-			if ( input.data( 'previous' ) == "true" ) {
-				input.data( 'previous', 'false' );
-				input.attr( 'checked', false );
-				input.change();
-			} else {
-				jQuery( 'input[name="'+input.attr('name')+'"]' ).data( 'previous', 'false' );
-				input.data( 'previous', 'true' );
-			}
-		} );
-
-		// Voting capture
-		jQuery( '.vote  *:input' ).change( function() {
-			console.log("vote");
-			var choice = Evaluate.extract_value( jQuery(this) );
-			Evaluate.send_vote( choice );
-		} );
-
-		// TODO: Actually implement the no-JS fallback
 		// Prevent the no-JS fallback
+		// TODO: Actually implement the no-JS fallback
 		jQuery( '.vote a' ).click( function( event ) {
 			event.preventDefault();
 		} );
 
-		// -----
-		console.log("Loaded metrics.js");
+		console.log("Loaded metric.js");
+	},
+
+	on_radio_click: function() {
+		var input = jQuery(this);
+
+		if ( input.data( 'previous' ) == true ) {
+			input.data( 'previous', false );
+			input.attr( 'checked', false );
+			input.change();
+		} else {
+			jQuery( 'input[name="'+input.attr('name')+'"]' ).data( 'previous', false );
+			input.data( 'previous', true );
+		}
+	},
+
+	on_vote_change: function() {
+		var choice = Evaluate_Metric.extract_value( jQuery(this) );
+		Evaluate_Metric.send_vote( choice );
 	},
 
 	extract_value: function( input ) {
@@ -95,4 +93,4 @@ var Evaluate = {
 	},
 }
 
-jQuery(document).ready( Evaluate.init );
+jQuery(document).ready( Evaluate_Metric.init );

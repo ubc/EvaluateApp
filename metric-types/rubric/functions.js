@@ -34,6 +34,7 @@ module.exports.adjust_score = function( score, new_value, old_value, metric, sub
 	score.count = score.count || 0;
 	score.average = 0;
 
+	// TODO: Check that the score is being set properly for rubrics.
 	if ( new_value !== old_value ) {
 		if ( new_value === null ) {
 			score.count--;
@@ -47,8 +48,8 @@ module.exports.adjust_score = function( score, new_value, old_value, metric, sub
 		var submetric = submetrics[i];
 		var submetric_id = submetric.id;
 		var submetric_score = submetric_data[submetric_id] || {};
-		var submetric_new_value = typeof new_value[submetric_id] !== 'undefined' ? new_value[submetric_id] : null;
-		var submetric_old_value = typeof old_value[submetric_id] !== 'undefined' ? old_value[submetric_id] : null;
+		var submetric_new_value = submetric_id in new_value ? new_value[submetric_id] : null;
+		var submetric_old_value = submetric_id in old_value ? old_value[submetric_id] : null;
 
 		submetric.type.adjust_score( submetric_score, submetric_new_value, submetric_old_value, submetric );
 

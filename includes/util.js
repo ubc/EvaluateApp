@@ -16,6 +16,7 @@ module.exports.defaults = function( map_defaults, map_values ) {
 }
 
 module.exports.validate_vote = function( new_value, old_value ) {
+	console.log('validate vote', new_value, '->', parseInt(new_value));
 	new_value = parseInt( new_value );
 
 	if ( isNaN( new_value ) || new_value == old_value ) {
