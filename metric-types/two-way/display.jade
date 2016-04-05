@@ -36,17 +36,21 @@ span.score(title="Total")
 	| #{display}
 
 script.
-	jQuery('.metric-two-way').on( 'evaluate-update', function( event, data, choice ) {
-		var element = jQuery(this);
-		element.find('.score').text( data.score );
-
-		if ( data.vote != choice ) {
-			if ( data.vote != null ) {
-				element.find( 'input[value="' + data.vote + '"]' ).prop( 'checked', true );
-			} else {
-				element.find( 'input:checked' ).prop( 'checked', false );
-			}
-		}
+	if ( typeof TWO_WAY_SCRIPT === 'undefined' ) {
+		TWO_WAY_SCRIPT = true;
 		
-		event.stopPropagation();
-	} );
+		jQuery('.metric-two-way').on( 'evaluate-update', function( event, data, choice ) {
+			var element = jQuery(this);
+			element.find('.score').text( data.score );
+
+			if ( data.vote != choice ) {
+				if ( data.vote != null ) {
+					element.find( 'input[value="' + data.vote + '"]' ).prop( 'checked', true );
+				} else {
+					element.find( 'input:checked' ).prop( 'checked', false );
+				}
+			}
+			
+			event.stopPropagation();
+		} );
+	}

@@ -33,21 +33,25 @@ ul
 			)
 
 script.
-	jQuery('.metric-poll').on( 'evaluate-update', function( event, data, choice ) {
-		for ( var k in data.score_data ) {
-			var value = data.score_data[k];
-			var score = jQuery( 'span.score-' + k );
-			var progress = jQuery( 'progress.score-' + k )
+	if ( typeof POLL_SCRIPT === 'undefined' ) {
+		POLL_SCRIPT = true;
+		
+		jQuery('.metric-poll').on( 'evaluate-update', function( event, data, choice ) {
+			for ( var k in data.score_data ) {
+				var value = data.score_data[k];
+				var score = jQuery( 'span.score-' + k );
+				var progress = jQuery( 'progress.score-' + k )
 
-			score.text( value );
-			progress.attr( 'value', value );
-			progress.attr( 'max', data.total );
-		}
+				score.text( value );
+				progress.attr( 'value', value );
+				progress.attr( 'max', data.total );
+			}
 
-		if ( data.vote != choice ) {
-			jQuery( 'input[value="' + data.vote + '"]' ).prop( 'checked', true );
-		}
+			if ( data.vote != choice ) {
+				jQuery( 'input[value="' + data.vote + '"]' ).prop( 'checked', true );
+			}
 
-		// Prevent the default evaluate-update event
-		event.stopImmediatePropagation();
-	} );
+			// Prevent the default evaluate-update event
+			event.stopImmediatePropagation();
+		} );
+	}

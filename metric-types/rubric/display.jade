@@ -35,18 +35,22 @@ if transaction_id
 	script(type="text/javascript", src="/javascripts/metric-rubric.js")
 
 script.
-	jQuery('.metric-rubric').on( 'evaluate-update', function( event, data, choices ) {
-		var element = jQuery(this);
-		element.find('.rubric-score').text( data.score );
+	if ( typeof RUBRIC_SCRIPT === 'undefined' ) {
+		RUBRIC_SCRIPT = true;
+		
+		jQuery('.metric-rubric').on( 'evaluate-update', function( event, data, choices ) {
+			var element = jQuery(this);
+			element.find('.rubric-score').text( data.score );
 
-		for ( var i in data.score_data ) {
-			console.log( "Processing update for", i );
-			jQuery( '#submetric-' + i ).trigger( 'evaluate-update', {
-				vote: data.vote[i],
-				score: data.score_data[i].display,
-				total: data.score_data[i].count,
-			}, choices[i] );
-		}
+			for ( var i in data.score_data ) {
+				console.log( "Processing update for", i );
+				jQuery( '#submetric-' + i ).trigger( 'evaluate-update', {
+					vote: data.vote[i],
+					score: data.score_data[i].display,
+					total: data.score_data[i].count,
+				}, choices[i] );
+			}
 
-		event.stopPropagation();
-	} );
+			event.stopPropagation();
+		} );
+	}
