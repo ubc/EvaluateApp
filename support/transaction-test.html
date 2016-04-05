@@ -48,8 +48,9 @@
 					api_key: getParameterByName("api_key", querystring),
 				}
 
-				show("Preview for #"+params.metric_id);
-				show("<iframe src=\"http://localhost:3000/api/preview/"+params.metric_id+"\" />")
+				var url = "http://localhost:3000/api/preview/"+params.metric_id;
+				show("Embedding Preview: <a href=\""+url+"\">"+url+"</a>");
+				show("<iframe src=\""+url+"\" />")
 
 				var data = {
 					metric_id: params.metric_id,
@@ -67,7 +68,7 @@
 						show("Got "+response);
 
 						var url = "http://localhost:3000/api/embed/"+response;
-						show("Embedding URL: "+url)
+						show("Embedding URL: <a href=\""+url+"\">"+url+"</a>");
 						show("<iframe src=\""+url+"\"/>")
 					},
 				} );
