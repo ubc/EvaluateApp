@@ -9,15 +9,19 @@ module.exports = {
 	has_submetrics: true,
 };
 
-module.exports.validate_vote = function( new_value, old_value, metric, submetrics ) {
-	new_value = JSON.parse( new_value );
+module.exports.validate_vote = function( new_value, metric, submetrics ) {
+	try {
+		new_value = JSON.parse( new_value );
+	} catch (err) {
+		DEBUG_VOTE("Error", err.message);
+		new_value = null
+	}
 
 	if ( typeof new_value === 'object' ) {
 		// Validate vote for each submetric.
 		for ( var i in new_value ) {
 			var submetric = UTIL.select_from( submetrics, { id: i } );
-			// Don't supply an old value, because we don't want to allow vote cancelling.
-			new_value[i] = submetric.type.validate_vote( new_value[i], null, submetric );
+			new_value[i] = submetric.type.validate_vote( new_value[i], submetric );
 		}
 	} else {
 		new_value = null;

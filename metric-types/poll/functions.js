@@ -2,15 +2,14 @@
 const DEBUG_VOTE = require('debug')('eval:voting');
 const UTIL = require('../../includes/util');
 
-// TODO: Allow the user to select multiple answers, if that option is enabled (and create that option)
 module.exports = {
 	title: "Poll",
 	slug: "poll",
 	valid_as_submetric: false,
 };
 
-module.exports.validate_vote = function( new_values, old_values, metric ) {
-	DEBUG_VOTE("Validating poll vote", new_values, old_values, metric.options)
+module.exports.validate_vote = function( new_values, metric ) {
+	DEBUG_VOTE("Validating poll vote", new_values, metric.options)
 	if ( new_values === '' ) {
 		return null;
 	} else if ( ! ( new_values instanceof Array ) ) {
@@ -23,7 +22,6 @@ module.exports.validate_vote = function( new_values, old_values, metric ) {
 		if ( new_values[i] == null || new_values[i] < 0 || new_values[i] > answers_count ) {
 			delete new_values[i];
 		} else {
-			// TODO: Make all validate_vote functions take a stance on string vs number.
 			new_values[i] = parseInt( new_values[i] );
 		}
 	}

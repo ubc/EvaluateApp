@@ -12,7 +12,6 @@ const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
 
-// TODO: Change vote nullification to be on the front end only.
 router.post('/vote', function( req, res, next ) {
 	DEBUG_VOTE('API CALL', "vote", req.body);
 
@@ -57,7 +56,7 @@ router.post('/vote', function( req, res, next ) {
 			var score = score_result[0];
 			var old_value = ( vote == null ? null : vote.value );
 
-			new_value = metric.type.validate_vote( new_value, old_value, metric, submetrics );
+			new_value = metric.type.validate_vote( new_value, metric, submetrics );
 
 			if ( new_value != old_value ) {
 				metric.type.adjust_score( score, new_value, old_value, metric, submetrics );

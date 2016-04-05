@@ -7,8 +7,8 @@ module.exports = {
 	slug: "one-way",
 };
 
-module.exports.validate_vote = function( new_value, old_value, metric ) {
-	new_value = UTIL.validate_vote( new_value, old_value );
+module.exports.validate_vote = function( new_value, metric ) {
+	new_value = parseInt( new_value );
 
 	if ( new_value > 0 ) {
 		return 1;

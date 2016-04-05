@@ -15,17 +15,6 @@ module.exports.defaults = function( map_defaults, map_values ) {
 	return map_defaults;
 }
 
-module.exports.validate_vote = function( new_value, old_value ) {
-	console.log('validate vote', new_value, '->', parseInt(new_value));
-	new_value = parseInt( new_value );
-
-	if ( isNaN( new_value ) || new_value == old_value ) {
-		return null;
-	} else {
-		return new_value;
-	}
-}
-
 module.exports.keep = function( object, keys ) {
 	for ( var key in object ) {
 		if ( keys.indexOf(key) == -1 ) {

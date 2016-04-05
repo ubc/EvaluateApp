@@ -7,14 +7,14 @@ module.exports = {
 	slug: "range",
 };
 
-module.exports.validate_vote = function( new_value, old_value, metric ) {
-	new_value = UTIL.validate_vote( new_value, old_value );
+module.exports.validate_vote = function( new_value, metric ) {
+	new_value = parseInt( new_value );
 	options = metric.options;
 
-	if ( new_value === null ) {
+	if ( isNaN( new_value ) ) {
 		return null;
 	} else if ( new_value <= 0 ) {
-		// Set the minimum value
+		// Return the minimum value
 		return ['numeric', 'slider'].indexOf( options['icon'] ) > -1 ? 0 : 1;
 	} else if ( new_value > options['max'] ) {
 		return parseInt( options['max'] );
