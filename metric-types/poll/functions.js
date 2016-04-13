@@ -10,7 +10,7 @@ module.exports = {
 
 module.exports.validate_vote = function( new_values, metric ) {
 	DEBUG_VOTE("Validating poll vote", new_values, metric.options)
-	if ( new_values === '' ) {
+	if ( new_values === '' || new_values == null ) {
 		return null;
 	} else if ( ! ( new_values instanceof Array ) ) {
 		new_values = [new_values]

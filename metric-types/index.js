@@ -16,7 +16,7 @@ function render_display( data ) {
 }
 
 FILE.readdirSync( __dirname ).forEach( function( file ) {
-	if ( file != "index.js" ) {
+	if ( file.indexOf(".") == -1 ) {
 		var object = require( "./" + file + "/functions.js" );
 
 		if ( typeof object !== 'undefined' && object.slug != null ) {

@@ -1,0 +1,52 @@
+-
+	// Expects variables metric, score, [user_vote], [transaction_id], [input_name]
+	name = input_name || 'metric-' + metric.metric_id
+	display = score.display || 0
+
+	options = metric.options || {}
+	multiselect = options['multiselect'] || false
+	choices = options['choices'] ? options['choices'].split( /\r?\n/ ) : []
+
+	for (var i = choices.length - 1; i >= 0; i--) {
+		choices[i] = choices[i].split("|", 2)
+	}
+
+ul
+	each choice, i in choices
+		- user_selected = ( user_vote instanceof Array ? user_vote.indexOf(i) > -1 : user_vote === i )
+		li
+			label.vote
+				input(
+					name = name
+					type = ( multiselect == 'on' ? 'checkbox' : 'radio' )
+					value = i
+					checked = ( user_selected )
+					autocomplete = "off"
+					disabled = ( transaction_id == null )
+				)
+				span
+					| #{choice[1]} (#{choice[0]})
+span.score(title="Average")
+	| #{display}
+
+script.
+	if ( typeof VALUELIST_SCRIPT === 'undefined' ) {
+		VALUELIST_SCRIPT = true;
+		
+		jQuery('.metric-valuelist').on( 'evaluate-update', function( event, data, choice ) {
+			var element = jQuery(this);
+			element.find('.score').text( data.score );
+
+			if ( data.vote != choice ) {
+				element.find( '.vote input' ).each( function() {
+					var input = jQuery(this);
+					var value = parseInt(input.val());
+					var checked = data.vote != null && data.vote.indexOf(value) > -1;
+					input.prop( 'checked', checked );
+				} );
+			}
+
+			// Prevent the default evaluate-update event
+			event.stopImmediatePropagation();
+		} );
+	}

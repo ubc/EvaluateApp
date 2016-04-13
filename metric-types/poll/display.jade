@@ -37,10 +37,12 @@ script.
 		POLL_SCRIPT = true;
 		
 		jQuery('.metric-poll').on( 'evaluate-update', function( event, data, choice ) {
+			var element = jQuery(this);
+
 			for ( var k in data.score_data ) {
 				var value = data.score_data[k];
-				var score = jQuery( 'span.score-' + k );
-				var progress = jQuery( 'progress.score-' + k )
+				var score = element.find( 'span.score-' + k );
+				var progress = element.find( 'progress.score-' + k )
 
 				score.text( value );
 				progress.attr( 'value', value );
@@ -48,7 +50,10 @@ script.
 			}
 
 			if ( data.vote != choice ) {
-				jQuery( 'input[value="' + data.vote + '"]' ).prop( 'checked', true );
+				element.find( 'input' ).each( function() {
+					var checked = data.vote != null && data.vote.indexOf(input.val()) > -1;
+					jQuery(this).prop( 'checked', checked );
+				} );
 			}
 
 			// Prevent the default evaluate-update event

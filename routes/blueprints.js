@@ -72,7 +72,6 @@ router.get('/edit/:blueprint_id', function( req, res ) {
 	} );
 });
 
-// TODO: Fix the fact that weight is not saved.
 function save_blueprint( req, res, next ) {
 	var blueprint_id = req.params.blueprint_id || null;
 	var data = req.body;

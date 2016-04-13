@@ -12,6 +12,8 @@ const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
 
+// TODO: Support metric listing, and sorting.
+
 router.post('/vote', function( req, res, next ) {
 	DEBUG_VOTE('API CALL', "vote", req.body);
 

@@ -1,5 +1,5 @@
 
-// TODO: Remove this code
+// TODO: Remove this test code.
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const EXPRESS = require('express');

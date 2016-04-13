@@ -6,6 +6,7 @@ const TYPES = require('../metric-types');
 module.exports = DATABASE.define( 'submetric', {
 	type: {
 		type: SEQUELIZE.ENUM(),
+		// TODO: Only include valid submetric types.
 		values: Object.keys(TYPES), // TODO: If these values change it requires a database upgrade. Figure out some better way to make that work.
 		get: function() {
 			return TYPES[ this.getDataValue( 'type' ) ];

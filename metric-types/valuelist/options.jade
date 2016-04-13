@@ -1,0 +1,32 @@
+
+mixin field(title)
+	dt= title
+	dd
+		block
+
+
+-
+	// Expects variables options, slug
+	choices = options['choices'] || ""
+	multiselect = options['multiselect'] || false
+
++field("choices")
+	textarea(
+		name= "options[choices]"
+		autocomplete= "off"
+		rows= "6"
+		placeholder= "value|text"
+	)= choices
+	br
+	small: em= "One answer per line. Seperate the value and text with a pipe (|) character."
+
++field("Allow Multiple Selections")
+	label
+		input(
+			name= "options[multiselect]"
+			type= "checkbox"
+			value= "on"
+			autocomplete= "off"
+			checked= (multiselect == "on")
+		)
+		|  Enabled
