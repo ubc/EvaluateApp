@@ -27,7 +27,7 @@ mixin field(title)
 						field_options = field.options
 						field_title = field_options['title'] || "Untitled"
 						field_type = field.type ? field.type.title : "no-type"
-						field_weight = field_weight || 1
+						field_weight = field.weight || 1
 					li
 						strong= field_title
 						|  with type #{field_type} and weight x#{field_weight}

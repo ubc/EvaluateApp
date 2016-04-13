@@ -48,7 +48,7 @@ mixin submetric(submetric, metric_types)
 		type = submetric.type ? submetric.type.slug : ""
 		options = submetric.options || {}
 		title = options.title || ""
-		weight = options.weight || 1.0
+		weight = submetric.weight || 1.0
 
 	li.submetric(class= type ? "" : "empty")
 		if submetric_id
