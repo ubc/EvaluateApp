@@ -69,6 +69,7 @@ router.get('/edit/:metric_id', function( req, res ) {
 	} );
 });
 
+// TODO: Make sure this is a valid creation.
 function save_metric( req, res ) {
 	var data = req.body;
 

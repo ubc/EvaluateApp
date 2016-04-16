@@ -1,9 +1,24 @@
 
-mixin nav(title, nav_path, current_path)
-	//- selected = ( current_path == nav_path ? "pure-menu-selected" : "" )
-	- selected = ( current_path != null && current_path.indexOf( nav_path ) == 0 ? "pure-menu-selected" : "" )
-	li.pure-menu-item(class = selected)
-		a.pure-menu-link(href= nav_path)= title
+-
+	/*
+	mixin nav(title, nav_path, current_path)
+		//- selected = ( current_path == nav_path ? "pure-menu-selected" : "" )
+		- selected = ( current_path != null && current_path.indexOf( nav_path ) == 0 ? "pure-menu-selected" : "" )
+		li.pure-menu-item(class = selected)
+			a.pure-menu-link(href= nav_path)= title
+	*/
+
+	/*
+	nav.pure-menu.pure-menu-horizontal
+		ul.pure-menu-list
+			+nav("Logout", "/logout", path)
+	*/
+
+mixin nav(title, url)
+	small
+		|  [
+		a(href=url)= title
+		| ]
 
 doctype html
 html
@@ -14,16 +29,9 @@ html
 		link(rel="stylesheet", href="/stylesheets/style.css")
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 		block scripts
-	header(style="display:none;")
-		h2= "Evaluate" + ( title ? " - " + title : "" )
-		hr
-		if true || user
-			nav.pure-menu.pure-menu-horizontal
-				ul.pure-menu-list
-					+nav("Login", "/", path)
-					+nav("Metrics", "/metrics", path)
-					+nav("Rubrics", "/blueprints", path)
-					+nav("View Data", "/data", path)
+	h3= ( title ? title : "Evaluate" )
+		if user
+			+nav("Logout", "/logout")
 	body
 		br
 		if alerts
