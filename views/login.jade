@@ -5,10 +5,3 @@ block content
 		div= "You are logged in."
 		pre= JSON.stringify(user)
 		pre= JSON.stringify(account)
-	else
-		h3
-			| Login with 
-			a(href="/login/saml")= "SAML"
-		h3
-			| Login with 
-			a(href="/login/cas")= "CAS"

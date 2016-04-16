@@ -8,9 +8,9 @@ module.exports = {
 		database: 'evaluate',
 		dialect: 'mysql',
 	},
-	lti_consumers: [
-
-	],
+	lti_consumers: {
+		"testconsumerkey": "testconsumersecret",
+	},
 	lrs: {
 		url: "https://lrs.adlnet.gov/xapi/",
 		auth: {

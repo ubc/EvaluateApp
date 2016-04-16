@@ -14,10 +14,10 @@ html
 		link(rel="stylesheet", href="/stylesheets/style.css")
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 		block scripts
-	header
+	header(style="display:none;")
 		h2= "Evaluate" + ( title ? " - " + title : "" )
 		hr
-		if user
+		if true || user
 			nav.pure-menu.pure-menu-horizontal
 				ul.pure-menu-list
 					+nav("Login", "/", path)

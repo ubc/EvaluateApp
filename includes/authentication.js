@@ -1,15 +1,17 @@
 
 const FILE = require('fs');
 const PASSPORT = require('passport');
-const SAML = require('passport-saml').Strategy;
-const CAS = require('passport-cas').Strategy;
+//const SAML = require('passport-saml').Strategy;
+//const CAS = require('passport-cas').Strategy;
 const LTI = require('passport-lti');
+const CONFIG = require('../config');
 const DEBUG = require('debug')('eval:auth');
 
 // Useful tools for SAML integrations
 // https://www.samltool.com/self_signed_certs.php
 // https://www.samltool.com/sp_metadata.php
 
+/*
 PASSPORT.use( new SAML( {
 	callbackUrl: 'http://localhost:3000/login/saml',
 	// URL of Identity Provider
@@ -28,36 +30,32 @@ PASSPORT.use( new SAML( {
 },
 function( profile, done ) {
 	DEBUG( "SAML Authentication" );
-	/*findByEmail(profile.email, function(err, user) {
-		if (err) {
-			return done(err);
-		}
-
-		return done(null, user);
-	} );*/
+	// Do something
 	done( null, profile );
 } ) );
 
 PASSPORT.use( new CAS( {
-		version: "CAS1.0",
-		ssoBaseURL: 'https://192.168.33.10/cas',
-		serverBaseURL: 'http://localhost:3000/',
-	}, function( profile, done ) {
-		DEBUG( "CAS Authentication" );
-		/*User.findOne({login: login}, function (err, user) {
-			if (err) {
-				return done(err);
-			} else if (!user) {
-				return done(null, false, {message: 'Unknown user'});
-			}
-
-			return done(null, user);
-		} );*/
-		done( null, profile );
-	} )
-);
+	version: "CAS1.0",
+	ssoBaseURL: 'https://192.168.33.10/cas',
+	serverBaseURL: 'http://localhost:3000/',
+}, function( profile, done ) {
+	DEBUG( "CAS Authentication" );
+	// Do something
+	done( null, profile );
+} ) );
+*/
 
 PASSPORT.use( new LTI( {
+		/*createProvider: function( req, done ) {
+			var key = req.body.oauth_consumer_key;
+			if ( key in CONFIG.lti_consumers ) {
+                var consumer = new LTI.Provider( key, CONFIG.lti_consumers[key] );
+                DEBUG( "Recognized LTI Consumer", key )
+                return done(null, consumer);
+			} else {
+				return done("Unrecognized LTI Consumer: " + key);
+			}
+		},*/
 		consumerKey: 'testconsumerkey',
 		consumerSecret: 'testconsumersecret'
 		// pass the req object to callback
@@ -69,6 +67,8 @@ PASSPORT.use( new LTI( {
 		// LTI launch parameters
 		// console.dir(lti);
 		// Perform local authentication if necessary
+		user = {};
+
 		return done(null, user);
 	} )
 );
@@ -83,6 +83,8 @@ PASSPORT.deserializeUser( function( user, done ) {
 	done( null, user );
 } );
 
+var authenticate = PASSPORT.authenticate( 'lti', { failureRedirect: '/', failureFlash: true, successFlash: true } );
+
 module.exports = {
 	
 	is_authenticated: function() {
@@ -93,19 +95,18 @@ module.exports = {
 		return true;
 	},
 
-	require_login: function(req, res, next) {
+	require_login: function( req, res, next ) {
 		// TODO: Remove this test code.
-		req.user = true;
-		res.locals.user = req.user;
+		//req.user = true;
+		//res.locals.user = req.user;
 		// ---
 
 		if (req.user) {
-			DEBUG("User Is Logged In", req.user, req.account);
+			DEBUG("User Is Logged In", req.user);
 			next();
 		} else {
-			req.flash("error", "You must log in.")
-			DEBUG("User Is NOT Logged In");
-			res.redirect("/");
+			DEBUG("Logging in User", req.user);
+			authenticate( req, res, next );
 		}
 	},
 

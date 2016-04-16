@@ -28,7 +28,7 @@ router.all('/', function(req, res, next) {
 
 router.all('/login/cas',
 	PASSPORT.authenticate('cas', { failureRedirect: '/', failureFlash: true, successFlash: true }),
-	PASSPORT.authorize('lti', { failureRedirect: '/', failureFlash: true, successFlash: true }),
+	//PASSPORT.authorize('lti', { failureRedirect: '/', failureFlash: true, successFlash: true }),
 	function(req, res, next) {
 		DEBUG("Got /login/cas hit", req.user, req.account);
 		res.status(303).redirect('/');
@@ -37,7 +37,7 @@ router.all('/login/cas',
 
 router.all('/login/saml',
 	PASSPORT.authenticate('saml', { failureRedirect: '/', failureFlash: true, successFlash: true }),
-	PASSPORT.authorize('lti', { failureRedirect: '/', failureFlash: true, successFlash: true }),
+	//PASSPORT.authorize('lti', { failureRedirect: '/', failureFlash: true, successFlash: true }),
 	function(req, res, next) {
 		DEBUG("Got /login/saml hit", req.user, req.account);
 		res.status(303).redirect('/');

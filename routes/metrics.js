@@ -15,7 +15,7 @@ var router = EXPRESS.Router();
 
 router.use( AUTH.require_login );
 
-router.get('/', function( req, res ) {
+router.all('/', function( req, res ) {
 	METRIC.findAll().then( function( results ) {
 		res.status(200).render( 'metrics/list', {
 			title: "Metrics List",

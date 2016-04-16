@@ -62,6 +62,7 @@ block content
 		input.pure-button.pure-button-primary(type="submit", value="Save")
 		if metric_id
 			a.pure-button(href="/metrics/destroy/#{metric_id}")= "Delete"
+		a.pure-button(href="/metrics")= "Back"
 
 	if metric_id
 		br
