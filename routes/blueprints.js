@@ -13,7 +13,7 @@ var router = EXPRESS.Router();
 router.use( AUTH.require_login );
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.all('/', function(req, res, next) {
 	BLUEPRINT.findAll().then( function( results ) {
 		res.status(200).render( 'blueprints/list', {
 			title: "Rubrics List",

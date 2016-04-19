@@ -15,6 +15,7 @@ var router = EXPRESS.Router();
 
 router.use( AUTH.require_login );
 
+// TODO: Tighten security by making this a POST only endpoint (LTI uses POST)
 router.all('/', function( req, res ) {
 	METRIC.findAll().then( function( results ) {
 		res.status(200).render( 'metrics/list', {
@@ -22,6 +23,12 @@ router.all('/', function( req, res ) {
 			path: req.originalUrl,
 			metrics: results,
 		} );
+	} );
+});
+
+router.post('/list', function( req, res ) {
+	METRIC.findAll().then( function( results ) {
+		res.status(200).send(results);
 	} );
 });
 
