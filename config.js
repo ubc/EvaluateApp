@@ -19,10 +19,10 @@ module.exports = {
 		"testconsumerkey": "testconsumersecret",
 	},
 	lrs: {
-		url: "https://lrs.adlnet.gov/xapi/",
+		url: "https://cloud.scorm.com/tc/CO2QZ8DR1Q/sandbox/",
 		auth: {
-			user: "tom",
-			password: "1234",
+			user: "P_NlxCkOx4_ouMxcQv4",
+			password: "5UIRXbnEu8riMqT-eAU",
 		},
 	},
 };

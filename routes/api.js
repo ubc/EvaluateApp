@@ -9,6 +9,7 @@ const DEBUG = require('debug')('eval:api');
 const DEBUG_VOTE = require('debug')('eval:voting');
 const TRANSACTION = require('../includes/transaction');
 const AUTH = require('../includes/authentication');
+const LRS = require('../includes/lrs');
 const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
@@ -79,6 +80,14 @@ router.post('/vote', function( req, res, next ) {
 				}
 
 				score.save();
+
+				LRS.send_vote( {
+					metric_id: data.metric_id,
+					context_id: data.context_id,
+					user_id: data.user_id,
+					score: score,
+					vote: new_value,
+				} );
 			}
 
 			res.status(200).json( {
