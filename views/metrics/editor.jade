@@ -12,7 +12,7 @@ block content
 		title = options['title'] || ""
 		type = metric.type ? metric.type.slug : "one-way"
 
-	form.pure-form(method="POST")
+	form.pure-form(method="POST", action="/metrics/save/"+metric_id)
 		dl
 			if metric_id
 				+field("Metric UUID")

@@ -10,6 +10,11 @@ var router = EXPRESS.Router();
 router.use( function( req, res, next ) {
 	res.locals.user = req.user;
 	res.locals.alerts = req.flash();
+
+	if ( res.locals.alerts ) {
+		DEBUG("Flash", res.locals.alerts);
+	}
+
 	next();
 } );
 
@@ -24,9 +29,8 @@ router.all('/', function(req, res, next) {
 router.post('/login',
 	PASSPORT.authenticate( 'lti', { failureRedirect: '/', failureFlash: true, successFlash: true } ),
 	function( req, res, next ) {
-		DEBUG("Got /login hit", req.user);
-		// TODO: Implement redirect.
-		res.status(303).redirect('/');
+		DEBUG("Got /login hit", req.user, req.body.target_path);
+		res.status(303).redirect(req.body.target_path || '/');
 	}
 );
 

@@ -130,8 +130,8 @@ function save_blueprint( req, res, next ) {
 	} );
 }
 
-router.post( '/edit/:blueprint_id', save_blueprint );
-router.post( '/create', save_blueprint );
+router.post( '/save/:blueprint_id', save_blueprint );
+router.post( '/save', save_blueprint );
 
 router.get( '/destroy/:blueprint_id', function( req, res ) {
 	var blueprint_id = req.params.blueprint_id;

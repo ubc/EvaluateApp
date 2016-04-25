@@ -93,12 +93,13 @@ router.post('/vote', function( req, res, next ) {
 router.get('/auth/:api_key', function( req, res, next ) {
 	// TODO: Remove this test header.
 	res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Methods', 'GET,POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
 	if ( !req.params.api_key /* TODO: Actually check api key validity */ ) {
 		res.status(403).send("Not Authorized");
 	} else if ( ! ( req.query.metric_id && req.query.context_id && req.query.user_id ) ) {
+		DEBUG("Metric, User, or Context is not specified", req.query, req.body);
 		res.status(404).send("Metric, User, or Context is not specified");
 	} else {
 		// TODO: Although users should be able to vote up to 5 times, they should really only be able to load the page once.

@@ -63,7 +63,7 @@ module.exports = {
 			user = req.user;
 			next();
 		} else {
-			DEBUG("Logging in User", req.user);
+			DEBUG("User is NOT logged In", req.user);
 			//res.status(401).redirect("/");
 			authenticate( req, res, next );
 		}

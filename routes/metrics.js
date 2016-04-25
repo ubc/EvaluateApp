@@ -26,7 +26,7 @@ router.all('/', function( req, res ) {
 	} );
 });
 
-router.post('/list', function( req, res ) {
+router.get('/list', function( req, res ) {
 	METRIC.findAll().then( function( results ) {
 		res.status(200).send(results);
 	} );
@@ -101,7 +101,7 @@ function save_metric( req, res ) {
 }
 
 router.post( '/edit/:metric_id', save_metric );
-router.post( '/create', save_metric );
+router.post( '/edit', save_metric );
 
 router.get( '/destroy/:metric_id', function( req, res ) {
 	var metric_id = req.params.metric_id;
