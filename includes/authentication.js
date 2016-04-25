@@ -52,6 +52,11 @@ module.exports = {
 		return true;
 	},
 
+	// TODO: Also check the the metric_id being accessed is associated with teh api key.
+	is_api_key_valid: function( key ) {
+		return key in CONFIG.api_keys;
+	},
+
 	require_login: function( req, res, next ) {
 		// TODO: Remove this test code.
 		//req.user = true;

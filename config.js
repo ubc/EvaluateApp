@@ -12,6 +12,9 @@ module.exports = {
 		database: 'evaluate',
 		dialect: 'mysql',
 	},
+	api_keys: [
+		"4bfb4e2a-405d-4a85-872f-32764604f9cd", // Local test key.
+	],
 	lti_consumers: {
 		"testconsumerkey": "testconsumersecret",
 	},

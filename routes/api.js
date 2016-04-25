@@ -8,6 +8,7 @@ const SUBMETRIC = require('../models/submetric')
 const DEBUG = require('debug')('eval:api');
 const DEBUG_VOTE = require('debug')('eval:voting');
 const TRANSACTION = require('../includes/transaction');
+const AUTH = require('../includes/authentication');
 const PASSPORT = require('passport');
 
 var router = EXPRESS.Router();
@@ -96,7 +97,7 @@ router.get('/auth/:api_key', function( req, res, next ) {
     res.header('Access-Control-Allow-Methods', 'GET,POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
-	if ( !req.params.api_key /* TODO: Actually check api key validity */ ) {
+	if ( ! AUTH.is_api_key_valid( req.params.api_key ) ) {
 		res.status(403).send("Not Authorized");
 	} else if ( ! ( req.query.metric_id && req.query.context_id && req.query.user_id ) ) {
 		DEBUG("Metric, User, or Context is not specified", req.query, req.body);
@@ -141,6 +142,10 @@ router.get( '/preview/:metric_id/', function( req, res ) {
 			metric: metric,
 			score: ( score != null ? score : {} ),
 		};
+
+		if ( req.query.stylesheet ) {
+			data['stylesheet'] = req.query.stylesheet;
+		}
 
 		var type_slug = metric.type.slug;
 

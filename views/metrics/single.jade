@@ -5,10 +5,12 @@ html
 		link(rel="stylesheet", href="/fontello/css/evaluate.css")
 		link(rel="stylesheet", href="/fontello/css/animation.css")
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+
+		if stylesheet
+			link(rel="stylesheet", href=stylesheet)
 	body#metric(class= "metric-"+metric.type.slug + ( transaction_id == null ? " disabled" : "" ))
 		strong.title= metric.options['title']
 		| !{metric.type.render_display( locals )}
-		//pre= JSON.stringify(metric.options)
 	footer
 		script.
 			data = {
