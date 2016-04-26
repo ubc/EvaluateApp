@@ -8,14 +8,16 @@ html
 
 		if stylesheet
 			link(rel="stylesheet", href=stylesheet)
+	
 	body#metric(class= "metric-"+metric.type.slug + ( transaction_id == null ? " disabled" : "" ))
 		strong.title= metric.options['title']
 		| !{metric.type.render_display( locals )}
-	footer
-		script.
-			data = {
-				transaction_id: "#{transaction_id}",
-			};
-		
-		if transaction_id
+
+	if transaction_id
+		footer
+			script.
+				data = {
+					transaction_id: "#{transaction_id}",
+				};
+			
 			script(type="text/javascript", src="/javascripts/metric.js")

@@ -4,25 +4,19 @@ const PROMISE = require('sequelize').Promise;
 const METRIC = require('../models/metric');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
-const AUTH = require('../includes/authentication');
-const PASSPORT = require('passport');
+const UTIL = require('../includes/util');
 const DEBUG = require('debug')('eval:data');
 
-var router = EXPRESS.Router();
+var router = EXPRESS.Router({ mergeParams: true });
 
-router.use( AUTH.require_login );
-
-router.get('/', function(req, res, next) {
+router.get('/list/:api_key', function(req, res, next) {
 	METRIC.findAll().then( function( results ) {
-		res.status(200).render( 'data/list', {
-			title: 'Data',
-			path: req.originalUrl,
-			metrics: results,
-		} );
+		res.status(200).json( results );
 	} );
 });
 
-router.get('/:metric_id', function(req, res, next) {
+router.get('/metric/:api_key', function(req, res, next) {
+	if ( UTIL.is_missing_attributes( ['metric_id'], req.params, res ) ) { return; }
 	var metric_id = req.params.metric_id;
 	var promises = [];
 
@@ -39,16 +33,15 @@ router.get('/:metric_id', function(req, res, next) {
 	PROMISE.all( promises ).spread( function( metric, votes, scores ) {
 		if ( metric == null ) {
 			res.status(404).send( "No metric #" + metric_id + " found." );
-			return;
+		} else {
+			res.status(200).json( {
+				metric: metric,
+				votes: votes,
+				scores: ( scores != null ? scores : [] ),
+			} );
+
 		}
 
-		res.status(200).render( 'data/single', {
-			title: "Data for " + metric.name,
-			path: req.originalUrl,
-			metric: metric,
-			votes: votes,
-			scores: ( scores != null ? scores : [] ),
-		} );
 	})
 });
 

@@ -1,17 +1,17 @@
 
+const TRANSACTION = require('../includes/transaction');
+const CONFIG = require('../config');
+const DEBUG = require('debug')('eval:util');
+
 module.exports.defaults = function( map_defaults, map_values ) {
 	if ( map_values != null ) {
-		console.log("defaults", map_defaults);
 		for ( var key in map_defaults ) {
-			console.log("check for", key, "in", map_values);
 			if ( map_values.hasOwnProperty( key ) ) {
-				console.log("found", key, "in", map_values);
 				map_defaults[key] = map_values[key];
 			}
 		}
 	}
 
-	console.log("results", map_defaults);
 	return map_defaults;
 }
 
@@ -37,3 +37,42 @@ module.exports.select_from = function( list, where ) {
 		return list[i];
 	}
 }
+
+module.exports.is_missing_attributes = function( attributes, data, res ) {
+	for ( var i in attributes ) {
+		var key = attributes[i];
+		if ( data.indexOf( key ) < 0 ) {
+			res.status(400).send("Missing attribute: " + key + " for request.");
+			return true;
+		}
+	}
+
+	return false;
+}
+
+module.exports.parse_transaction_id = function( req, res, next, id ) {
+	var path = req.originalUrl.replace(/\/+$/, "").split("/");
+	path.pop();
+	path = path.join("/");
+
+	var data = TRANSACTION.redeem( id, path );
+	DEBUG( "Got transaction data", data );
+
+	if ( data == false ) {
+		// This means that the transaction authorization failed.
+		res.status(401).json( "Transaction check failed. Your session may have expired, try refreshing the page." ); // Return a failure.
+	} else {
+		req.params.transaction = data;
+		next();
+	}
+};
+
+module.exports.parse_api_key = function( req, res, next, key ) {
+	if ( CONFIG.api_keys.indexOf( key ) < 0 ) {
+		DEBUG( "Invalid API Key", key );
+		res.status(403).send("Not Authorized");
+	} else {
+		DEBUG( "Validated API Key", key );
+		next()
+	}
+};

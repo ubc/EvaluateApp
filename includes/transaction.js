@@ -41,7 +41,6 @@ module.exports.redeem = function( id, action ) {
 	DEBUG( "Redeeming transaction", id, action );
 	if ( id in transaction_list ) {
 		var transaction = transaction_list[id];
-		DEBUG( "Transaction limit", transaction.limit );
 
 		if ( transaction.action == action ) {
 			if ( transaction.expiration_date >= new Date().getTime() ) {
@@ -52,11 +51,17 @@ module.exports.redeem = function( id, action ) {
 					delete transaction_list[id];
 					return transaction.data;
 				}
+			} else {
+				DEBUG( "Transaction is expired", transaction.expiration_date, "<", new Date().getTime() );
 			}
 
 			// If we haven't already returned data then the transaction is no longer valid, delete it.
 			delete transaction_list[id];
+		} else {
+			DEBUG( "Transaction action does not match", transaction.action, action );
 		}
+	} else {
+		DEBUG( "Transaction does not exist", id );
 	}
 
 	return false;

@@ -5,18 +5,18 @@ block scripts
 
 block content
 	-
-		// Expects variables: metric, metric_types
+		// Expects variables: metric, metric_types, transaction_id
 		metric_id = metric.metric_id || null
 		options = metric.options
 		name = metric.name || ""
 		title = options['title'] || ""
 		type = metric.type ? metric.type.slug : "one-way"
 
-	form.pure-form(method="POST", action="/metrics/save/"+metric_id)
+	form.pure-form(method="POST", action="/metrics/save/"+transaction_id)
 		dl
 			if metric_id
 				+field("Metric UUID")
-					a(href="/api/preview/#{metric.metric_id}")= "View"
+					a(href="/preview/#{metric.metric_id}")= "View"
 					| : 
 					span= metric_id
 					input(
@@ -61,14 +61,14 @@ block content
 
 		input.pure-button.pure-button-primary(type="submit", value="Save")
 		if metric_id
-			a.pure-button(href="/metrics/destroy/#{metric_id}")= "Delete"
-		a.pure-button(href="/metrics")= "Back"
+			a.pure-button(href="/metrics/destroy/#{transaction_id}")= "Delete"
 
 	if metric_id
 		br
 		strong= "Preview"
 		hr
-		iframe(src="/api/preview/#{metric_id}", frameborder="0")
+		// TODO: Reimplement this?
+		//iframe(src="/api/preview/#{metric_id}", frameborder="0")
 
 
 mixin options(slug, active_type)

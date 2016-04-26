@@ -73,9 +73,9 @@ module.exports = {
 			result: {
 				// TODO: Improve the information given here.
 				success: true,
-				score: {
-					raw: vote,
-				},
+				/*score: {
+				s	raw: vote,
+				},*/
 				extensions: {
 					// TODO: Implement these extension urls.
 					"http://localhost:3000/xapi/choice": vote,

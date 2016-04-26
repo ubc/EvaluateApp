@@ -1,25 +1,3 @@
-
--
-	/*
-	mixin nav(title, nav_path, current_path)
-		//- selected = ( current_path == nav_path ? "pure-menu-selected" : "" )
-		- selected = ( current_path != null && current_path.indexOf( nav_path ) == 0 ? "pure-menu-selected" : "" )
-		li.pure-menu-item(class = selected)
-			a.pure-menu-link(href= nav_path)= title
-	*/
-
-	/*
-	nav.pure-menu.pure-menu-horizontal
-		ul.pure-menu-list
-			+nav("Logout", "/logout", path)
-	*/
-
-mixin nav(title, url)
-	small
-		|  [
-		a(href=url)= title
-		| ]
-
 doctype html
 html
 	head
@@ -33,9 +11,4 @@ html
 		if user
 			+nav("Logout", "/logout")
 	body
-		br
-		if alerts
-			ul.alerts
-				each alert, key in alerts
-					li(class=key)= alert
 		block content

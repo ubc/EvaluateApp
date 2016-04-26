@@ -75,10 +75,9 @@ var Evaluate_Metric = {
 		console.log( "Sending vote", {
 			transaction_id: data.transaction_id,
 			vote: choice,
-		}, "to /api/vote" );
+		}, "to /vote" );
 		
-		jQuery.post( "/api/vote", {
-			transaction_id: data.transaction_id,
+		jQuery.post( "/vote/" + data.transaction_id, {
 			vote: choice,
 		}, function( response ) {
 			console.log( "Received", response, typeof response );

@@ -8,16 +8,14 @@ const FAVICON = require('serve-favicon');
 const LOGGER = require('morgan');
 const COOKIEPARSER = require('cookie-parser');
 const BODYPARSER = require('body-parser');
-const PASSPORT = require('passport');
-const SESSION = require('express-session');
-const FLASH = require('connect-flash-light');
 
+const DEBUG = require('debug')('eval:general');
 const MODELS = require('./models');
+const UTIL = require('./includes/util');
 
 const ROUTES = require('./routes/index');
 const METRICS = require('./routes/metrics');
 const BLUEPRINTS = require('./routes/blueprints');
-const API = require('./routes/api');
 const DATA = require('./routes/data');
 
 MODELS.install();
@@ -34,61 +32,36 @@ app.use( LOGGER('dev') );
 app.use( COOKIEPARSER() );
 app.use( BODYPARSER.json() );
 app.use( BODYPARSER.urlencoded( { extended: true } ) );
-app.use( SESSION( {
-	secret: "575p54BpD5AxWxTMN0su",
-	cookie: { maxAge: 1000 * 60 * 5 },
-} ) );
-app.use( FLASH() );
 app.use( require('less-middleware')( '/less', {
 	dest: '/stylesheets',
 	pathRoot: PATH.join(__dirname, 'public')
 } ) );
-app.use( PASSPORT.initialize() );
-app.use( PASSPORT.session() );
 app.use( EXPRESS.static( PATH.join( __dirname, 'public' ) ));
 
-app.use( '/', ROUTES );
-app.use( '/data', DATA );
-app.use( '/metrics', METRICS );
-app.use( '/blueprints', BLUEPRINTS );
-app.use( '/api', API );
+var routers = {
+	'/': require('./routes/index'),
+	'/data': require('./routes/data'),
+	'/metrics': require('./routes/metrics'),
+	'/blueprints': require('./routes/blueprints'),
+};
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-	var err = new Error('Not Found');
+Object.keys( routers ).forEach( function( path ) {
+	app.use( path, routers[path] );
+	routers[path].param( 'transaction_id', UTIL.parse_transaction_id );
+	routers[path].param( 'api_key', UTIL.parse_api_key );
+} );
+
+// Catch 404 and forward to error handler
+app.use( function(req, res, next) {
+	var err = new Error( "Not Found: " + req.originalUrl );
 	err.status = 404;
 	next(err);
-});
+} );
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-	app.use(function(err, req, res, next) {
-		res.status(err.status || 500);
-		console.log(err.message, err.stack);
-
-		res.render('index', {
-			title: err.message,
-			subtitle: err.status,
-			details: err.stack,
-		});
-	});
-}
-
-// production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-	/*
 	res.status(err.status || 500);
-	res.render('error', {
-		message: err.message,
-		error: {}
-	});
-	*/
-	req.flash('error', err.message);
-	res.redirect("/");
+	DEBUG( "Error", err.message, err.stack );
+	res.end( err.message );
 });
 
 module.exports = app;
