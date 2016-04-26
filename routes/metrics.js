@@ -34,51 +34,55 @@ router.get( '/edit/:transaction_id', function( req, res ) {
 	}
 
 	PROMISE.all( promises ).spread( function( blueprints, metric ) {
-		var transaction_id = TRANSACTION.create( {
-			action: "/metrics/save",
-			data: { metric_id: metric_id },
-			duration: TRANSACTION.DURATION.ONE_HOUR,
-			limit: 1,
-		} );
+		var transactions = {
+			submit_id: TRANSACTION.create( {
+				action: "/metrics/save",
+				data: { metric_id: metric_id },
+				duration: TRANSACTION.DURATION.ONE_HOUR,
+				limit: 1,
+			} ),
+			delete_id: TRANSACTION.create( {
+				action: "/metrics/destroy",
+				data: { metric_id: metric_id },
+				duration: TRANSACTION.DURATION.ONE_HOUR,
+				limit: 1,
+			} ),
+		};
 
-		res.status(200).render( 'metrics/editor', {
-			title: metric != null ? "Edit Metric" : "Create Metric",
-			transaction_id: transaction_id,
-			metric: metric != null ? metric : { options: {} },
-			metric_types: METRIC_TYPES,
-			blueprints: blueprints,
-		} );
+		if ( metric_id && metric == null ) {
+			res.status(404).send("The requested metric does not exist.");
+		} else {
+			res.status(200).render( 'metrics/editor', {
+				title: metric != null ? "Edit Metric" : "Create Metric",
+				transactions: transactions,
+				metric: metric != null ? metric : { options: {} },
+				metric_types: METRIC_TYPES,
+				blueprints: blueprints,
+			} );
+		}
 	} );
 } );
 
 router.post( '/save/:transaction_id', function( req, res ) {
 	var metric_id = req.params.transaction.metric_id || null;
 	var data = req.body;
-	var transaction_params = {
-		action: "/metrics/edit",
-		duration: TRANSACTION.DURATION.ONE_HOUR,
-		limit: 1,
-	};
 
 	if ( metric_id == null ) {
 		DEBUG( "Creating metric", data );
-		transaction_params.data = { metric_id: metric.metric_id };
-		var transaction_id = TRANSACTION.create( transaction_params );
 
 		METRIC.create( data ).then( function( metric ) {
 			DEBUG( "Metric created", metric.metric_id );
-			res.status(201).redirect( '/metrics/edit/' + transaction_id );
+			var transaction_id = TRANSACTION.renew( req.params.transaction_id, { metric_id: metric.metric_id } );
+			res.status(201).json( { transaction_id: transaction_id } );
 		} );
 	} else {
 		DEBUG( "Updating metric", metric_id, data );
-		transaction_params.data = { metric_id: metric_id };
-		var transaction_id = TRANSACTION.create( transaction_params );
-
 		METRIC.update( data, {
 			where: { metric_id: metric_id },
 		} ).then( function() {
 			DEBUG( "Metric updated", metric_id );
-			res.status(200).redirect( '/metrics/edit/' + transaction_id );
+			var transaction_id = TRANSACTION.renew( req.params.transaction_id );
+			res.status(200).json( { transaction_id: transaction_id } );
 		} );
 	}
 } );
@@ -102,7 +106,7 @@ router.post( '/destroy/:transaction_id', function( req, res ) {
 	
 	// TODO: Just return immediately?
 	PROMISE.all( promises ).spread( function( metric ) {
-		res.status(200).end();
+		res.status(200).send("success");
 	} );
 } );
 

@@ -4,6 +4,8 @@ const PROMISE = require('sequelize').Promise;
 const BLUEPRINT = require('../models/blueprint');
 const SUBMETRIC = require('../models/submetric');
 const SUBMETRIC_TYPES = require('../metric-types');
+const TRANSACTION = require('../includes/transaction');
+const UTIL = require('../includes/util');
 const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router({ mergeParams: true });
@@ -17,7 +19,7 @@ router.get( '/list/:api_key', function( req, res ) {
 
 router.get('/edit/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['blueprint_id'], req.params.transaction, res ) ) { return; }
-	var blueprint_id = req.params.transactions.blueprint_id || null;
+	var blueprint_id = req.params.transaction.blueprint_id || null;
 	var promises = [];
 
 	if ( blueprint_id ) {
@@ -35,10 +37,26 @@ router.get('/edit/:transaction_id', function( req, res ) {
 	}
 
 	PROMISE.all( promises ).spread( function( blueprint ) {
+		var transactions = {
+			submit_id: TRANSACTION.create( {
+				action: "/blueprints/save",
+				data: { blueprint_id: blueprint_id },
+				duration: TRANSACTION.DURATION.ONE_HOUR,
+				limit: 1,
+			} ),
+			delete_id: TRANSACTION.create( {
+				action: "/blueprints/destroy",
+				data: { blueprint_id: blueprint_id },
+				duration: TRANSACTION.DURATION.ONE_HOUR,
+				limit: 1,
+			} ),
+		};
+
 		res.status(200).render( 'blueprints/editor', {
 			title: blueprint != null ? "Edit Rubric" : "Create Rubric",
 			blueprint: blueprint != null ? blueprint : { options: {} },
 			metric_types: metric_types,
+			transactions: transactions,
 		} );
 	} );
 });
@@ -95,7 +113,8 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 			}
 
 			PROMISE.all( promises ).spread( function() {
-				res.status(303).redirect( '/blueprints/edit/' + blueprint_id );
+				var transaction_id = TRANSACTION.renew( req.params.transaction_id );
+				res.status(200).json( { transaction_id: transaction_id } );
 			} );
 		} );
 	} );
@@ -103,11 +122,11 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 
 router.post( '/destroy/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['blueprint_id'], req.params.transaction, res ) ) { return; }
-	
+
 	BLUEPRINT.destroy( {
 		where: { blueprint_id: req.params.transaction.blueprint_id },
 	} ).then( function() {
-		res.status(200).end();
+		res.status(200).send("success");
 	} );
 } );
 

@@ -41,7 +41,7 @@ module.exports.select_from = function( list, where ) {
 module.exports.is_missing_attributes = function( attributes, data, res ) {
 	for ( var i in attributes ) {
 		var key = attributes[i];
-		if ( data.indexOf( key ) < 0 ) {
+		if ( ! ( key in data ) ) {
 			res.status(400).send("Missing attribute: " + key + " for request.");
 			return true;
 		}

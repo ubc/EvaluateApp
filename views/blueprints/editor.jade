@@ -1,18 +1,18 @@
 extends ../layout
 
 block scripts
-	script(src="/javascripts/editor.js")
 	script(src="/javascripts/editor-blueprint.js")
+	script(src="/javascripts/editor.js")
 
 block content
 	-
-		// Expects variables: blueprint, submetrics
+		// Expects variables: blueprint, submetrics, transactions
 		blueprint_id = blueprint.blueprint_id || null
 		name = blueprint.name || ""
 		description = blueprint.description || ""
 		submetrics = blueprint.submetrics || []
 
-	form.pure-form(method="POST")
+	form.pure-form(method="POST", action="/blueprints/save/"+transactions.submit_id)
 		dl
 			+field("Name")
 				input(
@@ -33,9 +33,9 @@ block content
 
 					+submetric("", metric_types)
 					
-		input.pure-button.pure-button-primary(type="submit", value="Save")
-		if blueprint_id
-			a.pure-button(href="/blueprints/destroy/#{blueprint_id}")= "Delete"
+		input.pure-button.pure-button-primary.submit-button(type="submit", value="Save")
+		if blueprint_id && transactions.delete_id
+			a.pure-button.delete-button(href="/blueprints/destroy/#{transactions.delete_id}")= "Delete"
 
 mixin field(title)
 	dt= title

@@ -1,5 +1,6 @@
 
 const UUID = require('uuid4');
+const UTIL = require('./util');
 const DEBUG = require('debug')('eval:security');
 
 var transaction_list = {}
@@ -19,6 +20,7 @@ module.exports.create = function( args ) {
 	transaction_list[id] = {
 		action: args.action,
 		data: args.data,
+		duration: args.duration,
 		expiration_date: new Date().getTime() + args.duration,
 		limit: args.limit,
 	}
@@ -27,13 +29,21 @@ module.exports.create = function( args ) {
 	return id;
 }
 
-module.exports.data = function( id ) {
+module.exports.renew = function( id, data ) {
 	if ( id in transaction_list ) {
-		DEBUG( "Retrieving transaction", id, transaction_list[id].data );
-		return transaction_list[id].data;
+		var transaction = transaction_list[id];
+		delete transaction_list[id];
+
+		if ( data != null ) {
+			transaction = UTIL.defaults( transaction, data );
+		}
+
+		// TODO: Replace this temporary fix.
+		transaction.limit++;
+
+		return this.create( transaction );
 	} else {
-		DEBUG( "No transaction", id );
-		return false;
+		DEBUG( "Transaction does not exist", id );
 	}
 }
 
@@ -48,7 +58,8 @@ module.exports.redeem = function( id, action ) {
 					transaction.limit--;
 					return transaction.data;
 				} else if ( transaction.limit == 1 ) {
-					delete transaction_list[id];
+					// TODO: Transaction clean up
+					//delete transaction_list[id];
 					return transaction.data;
 				}
 			} else {

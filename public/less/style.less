@@ -35,6 +35,52 @@ iframe {
 	vertical-align: bottom;
 }
 
+.pure-button-coloured() {
+	color: white;
+	border-radius: 4px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.pure-button-success {
+	.pure-button-coloured();
+	background: rgb(28, 184, 65); /* this is a green */
+}
+
+.pure-button-error {
+	.pure-button-coloured();
+	background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.pure-button-warning {
+	.pure-button-coloured();
+	background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.pure-button-secondary {
+	.pure-button-coloured();
+	background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+form {
+	.submit-button.restore {
+		.pure-button-success;
+	}
+
+	.delete-button.confirm {
+		.pure-button-error;
+	}
+
+	&.hide-form {
+		dl {
+			display: none;
+		}
+
+		.delete-button {
+			display: none;
+		}
+	}
+}
+
 .alerts {
 	list-style: none;
 	margin-top: 0;

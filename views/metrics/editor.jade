@@ -5,26 +5,15 @@ block scripts
 
 block content
 	-
-		// Expects variables: metric, metric_types, transaction_id
+		// Expects variables: metric, metric_types, transactions
 		metric_id = metric.metric_id || null
 		options = metric.options
 		name = metric.name || ""
 		title = options['title'] || ""
 		type = metric.type ? metric.type.slug : "one-way"
 
-	form.pure-form(method="POST", action="/metrics/save/"+transaction_id)
+	form.pure-form(method="POST", action="/metrics/save/"+transactions.submit_id)
 		dl
-			if metric_id
-				+field("Metric UUID")
-					a(href="/preview/#{metric.metric_id}")= "View"
-					| : 
-					span= metric_id
-					input(
-						name= "id"
-						type= "hidden"
-						value= "#{metric_id}"
-						autocomplete= "off"
-					)
 			+field("Name")
 				input(
 					name= "name"
@@ -59,9 +48,9 @@ block content
 			+options(metric_type.slug, type)
 				| !{html}
 
-		input.pure-button.pure-button-primary(type="submit", value="Save")
-		if metric_id
-			a.pure-button(href="/metrics/destroy/#{transaction_id}")= "Delete"
+		input.pure-button.pure-button-primary.submit-button.pure-button-disabled(type="submit", disabled="disabled", value="Saved")
+		if metric_id && transactions.delete_id
+			a.pure-button.delete-button(href="/metrics/destroy/#{transactions.delete_id}")= "Delete"
 
 	if metric_id
 		br
