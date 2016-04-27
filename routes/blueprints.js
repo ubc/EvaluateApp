@@ -11,20 +11,25 @@ const DEBUG = require('debug')('eval:routing');
 var router = EXPRESS.Router({ mergeParams: true });
 
 router.get( '/list/:api_key', function( req, res ) {
-	// TODO: Filter by api key
-	BLUEPRINT.findAll().then( function( results ) {
+	BLUEPRINT.findAll( {
+		where: { api_key: req.params.api_key },
+	} ).then( function( results ) {
 		res.status(200).send(results);
 	} );
 } );
 
 router.get('/edit/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['blueprint_id'], req.params.transaction, res ) ) { return; }
-	var blueprint_id = req.params.transaction.blueprint_id || null;
+	var blueprint_id = req.params.transaction.blueprint_id;
+	var api_key = req.params.transaction.api_key;
 	var promises = [];
 
 	if ( blueprint_id ) {
 		promises.push( BLUEPRINT.findOne( {
-			where: { blueprint_id: blueprint_id },
+			where: {
+				blueprint_id: blueprint_id,
+				api_key: api_key,
+			},
 			include: [{ model: SUBMETRIC }],
 		} ) );
 	}
@@ -37,13 +42,18 @@ router.get('/edit/:transaction_id', function( req, res ) {
 	}
 
 	PROMISE.all( promises ).spread( function( blueprint ) {
+		var transaction_data = {
+			blueprint_id: blueprint_id,
+			api_key: api_key,
+		};
+
 		var transactions = {
-			submit_id: TRANSACTION.create( "/blueprints/save", { blueprint_id: blueprint_id } ),
-			delete_id: TRANSACTION.create( "/blueprints/destroy", { blueprint_id: blueprint_id } ),
+			submit_id: TRANSACTION.create( "/blueprints/save", transaction_data ),
+			delete_id: TRANSACTION.create( "/blueprints/destroy", transaction_data ),
 		};
 
 		if ( blueprint_id && blueprint == null ) {
-			res.status(404).send("The requested metric does not exist.");
+			res.status(404).send("The requested blueprint does not exist.");
 		} else {
 			res.status(200).render( 'blueprints/editor', {
 				title: blueprint != null ? "Edit Rubric" : "Create Rubric",
@@ -65,6 +75,7 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 
 	if ( blueprint_id == null ) {
 		DEBUG( "Creating blueprint", data );
+		data.api_key = req.params.transaction.api_key;
 		promise = BLUEPRINT.create( data );
 	} else {
 		DEBUG( "Updating blueprint", blueprint_id, data );

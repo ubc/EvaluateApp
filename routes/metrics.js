@@ -14,8 +14,9 @@ const DEBUG = require('debug')('eval:routing');
 var router = EXPRESS.Router({ mergeParams: true });
 
 router.get( '/list/:api_key', function( req, res ) {
-	// TODO: Filter by api key.
-	METRIC.findAll().then( function( results ) {
+	METRIC.findAll( {
+		where: { api_key: req.params.api_key },
+	} ).then( function( results ) {
 		res.status(200).send( results );
 	} );
 } );
@@ -23,9 +24,11 @@ router.get( '/list/:api_key', function( req, res ) {
 router.get( '/edit/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['metric_id'], req.params.transaction, res ) ) { return; }
 	var metric_id = req.params.transaction.metric_id;
+	var api_key = req.params.transaction.api_key;
 	var promises = [];
 
 	promises.push( BLUEPRINT.findAll( {
+		where: { api_key: api_key },
 		include: [ SUBMETRIC ],
 	} ) );
 
@@ -34,12 +37,17 @@ router.get( '/edit/:transaction_id', function( req, res ) {
 	}
 
 	PROMISE.all( promises ).spread( function( blueprints, metric ) {
-		var transactions = {
-			submit_id: TRANSACTION.create(  "/metrics/save", { metric_id: metric_id } ),
-			delete_id: TRANSACTION.create( "/metrics/destroy", { metric_id: metric_id } ),
+		var transaction_data = {
+			metric_id: metric_id,
+			api_key: api_key,
 		};
 
-		if ( metric_id && metric == null ) {
+		var transactions = {
+			submit_id: TRANSACTION.create( "/metrics/save", transaction_data ),
+			delete_id: TRANSACTION.create( "/metrics/destroy", transaction_data ),
+		};
+
+		if ( ( metric_id && metric == null ) || ( metric != null && metric.api_key != api_key ) ) {
 			res.status(404).send("The requested metric does not exist.");
 		} else {
 			res.status(200).render( 'metrics/editor', {
@@ -59,6 +67,7 @@ router.post( '/save/:transaction_id', function( req, res ) {
 
 	if ( metric_id == null ) {
 		DEBUG( "Creating metric", data );
+		data.api_key = req.params.transaction.api_key;
 
 		METRIC.create( data ).then( function( metric ) {
 			DEBUG( "Metric created", metric.metric_id );

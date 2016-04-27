@@ -37,4 +37,8 @@ module.exports = DATABASE.define( 'metric', {
 			this.setDataValue( 'options', JSON.stringify( val ) );
 		},
 	},
+	api_key: {
+		type: SEQUELIZE.UUID,
+		allowNull: false,
+	},
 } );

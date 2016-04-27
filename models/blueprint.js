@@ -15,4 +15,8 @@ module.exports = DATABASE.define( 'blueprint', {
 	description: {
 		type: SEQUELIZE.STRING,
 	},
+	api_key: {
+		type: SEQUELIZE.UUID,
+		allowNull: false,
+	},
 } );

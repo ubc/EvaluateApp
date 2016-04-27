@@ -131,8 +131,8 @@ router.get( '/embed/:transaction_id', function( req, res ) {
 	}
 
 	PROMISE.all( promises ).spread( function( metric, score, user_vote ) {
-		if ( metric == null ) {
-			res.status(404).send( "No metric #" + transaction.metric_id + " found." );
+		if ( metric == null || metric.api_key != req.params.transaction.api_key ) {
+			res.status(404).send( "The requested metric does not exist." );
 			return;
 		}
 
