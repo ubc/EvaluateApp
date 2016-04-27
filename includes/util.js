@@ -63,6 +63,11 @@ module.exports.parse_transaction_id = function( req, res, next, id ) {
 		res.status(401).json( "Transaction check failed. Your session may have expired, try refreshing the page." ); // Return a failure.
 	} else {
 		req.params.transaction = data;
+
+		res.on( 'finish', function() {
+			TRANSACTION.cleanup( id );
+		} );
+
 		next();
 	}
 };
@@ -73,6 +78,6 @@ module.exports.parse_api_key = function( req, res, next, key ) {
 		res.status(403).send("Not Authorized");
 	} else {
 		DEBUG( "Validated API Key", key );
-		next()
+		next();
 	}
 };

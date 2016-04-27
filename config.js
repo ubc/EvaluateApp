@@ -1,4 +1,10 @@
 
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR   = 60 * MINUTE;
+const DAY    = 24 * HOUR;
+const WEEK   = 7 * DAY;
+
 module.exports = {
 	site: {
 		title: "Evaluate",
@@ -22,4 +28,21 @@ module.exports = {
 			password: "5UIRXbnEu8riMqT-eAU",
 		},
 	},
+	transactions: {
+		/*
+		// TODO: Maybe implement this configuration option. By default there are no renewal limits.
+		renewal_limit: {
+			"default": false, // no limit by default
+			"/vote": 10,
+		},
+		*/
+		duration: {
+			"default":              2 * MINUTE,
+			"/vote":               10 * MINUTE,
+			"/metrics/save":        1 * HOUR,
+			"/metrics/destroy":     1 * HOUR,
+			"/blueprints/save":     1 * HOUR,
+			"/blueprints/destroy":  1 * HOUR,
+		},
+	}
 };

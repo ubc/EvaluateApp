@@ -1,49 +1,42 @@
 
 const UUID = require('uuid4');
 const UTIL = require('./util');
+const CONFIG = require('../config');
 const DEBUG = require('debug')('eval:security');
 
-var transaction_list = {}
+var transaction_list = {};
 
-module.exports.DURATION = {
-	ONE_HOUR: 1000 * 60 * 60,
-	ONE_DAY:  1000 * 60 * 60 * 24,
-	ONE_WEEK: 1000 * 60 * 60 * 24 * 7,
-};
-
-module.exports.TYPE = {
-	VOTE: "vote",
-};
-
-module.exports.create = function( args ) {
+module.exports.create = function( action, data ) {
 	var id = UUID();
-	transaction_list[id] = {
-		action: args.action,
-		data: args.data,
-		duration: args.duration,
-		expiration_date: new Date().getTime() + args.duration,
-		limit: args.limit,
+	var duration = CONFIG.transactions.duration['default'];
+
+	if ( action in CONFIG.transactions.duration ) {
+		duration = transaction_durations[action];
 	}
+
+	transaction_list[id] = {
+		action: action,
+		data: data,
+		expiration_time: new Date().getTime() + duration,
+		limit: 1,
+	};
 
 	DEBUG("Created transaction", id, transaction_list[id]);
 	return id;
 }
 
-module.exports.renew = function( id, data ) {
+module.exports.renew = function( id, new_data ) {
 	if ( id in transaction_list ) {
 		var transaction = transaction_list[id];
 		delete transaction_list[id];
 
-		if ( data != null ) {
-			transaction = UTIL.defaults( transaction, data );
+		if ( new_data != null ) {
+			transaction.data = UTIL.defaults( transaction.data, new_data );
 		}
 
-		// TODO: Replace this temporary fix.
-		transaction.limit++;
-
-		return this.create( transaction );
+		return this.create( transaction.action, transaction.data );
 	} else {
-		DEBUG( "Transaction does not exist", id );
+		DEBUG( "Transaction does not exist for renewal", id );
 	}
 }
 
@@ -53,17 +46,15 @@ module.exports.redeem = function( id, action ) {
 		var transaction = transaction_list[id];
 
 		if ( transaction.action == action ) {
-			if ( transaction.expiration_date >= new Date().getTime() ) {
-				if ( transaction.limit > 1 ) {
+			if ( transaction.expiration_time >= new Date().getTime() ) {
+				if ( transaction.limit > 0 ) {
 					transaction.limit--;
 					return transaction.data;
-				} else if ( transaction.limit == 1 ) {
-					// TODO: Transaction clean up
-					//delete transaction_list[id];
-					return transaction.data;
+				} else {
+					DEBUG( "Transaction has no more uses" );
 				}
 			} else {
-				DEBUG( "Transaction is expired", transaction.expiration_date, "<", new Date().getTime() );
+				DEBUG( "Transaction is expired", transaction.expiration_time, "<", new Date().getTime() );
 			}
 
 			// If we haven't already returned data then the transaction is no longer valid, delete it.
@@ -76,4 +67,10 @@ module.exports.redeem = function( id, action ) {
 	}
 
 	return false;
+}
+
+module.exports.cleanup = function( id ) {
+	if ( id in transaction_list && transaction_list[id].limit < 1 ) {
+		delete transaction_list[id];
+	}
 }

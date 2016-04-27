@@ -48,14 +48,12 @@ var Evaluate_Metric = {
 				case 'checkbox':
 					result = [];
 
-					console.log("Checkbox gives", result);
 					jQuery( "[name='" + input.prop('name') + "']" ).each( function( index, ele ) {
 						var element = jQuery(ele);
 						if ( element.prop('checked') == true ) {
-							result.push(element.val())
+							result.push( element.val() );
 						}
 					} );
-					console.log("Checkbox gives", result);
 					break;
 				case 'radio':
 					if ( input.prop('checked') != true ) {
@@ -83,6 +81,7 @@ var Evaluate_Metric = {
 			console.log( "Received", response, typeof response );
 
 			if ( typeof response === 'object' ) {
+				data.transaction_id = response.transaction_id;
 				jQuery( '#metric' ).trigger( 'evaluate-update', [response, choice] );
 			} else {
 				// TODO: Give some indication that the page needs to be refreshed.

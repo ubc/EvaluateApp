@@ -38,26 +38,20 @@ router.get('/edit/:transaction_id', function( req, res ) {
 
 	PROMISE.all( promises ).spread( function( blueprint ) {
 		var transactions = {
-			submit_id: TRANSACTION.create( {
-				action: "/blueprints/save",
-				data: { blueprint_id: blueprint_id },
-				duration: TRANSACTION.DURATION.ONE_HOUR,
-				limit: 1,
-			} ),
-			delete_id: TRANSACTION.create( {
-				action: "/blueprints/destroy",
-				data: { blueprint_id: blueprint_id },
-				duration: TRANSACTION.DURATION.ONE_HOUR,
-				limit: 1,
-			} ),
+			submit_id: TRANSACTION.create( "/blueprints/save", { blueprint_id: blueprint_id } ),
+			delete_id: TRANSACTION.create( "/blueprints/destroy", { blueprint_id: blueprint_id } ),
 		};
 
-		res.status(200).render( 'blueprints/editor', {
-			title: blueprint != null ? "Edit Rubric" : "Create Rubric",
-			blueprint: blueprint != null ? blueprint : { options: {} },
-			metric_types: metric_types,
-			transactions: transactions,
-		} );
+		if ( blueprint_id && blueprint == null ) {
+			res.status(404).send("The requested metric does not exist.");
+		} else {
+			res.status(200).render( 'blueprints/editor', {
+				title: blueprint != null ? "Edit Rubric" : "Create Rubric",
+				blueprint: blueprint != null ? blueprint : { options: {} },
+				metric_types: metric_types,
+				transactions: transactions,
+			} );
+		}
 	} );
 });
 

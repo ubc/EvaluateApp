@@ -39,6 +39,10 @@ script.
 		jQuery('.metric-poll').on( 'evaluate-update', function( event, data, choice ) {
 			var element = jQuery(this);
 
+			for ( var i in choice ) {
+				choice[i] = parseInt( choice[i] );
+			}
+
 			for ( var k in data.score_data ) {
 				var value = data.score_data[k];
 				var score = element.find( 'span.score-' + k );
@@ -49,10 +53,11 @@ script.
 				progress.attr( 'max', data.total );
 			}
 
-			if ( data.vote != choice ) {
+			if ( Object.toString( data.vote ) != Object.toString( choice ) ) {
 				element.find( 'input' ).each( function() {
-					var checked = data.vote != null && data.vote.indexOf(input.val()) > -1;
-					jQuery(this).prop( 'checked', checked );
+					var input = jQuery(this);
+					var checked = data.vote != null && data.vote.indexOf( parseInt( input.val() ) ) > -1;
+					input.prop( 'checked', checked );
 				} );
 			}
 

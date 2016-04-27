@@ -21,14 +21,9 @@ router.get( '/auth/:api_key', function( req, res, next ) {
 	res.header('Access-Control-Allow-Headers', 'Content-Type');
 	// ---
 
-	// TODO: Although users should be able to vote up to 5 times, they should really only be able to load the page once.
-	var transaction_id = TRANSACTION.create( {
-		action: req.query.path,
-		data: req.query.payload,
-		duration: TRANSACTION.DURATION.ONE_DAY,
-		limit: 5,
-	} );
+	req.query.payload.api_key = req.params.api_key;
 
+	var transaction_id = TRANSACTION.create( req.query.path, req.query.payload );
 	res.status(201).send( transaction_id );
 } );
 
@@ -99,6 +94,7 @@ router.post( '/vote/:transaction_id', function( req, res, next ) {
 			}
 
 			res.status(200).json( {
+				transaction_id: TRANSACTION.renew( req.params.transaction_id ),
 				score: score.display,
 				score_data: score.data,
 				vote: new_value,
@@ -146,13 +142,7 @@ router.get( '/embed/:transaction_id', function( req, res ) {
 		};
 
 		if ( params.user_id ) {
-			data.transaction_id = TRANSACTION.create( {
-				action: "/vote",
-				data: params,
-				duration: TRANSACTION.DURATION.ONE_DAY,
-				limit: 5,
-			} );
-
+			data.transaction_id = TRANSACTION.create( "/vote", params );
 			data.user_vote = user_vote != null ? user_vote.value : "";
 		}
 

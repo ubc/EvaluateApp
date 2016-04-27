@@ -35,18 +35,8 @@ router.get( '/edit/:transaction_id', function( req, res ) {
 
 	PROMISE.all( promises ).spread( function( blueprints, metric ) {
 		var transactions = {
-			submit_id: TRANSACTION.create( {
-				action: "/metrics/save",
-				data: { metric_id: metric_id },
-				duration: TRANSACTION.DURATION.ONE_HOUR,
-				limit: 1,
-			} ),
-			delete_id: TRANSACTION.create( {
-				action: "/metrics/destroy",
-				data: { metric_id: metric_id },
-				duration: TRANSACTION.DURATION.ONE_HOUR,
-				limit: 1,
-			} ),
+			submit_id: TRANSACTION.create(  "/metrics/save", { metric_id: metric_id } ),
+			delete_id: TRANSACTION.create( "/metrics/destroy", { metric_id: metric_id } ),
 		};
 
 		if ( metric_id && metric == null ) {
