@@ -5,8 +5,6 @@ const FILE = require("fs");
 
 module.exports = {};
 
-// TODO: Add checklist metric type (values associated with words)
-
 function render_options( data ) {
 	return JADE.renderFile( PATH.join( __dirname, this.slug, "options.jade" ), data );
 }

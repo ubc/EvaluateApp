@@ -18,8 +18,8 @@ module.exports = DATABASE.define( 'metric', {
 		allowNull: false,
 	},
 	type: {
-		type: SEQUELIZE.ENUM(),
-		values: Object.keys(TYPES), // TODO: If these values change it requires a database upgrade. Figure out some better way to make that work.
+		type: SEQUELIZE.STRING(19),
+		validate: { isIn: [ TYPES ] },
 		get: function() {
 			return TYPES[ this.getDataValue( 'type' ) ];
 		},
