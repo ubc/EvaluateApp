@@ -60,7 +60,7 @@ module.exports.parse_transaction_id = function( req, res, next, id ) {
 
 	if ( data == false ) {
 		// This means that the transaction authorization failed.
-		res.status(401).json( "Transaction check failed. Your session may have expired, try refreshing the page." ); // Return a failure.
+		res.status(401).send( "Transaction check failed. Your session may have expired, try refreshing the page." ); // Return a failure.
 	} else {
 		req.params.transaction = data;
 
@@ -75,7 +75,7 @@ module.exports.parse_transaction_id = function( req, res, next, id ) {
 module.exports.parse_api_key = function( req, res, next, key ) {
 	if ( CONFIG.api_keys.indexOf( key ) < 0 ) {
 		DEBUG( "Invalid API Key", key );
-		res.status(403).send("Not Authorized");
+		res.status(403).send( "API key is not authorized" );
 	} else {
 		DEBUG( "Validated API Key", key );
 		next();

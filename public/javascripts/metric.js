@@ -78,16 +78,18 @@ var Evaluate_Metric = {
 		jQuery.post( "/vote/" + data.transaction_id, {
 			vote: choice,
 		}, function( response ) {
-			console.log( "Received", response, typeof response );
-
-			if ( typeof response === 'object' ) {
+			console.log( "Received", response );
+			if ( response.transaction_id != false ) {
 				data.transaction_id = response.transaction_id;
 				jQuery( '#metric' ).trigger( 'evaluate-update', [response, choice] );
 			} else {
-				// TODO: Give some indication that the page needs to be refreshed.
-				console.log( response );
+				// TODO: Error handling that doesn't hide the voting preview.
+				jQuery('body').text( "Your transaction has reached it's renewal limit. Try refreshing the page." );
 			}
-		}, 'json' );
+		}, 'json' ).fail( function( error ) {
+			console.log( error );
+			jQuery('body').text( error.status + ": " + error.responseText );
+		} );
 	},
 }
 

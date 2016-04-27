@@ -21,21 +21,26 @@ module.exports = {
 	api_keys: [
 		"4bfb4e2a-405d-4a85-872f-32764604f9cd", // Local test key.
 	],
-	lrs: {
+	lrs: false,/*{
 		url: "https://cloud.scorm.com/tc/CO2QZ8DR1Q/sandbox/",
 		auth: {
 			user: "P_NlxCkOx4_ouMxcQv4",
 			password: "5UIRXbnEu8riMqT-eAU",
 		},
-	},
+	},*/
+	// Note: all transactions are wiped on system restart.
 	transactions: {
-		/*
-		// TODO: Maybe implement this configuration option. By default there are no renewal limits.
 		renewal_limit: {
-			"default": false, // no limit by default
-			"/vote": 10,
+			"default":              0, // no renewals allowed by default
+			"/vote":               10,
+			"/embed":               0,
+			"/metrics/edit":        0,
+			"/metrics/save":       -1, // no renewal limit
+			"/metrics/destroy":    -1,
+			"/blueprints/edit":     0,
+			"/blueprints/save":    -1,
+			"/blueprints/destroy": -1,
 		},
-		*/
 		duration: {
 			"default":              2 * MINUTE,
 			"/vote":               10 * MINUTE,
