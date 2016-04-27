@@ -9,8 +9,24 @@ const DEBUG = require('debug')('eval:data');
 
 var router = EXPRESS.Router({ mergeParams: true });
 
-router.get('/list/:api_key', function(req, res, next) {
-	METRIC.findAll().then( function( results ) {
+router.get('/:api_key', function( req, res, next ) {
+	var options = {
+		where: {},
+		include: [ VOTE, SCORE ],
+	}
+
+	if ( req.body.metric_id ) {
+		options.where = { metric_id: req.body.metric_id };
+	}
+
+	if ( req.body.context_id ) {
+		options.include = [
+			{ model: VOTE, where: { context_id: req.body.context_id } },
+			{ model: SCORE, where: { context_id: req.body.context_id } },
+		];
+	}
+
+	METRIC.findAll( options ).then( function( results ) {
 		res.status(200).json( results );
 	} );
 });
