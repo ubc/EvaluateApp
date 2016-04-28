@@ -13,6 +13,8 @@ const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router({ mergeParams: true });
 
+// TODO: Implement sorting functionality
+
 router.get( '/list/:api_key', function( req, res ) {
 	METRIC.findAll( {
 		where: { api_key: req.params.api_key },

@@ -9,6 +9,7 @@ module.exports = {
 	site: {
 		title: "Evaluate",
 		description: "A simple service for providing ratings on any website",
+		url: "http://localhost:3000"
 	},
 	database: {
 		host: 'localhost',
@@ -21,13 +22,13 @@ module.exports = {
 	api_keys: [
 		"4bfb4e2a-405d-4a85-872f-32764604f9cd", // Local test key.
 	],
-	lrs: false,/*{
+	lrs: {
 		url: "https://cloud.scorm.com/tc/CO2QZ8DR1Q/sandbox/",
 		auth: {
 			user: "P_NlxCkOx4_ouMxcQv4",
 			password: "5UIRXbnEu8riMqT-eAU",
 		},
-	},*/
+	},
 	// Note: all transactions are wiped on system restart.
 	transactions: {
 		renewal_limit: {
@@ -35,7 +36,7 @@ module.exports = {
 			"/vote":               10,
 			"/embed":               0,
 			"/metrics/edit":        0,
-			"/metrics/save":       -1, // no renewal limit
+			"/metrics/save":       -1, // no limit on renewals
 			"/metrics/destroy":    -1,
 			"/blueprints/edit":     0,
 			"/blueprints/save":    -1,

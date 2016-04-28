@@ -39,50 +39,50 @@ module.exports = {
 		var user_id = data.user_id || null;
 		var context_id = data.context_id || null;
 		var metric_id = data.metric_id || null;
+
+		if ( user_id == null || context_id == null || metric_id == null ) {
+			DEBUG("Missing Required Properties", "user_id:", user_id, "context_id:", context_id, "metric_id:", metric_id);
+			return;
+		}
+
 		var score = data.score || {};
 		var vote = data.vote || null;
 		var verb = data.verb || this.verbs.RATED;
 		var activity = data.activity || this.activities.LINK;
+		var meta = data.meta || {};
 
-		if ( user_id == null || context_id == null || metric_id == null ) {
-			DEBUG("Missing Required Properties", "user_id:", user_id, "context_id:", context_id, "metric_id:", metric_id);
-		}
-
-		this.send( {
+		var statement = {
 			id: UUID(),
 			actor: {
-				// TODO: Implement the user name.
-				//name: "",
+				name: meta.username || "Unknown User",
 				account: {
-					// TODO: Implement this home page.
-					homePage: "http://localhost",
+					homePage: meta.homeurl || "http://unknown",
 					name: user_id,
 				},
 			},
 			verb: verb,
 			object: {
-				// TODO: Implement this as an absolute URL
-				//id: context_id,
-				id: "http://localhost",
+				id: context_id,
 				definition: {
 					type: activity,
-					// TODO: Implement the activity name.
-					//name: "",
+					name: {
+						"en-US": meta.activity_name || "Unknown Activity",
+					},
+					description: { 
+						"en-US": meta.activity_description || "unknown",
+					},
 				},
 			},
 			result: {
-				// TODO: Improve the information given here.
 				success: true,
-				/*score: {
-				s	raw: vote,
-				},*/
-				extensions: {
-					// TODO: Implement these extension urls.
-					"http://localhost:3000/xapi/choice": vote,
-					"http://localhost:3000/xapi/average": score.average || 0,
-				},
-			}
-		} );
+				extensions: {}, // Defined in the next few lines.
+			},
+		};
+
+		statement.result.extensions[ CONFIG.site.url + "/xapi/choice" ] = vote || "unknown";
+		statement.result.extensions[ CONFIG.site.url + "/xapi/average" ] = score.average || 0;
+
+		this.send( statement );
 	},
 
 	send: function( statement ) {

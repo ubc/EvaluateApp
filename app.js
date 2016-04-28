@@ -43,6 +43,7 @@ var routers = {
 	'/data': require('./routes/data'),
 	'/metrics': require('./routes/metrics'),
 	'/blueprints': require('./routes/blueprints'),
+	'/xapi': require('./routes/xapi'),
 };
 
 Object.keys( routers ).forEach( function( path ) {
