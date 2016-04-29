@@ -1,6 +1,4 @@
 
-// TODO: Test LRS sending implementation.
-
 const EXPRESS = require('express');
 
 var router = EXPRESS.Router();

@@ -8,9 +8,7 @@
 			<br>
 			API Key: <input type="text" name="api_key" value="4bfb4e2a-405d-4a85-872f-32764604f9cd"></input>
 			<br>
-			User ID: <input type="text" name="user_id" value="user"></input>
-			<br>
-			Context ID: <input type="text" name="context_id" value="context"></input>
+			Contexts: <textarea name="contexts" value="context"></textarea>
 			<br>
 			<input type="submit">
 		</form>
@@ -43,37 +41,23 @@
 
 				var params = {
 					metric_id: getParameterByName("metric_id", querystring),
-					user_id: getParameterByName("user_id", querystring),
-					context_id: getParameterByName("context_id", querystring),
+					context_id: getParameterByName("contexts", querystring).split("\r\n"),
 					api_key: getParameterByName("api_key", querystring),
-				}
-
-				// TODO: Restore this feature?
-				//var url = "http://localhost:3000/embed/"+params.metric_id;
-				//show("Embedding Preview: <a href=\""+url+"\">"+url+"</a>");
-				//show("<iframe src=\""+url+"\" />")
+				};
 
 				var data = {
 					metric_id: params.metric_id,
-					user_id: params.user_id,
-					context_id: params.context_id,
-				}
+					contexts: params.context_id,
+				};
 
-				show("Requesting Transaction ID, using api key: \""+params.api_key+"\" and data: "+JSON.stringify(data));
+				show("Requesting sorted contexts, using api key: \""+params.api_key+"\" and data: "+JSON.stringify(data));
 
 				jQuery.get( {
-					url: "http://localhost:3000/auth/" + params.api_key,
-					data: {
-						path: "/embed",
-						payload: data,
-					},
+					url: "http://localhost:3000/metrics/sort/" + params.api_key,
+					data: data,
 					success: function(response) {
-						console.log("Got "+response);
-						show("Got "+response);
-
-						var url = "http://localhost:3000/embed/"+response;
-						show("Embedding URL: <a href=\""+url+"\">"+url+"</a>");
-						show("<iframe src=\""+url+"\"/>")
+						console.log("Got", response);
+						show("Got " + JSON.stringify(response));
 					},
 				} );
 			} );

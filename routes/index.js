@@ -12,8 +12,6 @@ const DEBUG = require('debug')('eval:index');
 
 var router = EXPRESS.Router();
 
-// TODO: Support metric listing, and sorting.
-
 router.get( '/auth/:api_key', function( req, res, next ) {
 	// TODO: Remove this test header.
 	res.header('Access-Control-Allow-Origin', '*');

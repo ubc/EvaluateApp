@@ -15,6 +15,38 @@ var router = EXPRESS.Router({ mergeParams: true });
 
 // TODO: Implement sorting functionality
 
+router.get( '/sort/:api_key', function( req, res ) {
+	// TODO: Remove this test header.
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Methods', 'GET,POST');
+	res.header('Access-Control-Allow-Headers', 'Content-Type');
+	// ---
+
+	if ( UTIL.is_missing_attributes( ['metric_id', 'contexts'], req.query, res ) ) { return; }
+	var metric_id = req.query.metric_id;
+	var contexts = req.query.contexts;
+
+	SCORE.findAll( {
+		attributes: [ 'context_id' ],
+		where: {
+			metric_id: metric_id,
+			context_id: {
+				$in: contexts,
+			},
+		},
+		order: [ [ 'sorting', 'ASC' ] ],
+	} ).then( function( results ) {
+		// TODO: Place the unscored metrics in this sorting.
+		var sorted_contexts = [];
+
+		for ( var i = results.length - 1; i >= 0; i-- ) {
+			sorted_contexts.push( results[i].context_id );
+		};
+
+		res.status(200).send( sorted_contexts );
+	} );
+} );
+
 router.get( '/list/:api_key', function( req, res ) {
 	METRIC.findAll( {
 		where: { api_key: req.params.api_key },
