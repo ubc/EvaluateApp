@@ -12,6 +12,8 @@
 			<br>
 			Context ID: <input type="text" name="context_id" value="context"></input>
 			<br>
+			Stylesheet URL: <input type="text" name="stylesheet" value=""></input>
+			<br>
 			<input type="submit">
 		</form>
 
@@ -45,6 +47,7 @@
 					metric_id: getParameterByName("metric_id", querystring),
 					user_id: getParameterByName("user_id", querystring),
 					context_id: getParameterByName("context_id", querystring),
+					stylesheet: getParameterByName("stylesheet", querystring),
 					api_key: getParameterByName("api_key", querystring),
 				}
 
@@ -52,6 +55,7 @@
 					metric_id: params.metric_id,
 					user_id: params.user_id,
 					context_id: params.context_id,
+					stylesheet: params.stylesheet,
 				}
 
 				show("Requesting Transaction ID, using api key: \""+params.api_key+"\" and data: "+JSON.stringify(data));

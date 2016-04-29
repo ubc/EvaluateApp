@@ -63,6 +63,8 @@ module.exports.parse_transaction_id = function( req, res, next, id ) {
 		res.status(401).send( "Transaction check failed. Your session may have expired, try refreshing the page." ); // Return a failure.
 	} else {
 		req.params.transaction = data;
+		DEBUG( "Stylesheet", data.stylesheet );
+		res.locals.stylesheet = data.stylesheet;
 
 		res.on( 'finish', function() {
 			TRANSACTION.cleanup( id );
