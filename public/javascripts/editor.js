@@ -60,22 +60,21 @@ var Evaluate_Editor = {
 		jQuery.post( form.prop( 'action' ), form.serialize(), function( response ) {
 			console.log( "Received", response, typeof response );
 
-			if ( typeof response === 'object' ) {
-				var path = form.prop( 'action' );
-				path = path.split("/");
-				path.pop();
-				path = path.join("/");
+			var path = form.prop( 'action' );
+			path = path.split("/");
+			path.pop();
+			path = path.join("/");
 
-				submit_button.val("Saved");
-				form.prop( 'action', path + "/" + response.transaction_id );
-			} else {
-				submit_button.val("Save");
-				submit_button.removeClass( 'pure-button-disabled' );
-				submit_button.prop( 'disabled', false );
-				// TODO: Give some indication that the page needs to be refreshed.
-				console.log( response );
-			}
-		}, 'json' );
+			submit_button.val("Saved");
+			form.prop( 'action', path + "/" + response.transaction_id );
+		}, 'json' ).fail( function( error ) {
+			submit_button.val("Save");
+			submit_button.removeClass( 'pure-button-disabled' );
+			submit_button.prop( 'disabled', false );
+
+			console.log( error );
+			jQuery( '#error-display' ).text( error.status + ": " + error.responseText );
+		} );;
 
 		jQuery( '.options:hidden *:input' ).prop( 'disabled', false );
 		event.preventDefault();
@@ -93,12 +92,14 @@ var Evaluate_Editor = {
 			jQuery.post( delete_button.prop( 'href' ), {}, function( response ) {
 				console.log( "Received", response, typeof response );
 
-				if ( response == "success" ) {
-					jQuery('body').html("<p>This object, and the associated data has been deleted. Nothing can be recovered.</p>")
+				if ( response == "inprogress" ) {
+					jQuery('body').html("<p id='error-display'>This object, and the associated data has been deleted. Nothing can be recovered.</p>")
 				} else {
-					// TODO: Give some indication that the page needs to be refreshed.
 					console.log( response );
 				}
+			} ).fail( function( error ) {
+				console.log( error );
+				jQuery('#error-display').text( error.status + ": " + error.responseText );
 			} );
 		} else {
 			delete_button.addClass('confirm');

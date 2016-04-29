@@ -13,8 +13,6 @@ const DEBUG = require('debug')('eval:routing');
 
 var router = EXPRESS.Router({ mergeParams: true });
 
-// TODO: Implement sorting functionality
-
 router.get( '/sort/:api_key', function( req, res ) {
 	// TODO: Remove this test header.
 	res.header('Access-Control-Allow-Origin', '*');
@@ -123,24 +121,20 @@ router.post( '/save/:transaction_id', function( req, res ) {
 router.post( '/destroy/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['metric_id'], req.params.transaction, res ) ) { return; }
 	var metric_id = req.params.transaction.metric_id;
-	var promises = [];
-
-	promises.push( METRIC.destroy( {
-		where: { metric_id: metric_id },
-	} ) );
-
-	promises.push( VOTE.destroy( {
-		where: { metric_id: metric_id },
-	} ) );
-
-	promises.push( SCORE.destroy( {
-		where: { metric_id: metric_id },
-	} ) );
 	
-	// TODO: Just return immediately?
-	PROMISE.all( promises ).spread( function( metric ) {
-		res.status(200).send("success");
+	METRIC.destroy( {
+		where: { metric_id: metric_id },
 	} );
+
+	VOTE.destroy( {
+		where: { metric_id: metric_id },
+	} );
+
+	SCORE.destroy( {
+		where: { metric_id: metric_id },
+	} );
+	
+	res.status(202).send("inprogress");
 } );
 
 module.exports = router;

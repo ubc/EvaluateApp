@@ -56,8 +56,6 @@ form .title {
 	}
 }
 
-// TODO: Style the progress bars and sliders.
-
 .rubric-score,
 .score {
 	margin-left: 3px;
@@ -85,4 +83,13 @@ progress.score {
 
 body.disabled .vote {
 	cursor: default;
+}
+
+#error-display {
+	border: 2px solid lighten(red, 30%);
+	background: pink;
+	margin: 3px 0;
+	padding: 0.5em;
+
+	&:empty { display: none; }
 }

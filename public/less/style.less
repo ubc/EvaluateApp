@@ -103,3 +103,12 @@ form {
 		}
 	}
 }
+
+#error-display {
+	border: 2px solid lighten(red, 30%);
+	background: pink;
+	margin: 2px 0;
+	padding: 0.5em;
+
+	&:empty { display: none; }
+}

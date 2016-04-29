@@ -12,7 +12,7 @@ var Evaluate_Metric = {
 		jQuery( '.vote  *:input' ).on( 'change', Evaluate_Metric.on_vote_change );
 
 		// Prevent the no-JS fallback
-		// TODO: Actually implement the no-JS fallback
+		// TODO: Actually implement a no-JS fallback
 		jQuery( '.vote a' ).click( function( event ) {
 			event.preventDefault();
 		} );
@@ -70,26 +70,31 @@ var Evaluate_Metric = {
 	},
 
 	send_vote: function( choice ) {
-		console.log( "Sending vote", {
-			transaction_id: data.transaction_id,
-			vote: choice,
-		}, "to /vote" );
-		
-		jQuery.post( "/vote/" + data.transaction_id, {
-			vote: choice,
-		}, function( response ) {
-			console.log( "Received", response );
-			if ( response.transaction_id != false ) {
-				data.transaction_id = response.transaction_id;
-				jQuery( '#metric' ).trigger( 'evaluate-update', [response, choice] );
-			} else {
-				// TODO: Error handling that doesn't hide the voting preview.
-				jQuery('body').text( "Your transaction has reached it's renewal limit. Try refreshing the page." );
-			}
-		}, 'json' ).fail( function( error ) {
-			console.log( error );
-			jQuery('body').text( error.status + ": " + error.responseText );
-		} );
+		if ( data.transaction_id ) {
+			console.log( "Sending vote", {
+				transaction_id: data.transaction_id,
+				vote: choice,
+			}, "to /vote" );
+			
+			jQuery.post( "/vote/" + data.transaction_id, {
+				vote: choice,
+			}, function( response ) {
+				console.log( "Received", response );
+				if ( response.transaction_id != false ) {
+					data.transaction_id = response.transaction_id;
+					jQuery( '#metric' ).trigger( 'evaluate-update', [response, choice] );
+				} else {
+					// The next line warns the user that future votes will not work.
+					// For the moment it's disabled. We'll tell the user when something actually goes wrong.
+					//jQuery('#error-display').text( "Your transaction has reached it's renewal limit. Try refreshing the page." );
+				}
+			}, 'json' ).fail( function( error ) {
+				console.log( error );
+				jQuery('body').html( "<p id='error-display'>" + error.status + ": " + error.responseText + "</p>" );
+			} );
+		} else {
+			jQuery('#error-display').text( "You do not have a valid transcation. Try refreshing the page." );
+		}
 	},
 }
 

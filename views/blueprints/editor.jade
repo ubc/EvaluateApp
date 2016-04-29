@@ -37,6 +37,8 @@ block content
 		if blueprint_id && transactions.delete_id
 			a.pure-button.delete-button(href="/blueprints/destroy/#{transactions.delete_id}")= "Delete"
 
+	div#error-display
+
 mixin field(title)
 	dt= title
 	dd
@@ -73,7 +75,7 @@ mixin submetric(submetric, metric_types)
 		input(
 			name= "weight"
 			type= "text"
-			placeholder= "Weight"
+			placeholder= "Multiplier"
 			autocomplete= "off"
 			value= weight
 		)

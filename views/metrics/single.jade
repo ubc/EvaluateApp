@@ -13,6 +13,8 @@ html
 		strong.title= metric.options['title']
 		| !{metric.type.render_display( locals )}
 
+		div#error-display
+
 	if transaction_id
 		footer
 			script.

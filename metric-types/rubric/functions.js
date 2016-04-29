@@ -30,7 +30,6 @@ module.exports.validate_vote = function( new_value, metric, submetrics ) {
 	return new_value;
 }
 
-// TODO: The current weight adjustments are unintuitive. Fix that.
 module.exports.adjust_score = function( score, new_value, old_value, metric, submetrics ) {
 	old_value = old_value || {}
 

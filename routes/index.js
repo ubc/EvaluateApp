@@ -111,7 +111,7 @@ router.get( '/embed/:transaction_id', function( req, res ) {
 
 	promises.push( METRIC.findById( params.metric_id ) );
 
-	promises.push( SCORE.findOne( { // TODO: findOneOrCreate
+	promises.push( SCORE.findOne( {
 		attributes: ['count', 'display', 'data'],
 		where: { 
 			metric_id: params.metric_id,

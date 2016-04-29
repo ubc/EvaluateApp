@@ -130,9 +130,9 @@ router.post( '/destroy/:transaction_id', function( req, res ) {
 
 	BLUEPRINT.destroy( {
 		where: { blueprint_id: req.params.transaction.blueprint_id },
-	} ).then( function() {
-		res.status(200).send("success");
 	} );
+
+	res.status(202).send("inprogress");
 } );
 
 module.exports = router;

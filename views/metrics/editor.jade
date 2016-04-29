@@ -52,6 +52,8 @@ block content
 		if metric_id && transactions.delete_id
 			a.pure-button.delete-button(href="/metrics/destroy/#{transactions.delete_id}")= "Delete"
 
+	div#error-display
+
 	if metric_id
 		br
 		strong= "Preview"
