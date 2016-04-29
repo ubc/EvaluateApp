@@ -11,6 +11,7 @@ block content
 		name = metric.name || ""
 		title = options['title'] || ""
 		type = metric.type ? metric.type.slug : "one-way"
+		transactions = transactions || {}
 
 	form.pure-form(method="POST", action="/metrics/save/"+transactions.submit_id)
 		dl
@@ -54,12 +55,11 @@ block content
 
 	div#error-display
 
-	if metric_id
+	if transactions.embed_id
 		br
 		strong= "Preview"
 		hr
-		// TODO: Reimplement this?
-		//iframe(src="/api/preview/#{metric_id}", frameborder="0")
+		iframe(src="/embed/#{transactions.embed_id}", frameborder="0")
 
 
 mixin options(slug, active_type)

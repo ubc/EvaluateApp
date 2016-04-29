@@ -77,6 +77,7 @@ router.get( '/edit/:transaction_id', function( req, res ) {
 		var transactions = {
 			submit_id: TRANSACTION.create( "/metrics/save", transaction_data ),
 			delete_id: TRANSACTION.create( "/metrics/destroy", transaction_data ),
+			embed_id: TRANSACTION.create( "/embed", transaction_data ),
 		};
 
 		if ( ( metric_id && metric == null ) || ( metric != null && metric.api_key != api_key ) ) {

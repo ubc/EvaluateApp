@@ -105,19 +105,21 @@ router.post( '/vote/:transaction_id', function( req, res, next ) {
 } );
 
 router.get( '/embed/:transaction_id', function( req, res ) {
-	if ( UTIL.is_missing_attributes( ['metric_id', 'context_id'], req.params.transaction, res ) ) { return; }
+	if ( UTIL.is_missing_attributes( ['metric_id'], req.params.transaction, res ) ) { return; }
 	var params = req.params.transaction;
 	var promises = [];
 
 	promises.push( METRIC.findById( params.metric_id ) );
 
-	promises.push( SCORE.findOne( {
-		attributes: ['count', 'display', 'data'],
-		where: { 
-			metric_id: params.metric_id,
-			context_id: params.context_id,
-		},
-	} ) );
+	if ( params.context_id ) {
+		promises.push( SCORE.findOne( {
+			attributes: ['count', 'display', 'data'],
+			where: { 
+				metric_id: params.metric_id,
+				context_id: params.context_id,
+			},
+		} ) );
+	}
 
 	if ( params.user_id ) {
 		promises.push( VOTE.findOne( {
