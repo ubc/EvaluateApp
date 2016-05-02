@@ -9,56 +9,42 @@ const DEBUG = require('debug')('eval:data');
 
 var router = EXPRESS.Router({ mergeParams: true });
 
-router.get('/:api_key', function( req, res, next ) {
+function get_metric_data( api_key, args, callback ) {
 	var options = {
-		where: {},
-		include: [ VOTE, SCORE ],
+		attributes: [ 'metric_id', 'name', 'type', 'options' ],
+		where: {
+			api_key: api_key,
+		},
+	};
+
+	var vote = {
+		model: VOTE,
+		attributes: [ 'value', 'context_id', 'user_id', 'modified' ],
+	};
+
+	var score = {
+		model: SCORE,
+		attributes: [ 'data', 'context_id', 'count', 'sorting', 'display', 'average', 'modified' ],
+	};
+
+	if ( args.metric_id ) {
+		options.where.metric_id = args.metric_id;
 	}
 
-	if ( req.body.metric_id ) {
-		options.where = { metric_id: req.body.metric_id };
+	if ( args.context_id ) {
+		vote.where = { context_id: args.context_id };
+		score.where = { context_id: args.context_id };
 	}
 
-	if ( req.body.context_id ) {
-		options.include = [
-			{ model: VOTE, where: { context_id: req.body.context_id } },
-			{ model: SCORE, where: { context_id: req.body.context_id } },
-		];
-	}
+	options.include = [ vote, score ];
 
-	METRIC.findAll( options ).then( function( results ) {
+	METRIC.findAll( options ).then( callback );
+}
+
+router.get('/:api_key', function( req, res, next ) {
+	get_metric_data( req.params.api_key, req.body, function( results ) {
 		res.status(200).json( results );
 	} );
-});
-
-router.get('/metric/:api_key', function(req, res, next) {
-	if ( UTIL.is_missing_attributes( ['metric_id'], req.params, res ) ) { return; }
-	var metric_id = req.params.metric_id;
-	var promises = [];
-
-	promises.push( METRIC.findById( metric_id ) );
-
-	promises.push( VOTE.findAll( {
-		where: { metric_id: metric_id },
-	} ) );
-
-	promises.push( SCORE.findAll( {
-		where: { metric_id: metric_id },
-	} ) );
-
-	PROMISE.all( promises ).spread( function( metric, votes, scores ) {
-		if ( metric == null ) {
-			res.status(404).send( "No metric #" + metric_id + " found." );
-		} else {
-			res.status(200).json( {
-				metric: metric,
-				votes: votes,
-				scores: ( scores != null ? scores : [] ),
-			} );
-
-		}
-
-	})
 });
 
 module.exports = router;
