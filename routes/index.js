@@ -13,11 +13,11 @@ const DEBUG = require('debug')('eval:index');
 var router = EXPRESS.Router();
 
 router.get( '/auth/:api_key', function( req, res, next ) {
-	// TODO: Remove this test header.
+	/*/ These lines are useful for testing, but should not be generally enabled.
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,POST');
 	res.header('Access-Control-Allow-Headers', 'Content-Type');
-	// ---
+	//*/
 
 	req.query.payload.api_key = req.params.api_key;
 

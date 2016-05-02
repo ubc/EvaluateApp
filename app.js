@@ -1,6 +1,6 @@
 
-// TODO: Remove this test code.
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+// This line is useful when testing, but otherwise should remain commented out.
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const EXPRESS = require('express');
 const PATH = require('path');

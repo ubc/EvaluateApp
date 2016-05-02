@@ -14,11 +14,11 @@ const DEBUG = require('debug')('eval:routing');
 var router = EXPRESS.Router({ mergeParams: true });
 
 router.get( '/sort/:api_key', function( req, res ) {
-	// TODO: Remove this test header.
+	/*/ These lines are useful for testing, but should not be generally enabled.
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,POST');
 	res.header('Access-Control-Allow-Headers', 'Content-Type');
-	// ---
+	//*/
 
 	if ( UTIL.is_missing_attributes( ['metric_id', 'contexts'], req.query, res ) ) { return; }
 	var metric_id = req.query.metric_id;

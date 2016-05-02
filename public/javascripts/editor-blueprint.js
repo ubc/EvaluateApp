@@ -14,7 +14,6 @@ var Evaluate_Editor_Blueprint = {
 	},
 
 	on_switch_change: function() {
-		console.log("on_switch_change");
 		var element = jQuery(this);
 		var value = element.val();
 		var submetric = element.closest('.submetric');
