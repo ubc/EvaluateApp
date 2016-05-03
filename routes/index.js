@@ -25,7 +25,6 @@ router.get( '/auth/:api_key', function( req, res, next ) {
 	res.status(201).send( transaction_id );
 } );
 
-// TODO: Investigate SequelizeUniqueConstraintError that appears when voting.
 router.post( '/vote/:transaction_id', function( req, res, next ) {
 	if ( UTIL.is_missing_attributes( ['metric_id', 'user_id', 'context_id'], req.params.transaction, res ) ) { return; }
 	var data = req.params.transaction;
@@ -144,7 +143,10 @@ router.get( '/embed/:transaction_id', function( req, res ) {
 		};
 
 		if ( params.user_id ) {
-			data.transaction_id = TRANSACTION.create( "/vote", params );
+			if ( params.preview != 'preview' ) {
+				data.transaction_id = TRANSACTION.create( "/vote", params );
+			}
+			
 			data.user_vote = user_vote != null ? user_vote.value : "";
 		}
 

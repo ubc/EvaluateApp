@@ -5,7 +5,7 @@ const DEBUG = require('debug')('eval:database');
 
 module.exports = DATABASE.define( 'score', {
 	context_id: {
-		type: SEQUELIZE.CHAR(32),
+		type: SEQUELIZE.CHAR(255),
 		allowNull: false,
 	},
 	count: {

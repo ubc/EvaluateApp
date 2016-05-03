@@ -4,7 +4,7 @@ const DATABASE = require('../includes/database');
 
 module.exports = DATABASE.define( 'vote', {
 	context_id: {
-		type: SEQUELIZE.CHAR(32),
+		type: SEQUELIZE.CHAR(255),
 		allowNull: false,
 	},
 	user_id: {
