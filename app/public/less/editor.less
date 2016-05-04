@@ -1,0 +1,91 @@
+
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+dl {
+	margin: 0;
+	margin-bottom: 0.5em;
+}
+
+dt {
+	margin-top: 0.5em;
+}
+
+iframe {
+	overflow: hidden; 
+	display: block;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+.submetric-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pure-button {
+	margin-right: 2px;
+	vertical-align: bottom;
+}
+
+.pure-button-coloured() {
+	color: white;
+	border-radius: 4px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.pure-button-success {
+	.pure-button-coloured();
+	background: rgb(28, 184, 65); /* this is a green */
+}
+
+.pure-button-error {
+	.pure-button-coloured();
+	background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.pure-button-warning {
+	.pure-button-coloured();
+	background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.pure-button-secondary {
+	.pure-button-coloured();
+	background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+form {
+	.submit-button.restore {
+		.pure-button-success;
+	}
+
+	.delete-button.confirm {
+		.pure-button-error;
+	}
+
+	&.hide-form {
+		dl {
+			display: none;
+		}
+
+		.delete-button {
+			display: none;
+		}
+	}
+}
+
+#error-display {
+	border: 2px solid lighten(red, 30%);
+	background: pink;
+	margin: 2px 0;
+	padding: 0.5em;
+
+	&:empty { display: none; }
+}
