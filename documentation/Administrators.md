@@ -2,15 +2,19 @@
 
 This document contains information on how to set up and maintain an Evaluate Installation.
 
+- [Installation](#)
+- [Issuing an API Key](#)
+- [Debugging an issue](#)
+
 ## Installation
 
 To install Evaluate follow these steps.
-1. Install [NodeJS](https://nodejs.org/en/)
-2. Set up a database using one of the following dialects: PostgreSQL, MySQL, MariaDB, SQLite or MSSQL.
-3. Download the repository onto your computer. (Only the 'app' folder is necessary)
-4. Navigate to the 'app' folder
-5. Configure json in [config.js](../app/config) (The sample file is annotated and explains all the variables)
-6. Run `npm start` (in the 'app' folder)
+ 1. Install [NodeJS](https://nodejs.org/en/)
+ 2. Set up a database using one of the following dialects: PostgreSQL, MySQL, MariaDB, SQLite or MSSQL.
+ 3. Download the repository onto your computer. (Only the 'app' folder is necessary)
+ 4. Navigate to the 'app' folder
+ 5. Configure json in [config.js](../app/config) (The sample file is annotated and explains all the variables)
+ 6. Run `npm start` (in the 'app' folder)
 
 ## Issuing an API Key
 

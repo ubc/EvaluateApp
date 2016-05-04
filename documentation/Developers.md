@@ -21,83 +21,101 @@ $embed_url = "http://localhost:3000/embed/" . $transaction_id;
 ```html
 <iframe src="<?php echo $embed_url; ?>"></iframe>
 ```
-
+a
 Each request is made to one of the endpoints below. Some endpoints can be accessed directly with an api key. While others require you to first establish a transaction. The reason for this is to avoid the API key being leaked to your end user.
 
 The api key or transaction id should be appended to the endpoint path, as noted below.
+
+- [Public Endpoints](#)
+	- [Request Transaction ID  /auth/:api_key](#)
+	- [Embed Metric  /embed/:transaction_id](#)
+	- [Sort Contexts  /metrics/sort/:api_key](#)
+	- [List Metrics  /metrics/list/:api_key](#)
+	- [Edit Metric  /metrics/edit/:transaction_id](#)
+	- [List Blueprints  /blueprints/list/:api_key](#)
+	- [Edit Blueprint  /blueprints/edit/:transaction_id](#)
+	- [Request Voting Data  /data/:api_key](#)
+- [Hidden Endpoints](#)
+	- [Vote  /vote/:transaction_id](#)
+	- [Delete Metric  /metrics/destroy/:transaction_id](#)
+	- [Save Metric  /metrics/save/:transaction_id](#)
+	- [Delete Blueprint  /blueprints/destroy/:transaction_id](#)
+	- [Save Blueprint  /blueprints/save/:transaction_id](#)
 
 ## Public Endpoints
 These are the paths that you will likely want to use in your system.
 
 ### Request Transaction ID  /auth/:api_key
-*Method:* GET
-*Response:* UUID (v4)
-*Query Parameters:*
-* *path*, The endpoint which you want to create a transaction for. eg. "/embed" or "/metrics/edit"
-* *payload*, This data will be used when the transaction is redeemed. Consult the access points below for what information should be included here. It is different for every path.
+**Method:** GET
+
+**Response:** UUID (v4)
+
+**Query Parameters:**
+* **path**, The endpoint which you want to create a transaction for. eg. "/embed" or "/metrics/edit"
+* **payload**, This data will be used when the transaction is redeemed. Consult the access points below for what information should be included here. It is different for every path.
 
 Returns a Transaction ID for the given path.
 
 ### Embed Metric  /embed/:transaction_id
-*Method:* GET
-*Response:* HTML
-*Transaction Payload:*
-* *metric_id*, The UUID of the metric which you wish to embed.
-* *context_id*, (optional) The url which is to be rated. If not provided, a simple preview of the metric will be rendered.
-* *user_id*, (optional) The user ID to associate with votes made on this embed. If not provided, the user will not be able to vote.
-* *preview*, (optional) If this value is equal to 'preview' voting will be disallowed (even if context_id and user_id have been provided).
-* *stylesheet*, (optional) The url of a CSS file to insert into the html.
+**Method:** GET
+**Response:** HTML
+**Transaction Payload:**
+* **metric_id**, The UUID of the metric which you wish to embed.
+* **context_id**, (optional) The url which is to be rated. If not provided, a simple preview of the metric will be rendered.
+* **user_id**, (optional) The user ID to associate with votes made on this embed. If not provided, the user will not be able to vote.
+* **preview**, (optional) If this value is equal to 'preview' voting will be disallowed (even if context_id and user_id have been provided).
+* **stylesheet**, (optional) The url of a CSS file to insert into the html.
 * Additionally all "/vote" parameters should be provided, if voting is allowed.
 
 Renders a metric. Intended for use in an iframe.
 
 ### Sort Contexts  /metrics/sort/:api_key
-*Method:* GET
-*Response:* JSON
-*Query Parameters:*
-* *contexts*, An array of context IDs which you want sorted.
-* *metric_id*, The metric to use for sorting.
+**Method:** GET
+**Response:** JSON
+**Query Parameters:**
+* **contexts**, An array of context IDs which you want sorted.
+* **metric_id**, The metric to use for sorting.
 
 Sorts a list of contexts depending on how they are rated by a certain metric.
 The sorted lists will be returned as a json array.
 
 ### List Metrics  /metrics/list/:api_key
-*Method:* GET
-*Response:* JSON
-*Query Parameters:* None
+**Method:** GET
+**Response:** JSON
+**Query Parameters:** None
 
 Returns a json of all metrics, which are associated with your api key.
 
 ### Edit Metric  /metrics/edit/:transaction_id
-*Method:* GET
-*Response:* HTML
-*Transaction Payload:*
-* *metric_id*, The ID for the metric which you want to edit.
-* *stylesheet*, (optional) The url of a CSS file to insert into the html.
+**Method:** GET
+**Response:** HTML
+**Transaction Payload:**
+* **metric_id**, The ID for the metric which you want to edit.
+* **stylesheet**, (optional) The url of a CSS file to insert into the html.
 
 Renders a form for editing/deleting a metric. Intended for use in an iframe.
 
 ### List Blueprints  /blueprints/list/:api_key
-*Method:* GET
-*Response:* JSON
-*Query Parameters:* None
+**Method:** GET
+**Response:** JSON
+**Query Parameters:** None
 
 Returns a json of all blueprints, which are associated with your api key.
 
 ### Edit Blueprint  /blueprints/edit/:transaction_id
-*Method:* GET
-*Response:* HTML
-*Transaction Payload:*
-* *blueprint_id*, The ID for the blueprint which you want to edit.
-* *stylesheet*, (optional) The url of a CSS file to insert into the html.
+**Method:** GET
+**Response:** HTML
+**Transaction Payload:**
+* **blueprint_id**, The ID for the blueprint which you want to edit.
+* **stylesheet**, (optional) The url of a CSS file to insert into the html.
 
 Renders a form for editing/deleting a blueprint. Intended for use in an iframe.
 
 ### Request Voting Data  /data/:api_key
-*Method:* GET
-*Query Parameters:*
-* *metric_id*, (optional) If provided, the data will be restricted to this metric.
-* *context_id*, (optional) If provided, the data will be restricted to this context.
+**Method:** GET
+**Query Parameters:**
+* **metric_id**, (optional) If provided, the data will be restricted to this metric.
+* **context_id**, (optional) If provided, the data will be restricted to this context.
 
 Retrieve lists of votes and scores, organized by metrics.
 
@@ -106,50 +124,48 @@ Retrieve lists of votes and scores, organized by metrics.
 These access points are available, but it is not necessary for you to support them, as they are used indirectly by the public access points.
 
 ### Vote  /vote/:transaction_id
-*Method:* POST
-*Transaction Payload:*
-* *metric_id*, The ID of the metric to vote on.
-* *context_id*, The url of the context to vote on.
-* *user_id*, The user ID to associate with this vote.
-* *lrs*, (optional if not using lrs)
-  * *username*, A display name for the user.
-  * *homeurl*, The base url of the server where this user is registered.
-  * *activity_name*, The name of the context which is being rated.
-  * *activity_description*, A description of the context which is being rated.
+**Method:** POST
+**Transaction Payload:**
+* **metric_id**, The ID of the metric to vote on.
+* **context_id**, The url of the context to vote on.
+* **user_id**, The user ID to associate with this vote.
+* **lrs**, (optional if not using lrs)
+  * **username**, A display name for the user.
+  * **homeurl**, The base url of the server where this user is registered.
+  * **activity_name**, The name of the context which is being rated.
+  * **activity_description**, A description of the context which is being rated.
 
 Saves a vote to the system.
 
 ### Delete Metric  /metrics/destroy/:transaction_id
-*Method:* POST
-*Transaction Payload:*
-* *metrid_id*, The metric to be deleted.
-*POST Body:* None
+**Method:** POST
+**Transaction Payload:**
+* **metrid_id**, The metric to be deleted.
+**POST Body:** None
 
 Removes a metric from the system.
 
 ### Save Metric  /metrics/save/:transaction_id
-*Method:* POST
-*Transaction Payload:*
-* *metric_id*, (optional) The ID of the metric to save. If not provided, then a new metric will be created.
-*POST Body:*
+**Method:** POST
+**Transaction Payload:**
+* **metric_id**, (optional) The ID of the metric to save. If not provided, then a new metric will be created.
+**POST Body:**
 * The attributes for the new metric. If you really want to use this end point. Examine [views/metrics/editor.jade](../views/metrics/editor) for the appropriate values.
 
 Saves a metric
 
 ### Delete Blueprint  /blueprints/destroy/:transaction_id
-*Method:* POST
-*Transaction Payload:*
- * *blueprint_id*, The blueprint to be deleted.
+**Method:** POST
+**Transaction Payload:**
+ * **blueprint_id**, The blueprint to be deleted.
 
 Removes a blueprint from the system.
 
 ### Save Blueprint  /blueprints/save/:transaction_id
-*Method:* POST
-*Transaction Payload:*
-* *blueprint_id*, (optional) The ID of the blueprint to save. If not provided, then a new blueprint will be created.
-*POST Body:*
+**Method:** POST
+**Transaction Payload:**
+* **blueprint_id**, (optional) The ID of the blueprint to save. If not provided, then a new blueprint will be created.
+**POST Body:**
 * The attributes for the new blueprint. If you really want to use this end point. Examine [views/blueprints/editor.jade](../views/blueprints/editor) for the appropriate values.
 
 Saves a blueprint
-
-
