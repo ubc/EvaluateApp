@@ -2,9 +2,9 @@
 
 This document contains information on how to set up and maintain an Evaluate Installation.
 
-- [Installation](#)
-- [Issuing an API Key](#)
-- [Debugging an issue](#)
+- [Installation](#installation)
+- [Issuing an API Key](#issuing-an-api-key)
+- [Debugging an issue](#debugging-an-issue)
 
 ## Installation
 

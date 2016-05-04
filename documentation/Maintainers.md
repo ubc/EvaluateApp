@@ -2,18 +2,18 @@
 
 Since you will be working with the entire code base - you should familiarize yourself with the documentation for [System Administrators](./Administrators.md) and [Client Developers](./Developers.md)
 
-- [Code Philosophies](#)
-- [Major Libraries Used](#)
-- [Code Structure](#)
-- [Security](#)
-  - [API Keys](#)
-  - [Transactions](#)
-- [Control Flow](#)
-- [Adding a new Metric Type](#)
-- [The Concept of Blueprints / Rubrics](#)
-- [Learning Record Store](#)
-- [Database](#)
-- [Future Improvements](#)
+- [Code Philosophies](#code-philosophies)
+- [Major Libraries Used](#major-libraries-used)
+- [Code Structure](#code-structure)
+- [Security](#security)
+  - [API Keys](#api-keys)
+  - [Transactions](#transactions)
+- [Control Flow](#control-flow)
+- [Adding a new Metric Type](#adding-a-new-metric-type)
+- [The Concept of Blueprints / Rubrics](#the-concept-of-blueprints--rubrics)
+- [Learning Record Store](#learning-record-store)
+- [Database](#database)
+- [Future Improvements](#future-improvements)
 
 ## Code Philosophies
 

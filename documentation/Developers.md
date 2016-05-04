@@ -26,21 +26,21 @@ Each request is made to one of the endpoints below. Some endpoints can be access
 
 The api key or transaction id should be appended to the endpoint path, as noted below.
 
-- [Public Endpoints](#)
-	- [Request Transaction ID  /auth/:api_key](#)
-	- [Embed Metric  /embed/:transaction_id](#)
-	- [Sort Contexts  /metrics/sort/:api_key](#)
-	- [List Metrics  /metrics/list/:api_key](#)
-	- [Edit Metric  /metrics/edit/:transaction_id](#)
-	- [List Blueprints  /blueprints/list/:api_key](#)
-	- [Edit Blueprint  /blueprints/edit/:transaction_id](#)
-	- [Request Voting Data  /data/:api_key](#)
-- [Hidden Endpoints](#)
-	- [Vote  /vote/:transaction_id](#)
-	- [Delete Metric  /metrics/destroy/:transaction_id](#)
-	- [Save Metric  /metrics/save/:transaction_id](#)
-	- [Delete Blueprint  /blueprints/destroy/:transaction_id](#)
-	- [Save Blueprint  /blueprints/save/:transaction_id](#)
+- [Public Endpoints](#public-endpoints)
+	- [Request Transaction ID  /auth/:api_key](#request-transaction-id--authapi_key)
+	- [Embed Metric  /embed/:transaction_id](#embed-metric--embedtransaction_id)
+	- [Sort Contexts  /metrics/sort/:api_key](#sort-contexts--metricssortapi_key)
+	- [List Metrics  /metrics/list/:api_key](#list-metrics--metricslistapi_key)
+	- [Edit Metric  /metrics/edit/:transaction_id](#edit-metric--metricsedittransaction_id)
+	- [List Blueprints  /blueprints/list/:api_key](#list-blueprints--blueprintslistapi_key)
+	- [Edit Blueprint  /blueprints/edit/:transaction_id](#edit-blueprint--blueprintsedittransaction_id)
+	- [Request Voting Data  /data/:api_key](#request-voting-data--dataapi_key)
+- [Hidden Endpoints](#hidden-endpoints)
+	- [Vote  /vote/:transaction_id](#vote--votetransaction_id)
+	- [Delete Metric  /metrics/destroy/:transaction_id](#delete-metric--metricsdestroytransaction_id)
+	- [Save Metric  /metrics/save/:transaction_id](#save-metric--metricssavetransaction_id)
+	- [Delete Blueprint  /blueprints/destroy/:transaction_id](#delete-blueprint--blueprintsdestroytransaction_id)
+	- [Save Blueprint  /blueprints/save/:transaction_id](#save-blueprint--blueprintssavetransaction_id)
 
 ## Public Endpoints
 These are the paths that you will likely want to use in your system.

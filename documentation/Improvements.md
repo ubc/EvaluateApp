@@ -1,10 +1,10 @@
 # Possible Future Improvements
 
-- [LTI Integration](#)
-- [Pre-Written Clients](#)
-- [Additional Metric Types](#)
-- [Persistent Transactions](#)
-- [Additional Data sent to LRS](#)
+- [LTI Integration](#lti-integration)
+- [Pre-Written Clients](#pre-written-clients)
+- [Additional Metric Types](#additional-metric-types)
+- [Persistent Transactions](#persistent-transactions)
+- [Additional Data sent to LRS](#additional-data-sent-to-lrs)
 
 ## LTI Integration
 As this platform reached version 1.0.0, the LTI integration feature was stripped out. This was a major simplification move, however there might be a good basis for including it.
@@ -25,7 +25,7 @@ Further details about how to implement a client can be found in the [Client Deve
 ## Additional Metric Types
 Although the current metric types should cover most scenarios. Others could be added.
 
-Details on how to do that can be found in the [Evaluate Developers Documentation](./Maintainer.md)
+Details on how to do that can be found in the [Evaluate Developers Documentation](./Maintainers.md#adding-a-new-metric-type)
 
 ## Persistent Transactions
 Currently transactions are stored in memory. When the server shuts down or crashes, all current transactons will be lost.
