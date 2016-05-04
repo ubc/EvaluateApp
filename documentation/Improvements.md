@@ -5,6 +5,10 @@
 - [Additional Metric Types](#additional-metric-types)
 - [Persistent Transactions](#persistent-transactions)
 - [Additional Data sent to LRS](#additional-data-sent-to-lrs)
+- [Better Valuelist Sorting](#better-valuelist-sorting)
+- [No-Javascript Fallbacks](#no-javascript-fallbacks)
+- [Handle Unsorted Contexts](#handle-unsorted-contexts)
+- [Native Data Displays](#native-data-displays)
 
 ## LTI Integration
 As this platform reached version 1.0.0, the LTI integration feature was stripped out. This was a major simplification move, however there might be a good basis for including it.
@@ -42,3 +46,19 @@ At the moment, only votes are being sent to the LRS. We could also send other da
 To do this, we should create new functions in `includes/lrs.js` similar to the `send_vote` function. This should be set up to automatically supply most of the parameters.
 
 Consule the [xAPI Spec](https://github.com/adlnet/xAPI-Spec/blob/master/xAPI.md) for details on what data needs to be sent to the LRS.
+
+## Better Valuelist Sorting
+
+// TODO: Write this.
+
+## No-Javascript Fallbacks
+
+// TODO: Write this.
+
+## Handle Unsorted Contexts
+
+// TODO: Write this.
+
+## Native Data Displays
+
+// TODO: Write this.

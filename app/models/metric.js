@@ -1,4 +1,9 @@
 
+/**
+ * This module defines the database table for the Metric object.
+ * See here for details: http://docs.sequelizejs.com/en/latest/docs/models-definition/
+ */
+
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 const TYPES = require('../metric-types');

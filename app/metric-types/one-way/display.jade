@@ -1,5 +1,8 @@
 -
-	// Expects variables metric, score, [user_vote], [transaction_id], [name]
+	// This file defines how a "One Way" metric should look.
+	// Expects variables metric, score, [user_vote], [transaction_id], [input_name]
+
+	// Explicitly extract the expected variables.
 	name = input_name || 'metric-' + metric.metric_id
 	options = metric.options
 	icon = options['icon']
@@ -22,18 +25,24 @@ span.score(title="Total")
 	| #{display}
 
 script.
+	// This check makes sure that the script is only run once.
 	if ( typeof ONE_WAY_SCRIPT === 'undefined' ) {
 		ONE_WAY_SCRIPT = true;
 		
+		// When our front-end code receives an update on the value of this metric, this callback will run to update the UI.
 		jQuery('.metric-one-way').on( 'evaluate-update', function( event, data, choice ) {
 			var element = jQuery(this);
+
+			// Set the score value to what we received.
 			element.find('.score').text( data.score );
 
+			// If the new vote is different from the expected value, make sure we update it.
 			if ( data.vote != choice ) {
 				var input = element.find( 'input' );
 				input.prop( 'checked', data.vote == 1 );
 			}
 			
+			// Prevent the default evaluate-update event
 			event.stopPropagation();
 		} );
 	}

@@ -24,7 +24,7 @@ $embed_url = "http://localhost:3000/embed/" . $transaction_id;
 a
 Each request is made to one of the endpoints below. Some endpoints can be accessed directly with an api key. While others require you to first establish a transaction. The reason for this is to avoid the API key being leaked to your end user.
 
-The api key or transaction id should be appended to the endpoint path, as noted below.
+The api key or transaction id should be appended to the endpoint path, as noted below. All endpoints use appropriate HTTP status codes when responding.
 
 - [Public Endpoints](#public-endpoints)
 	- [Request Transaction ID  /auth/:api_key](#request-transaction-id--authapi_key)
@@ -139,7 +139,7 @@ Saves a vote to the system. Returns a renewed transaction id. Or false, if no re
 
 ### Delete Metric  /metrics/destroy/:transaction_id
 **Method:** POST  
-**Reponse:** `"success"` | `"failure"`  
+**Reponse:** `"inprogress"`  
 **Transaction Payload:**
 * **metrid_id**, The metric to be deleted.
 **POST Body:** None
@@ -158,7 +158,7 @@ Saves a metric. Returns a renewed transaction id. Or false, if no renewal was po
 
 ### Delete Blueprint  /blueprints/destroy/:transaction_id
 **Method:** POST  
-**Response:** `"success"` | `"failure"`  
+**Response:** `"inprogress"`  
 **Transaction Payload:**
  * **blueprint_id**, The blueprint to be deleted.
 

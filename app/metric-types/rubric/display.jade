@@ -1,25 +1,29 @@
 -
+	// This file defines how a "Rubric" metric should look.
 	// Expects variables metric, score, submetrics, [user_vote], [transaction_id]
+
+	// Explicitly extract the expected variables.
 	rubric = metric
 	rubric_score = score
 	rubric_user_vote = user_vote || {}
 	value = rubric_score.display || 0
 
 form
+	- // Loop through each submetric
 	each submetric, i in submetrics
 		-
-			console.log("Rubric score", rubric_score.data, i)
 			submetric_id = submetric.id
 			title = submetric.options['title'] || ""
 			score = rubric_score.data ? rubric_score.data[submetric_id] : {}
 
-			html = submetric.type.render_display({
+			// Get the html for the submetric.
+			html = submetric.type.render_display( {
 				transaction_id: transaction_id,
 				metric: submetric,
 				input_name: 'submetric-' + submetric_id,
 				user_vote: rubric_user_vote[submetric_id],
 				score: score != null ? rubric_score.data[submetric_id] : {},
-			});
+			} );
 
 		div.submetric(id= "submetric-" + submetric_id, class= "metric-"+submetric.type.slug, data-id= submetric_id)
 			strong.title= title
@@ -32,18 +36,23 @@ form
 		span.rubric-score(title="Average")= value
 
 if transaction_id
+	- // Include the special script for this special metric type.
 	script(type="text/javascript", src="/javascripts/metric-rubric.js")
 
 script.
+	// This check makes sure that the script is only run once.
 	if ( typeof RUBRIC_SCRIPT === 'undefined' ) {
 		RUBRIC_SCRIPT = true;
 		
+		// When our front-end code receives an update on the value of this metric, this callback will run to update the UI.
 		jQuery('.metric-rubric').on( 'evaluate-update', function( event, data, choices ) {
 			var element = jQuery(this);
+
+			// Set the score value to what we received.
 			element.find('.rubric-score').text( data.score );
 
+			// Propagate the event to each submetric.
 			for ( var i in data.score_data ) {
-				console.log( "Processing update for", i );
 				jQuery( '#submetric-' + i ).trigger( 'evaluate-update', {
 					vote: data.vote[i],
 					score: data.score_data[i].display,
@@ -51,6 +60,7 @@ script.
 				}, choices[i] );
 			}
 
+			// Prevent the default evaluate-update event
 			event.stopPropagation();
 		} );
 	}

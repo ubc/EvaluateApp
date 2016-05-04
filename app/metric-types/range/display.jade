@@ -1,4 +1,5 @@
 
+- // This function creates a set of icons for the range metric type. Such as 5 stars, if i=5
 mixin step( i, icon, name, user_vote )
 	if i > 0
 		span.vote
@@ -15,7 +16,10 @@ mixin step( i, icon, name, user_vote )
 				i(class='icon-'+icon+'-up')
 
 -
+	// This file defines how a "Range" metric should look.
 	// Expects variables metric, score, [user_vote], [transaction_id], [input_name]
+
+	// Explicitly define the expected variables.	
 	name = input_name || 'metric-' + metric.metric_id
 	options = metric.options
 	icon = options['icon']
@@ -53,13 +57,18 @@ span.score(title="Average")
 	| #{display}
 
 script.
+	// This check makes sure that the script is only run once.
 	if ( typeof RANGE_SCRIPT === 'undefined' ) {
 		RANGE_SCRIPT = true;
 		
+		// When our front-end code receives an update on the value of this metric, this callback will run to update the UI.
 		jQuery('.metric-range').on( 'evaluate-update', function( event, data, choice ) {
 			var element = jQuery(this);
+
+			// Set the score value to what we received.
 			element.find('.score').text( data.score );
 
+			// If the new vote is different from the expected value, make sure we update it.
 			if ( data.vote != choice ) {
 				if ( '#{icon}' == 'slider' || '#{icon}' == 'numeric' ) {
 					element.find( 'input' ).val( data.vote );
@@ -70,6 +79,7 @@ script.
 				}
 			}
 			
+			// Prevent the default evaluate-update event
 			event.stopPropagation();
 		} );
 	}

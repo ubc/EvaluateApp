@@ -1,4 +1,8 @@
 
+/**
+ * This module links together the various database modules with it's install function.
+ */
+
 const METRIC = require('./metric');
 const SCORE = require('./score');
 const VOTE = require('./vote');
@@ -6,6 +10,9 @@ const VOTE = require('./vote');
 const BLUEPRINT = require('./blueprint');
 const SUBMETRIC = require('./submetric');
 
+/**
+ * Links and syncs the database tables.
+ */
 module.exports.install = function() {
 	METRIC.hasMany( SCORE, {
 		foreignKey: 'metric_id',

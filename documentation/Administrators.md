@@ -29,6 +29,7 @@ You can also pipe the output into log files using this command: `DEBUG=eval:* np
 If you wish to narrow down the kind of DEBUG output you receive you can replace the `*` with one of these options:
  * `lrs` for messages related to the Learning Record Store
  * `security` for messages related to Transactions
+ * `database` for messages related to database queries.
  * `voting` for messages related to the parsing and storage of votes.
  * `metrics` for messages related to creating/saving/deleting metrics.
  * `blueprints` for messages related to creating/saving/deleting blueprints. (aka Rubrics)

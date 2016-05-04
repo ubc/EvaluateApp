@@ -17,17 +17,23 @@ const METRICS = require('./routes/metrics');
 const BLUEPRINTS = require('./routes/blueprints');
 const DATA = require('./routes/data');
 
+// Link and initialize all database models.
 MODELS.install();
 
+// Create the Express app.
 var app = EXPRESS();
 
-// view engine setup
+// Set up the views engine, using Jade
 app.set( 'views', PATH.join( __dirname, 'views' ) );
 app.set( 'view engine', 'jade' );
 
-// uncomment after placing your favicon in /public
-//app.use(FAVICON(PATH.join(__dirname, 'public', 'favicon.ico')));
-app.use( LOGGER('dev') );
+// Define Middleware
+app.use( FAVICON( PATH.join( __dirname, 'public', 'favicon.ico' ) ) );
+
+if ( CONFIG.http_logging ) {
+	app.use( LOGGER( CONFIG.http_logging ) );
+}
+
 app.use( COOKIEPARSER() );
 app.use( BODYPARSER.json() );
 app.use( BODYPARSER.urlencoded( { extended: true } ) );
@@ -37,6 +43,7 @@ app.use( require('less-middleware')( '/less', {
 } ) );
 app.use( EXPRESS.static( PATH.join( __dirname, 'public' ) ));
 
+// Get all the http routes.
 var routers = {
 	'/': require('./routes/index'),
 	'/data': require('./routes/data'),
@@ -45,23 +52,30 @@ var routers = {
 	'/xapi': require('./routes/xapi'),
 };
 
+// Initialize the http routes.
 Object.keys( routers ).forEach( function( path ) {
 	app.use( path, routers[path] );
+
+	// Add the transaction and api key handlers.
 	routers[path].param( 'transaction_id', UTIL.parse_transaction_id );
 	routers[path].param( 'api_key', UTIL.parse_api_key );
 } );
 
 // Catch 404 and forward to error handler
-app.use( function(req, res, next) {
+app.use( function( req, res, next ) {
+	// If the request hasn't been handled by now that means it is a 404.
+	// Generate an error.
 	var err = new Error( "Not Found: " + req.originalUrl );
 	err.status = 404;
+	// Send the error on.
 	next(err);
 } );
 
-app.use(function(err, req, res, next) {
-	res.status(err.status || 500);
+// Error handler.
+app.use( function( err, req, res, next ) {
+	res.status( err.status || 500 );
 	console.error( "Error", err.message, err.stack );
 	res.end( err.message );
-});
+} );
 
 module.exports = app;

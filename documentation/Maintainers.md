@@ -13,6 +13,7 @@ Since you will be working with the entire code base - you should familiarize you
 - [The Concept of Blueprints / Rubrics](#the-concept-of-blueprints--rubrics)
 - [Learning Record Store](#learning-record-store)
 - [Database](#database)
+- [Metric Sorting](#metric-sorting)
 - [Future Improvements](#future-improvements)
 
 ## Code Philosophies
@@ -135,6 +136,10 @@ Additionally we had to extend the [xAPI](https://github.com/adlnet/xAPI-Spec/blo
 The database code is implemented using the [Sequelize](http://docs.sequelizejs.com/en/latest/) library. Initial set up is performed in `includes/database.js`
 
 However the actual table definitions are located in the `models` folder. These database tables are automatically generated if they don't already exist, and can be used as defined in the Sequelize documentation.
+
+## Metric Sorting
+
+// TODO: Write this.
 
 ## Future Improvements
 

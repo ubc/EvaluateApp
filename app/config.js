@@ -13,6 +13,10 @@ module.exports = {
 		port: 3000, // The port on which to start the server.
 		url: "http://localhost:3000", // This url should point to the root folder of your Evaluate installation.
 	},
+	// This is the HTTP request logging mode.
+	// See here for options https://github.com/expressjs/morgan#predefined-formats
+	// Or set false to disable http logging.
+	http_logging: 'combined',
 	// These are the configuration options for the database connection.
 	database: {
 		host: 'localhost',

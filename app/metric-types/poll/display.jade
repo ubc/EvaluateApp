@@ -1,5 +1,8 @@
 -
-	// Expects variables metric, score, [user_vote], [transaction_id], [name]
+	// This file defines how a "Poll" metric should look.
+	// Expects variables metric, score, [user_vote], [transaction_id], [input_name]
+
+	// Explicitly define the expected variables.	
 	name = input_name || 'metric-' + metric.metric_id
 	options = metric.options || {}
 	answers = options['answers'] ? options['answers'].split( /\r?\n/ ) : []
@@ -33,16 +36,15 @@ ul
 			)
 
 script.
+	// This check makes sure that the script is only run once.
 	if ( typeof POLL_SCRIPT === 'undefined' ) {
 		POLL_SCRIPT = true;
 		
+		// When our front-end code receives an update on the value of this metric, this callback will run to update the UI.
 		jQuery('.metric-poll').on( 'evaluate-update', function( event, data, choice ) {
 			var element = jQuery(this);
 
-			for ( var i in choice ) {
-				choice[i] = parseInt( choice[i] );
-			}
-
+			// Set the score values to what we received, for each poll option.
 			for ( var k in data.score_data ) {
 				var value = data.score_data[k];
 				var score = element.find( 'span.score-' + k );
@@ -53,7 +55,14 @@ script.
 				progress.attr( 'max', data.total );
 			}
 
+			// Since the data object will contain integers for each vote, make sure that "choice" has the same, for later comparison.
+			for ( var i in choice ) {
+				choice[i] = parseInt( choice[i] );
+			}
+
+			// If the new and expected vote are not the same, update our UI.
 			if ( Object.toString( data.vote ) != Object.toString( choice ) ) {
+				// Loop through each poll option and update it.
 				element.find( 'input' ).each( function() {
 					var input = jQuery(this);
 					var checked = data.vote != null && data.vote.indexOf( parseInt( input.val() ) ) > -1;
