@@ -139,7 +139,9 @@ However the actual table definitions are located in the `models` folder. These d
 
 ## Metric Sorting
 
-// TODO: Write this.
+In most cases using a simple average is not a good method for sorting. For the Two Way and Range metrics we use special formulas to calculate the sorting. Namely a Wilson score and a Bayesian Average, respectively.
+
+The reasoning for this is well explained by this article: [How Now to Sort by Average Rating](http://www.evanmiller.org/how-not-to-sort-by-average-rating.html)
 
 ## Future Improvements
 

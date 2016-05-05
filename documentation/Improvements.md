@@ -49,16 +49,47 @@ Consule the [xAPI Spec](https://github.com/adlnet/xAPI-Spec/blob/master/xAPI.md)
 
 ## Better Valuelist Sorting
 
-// TODO: Write this.
+Currently the Valuelist metric type uses a simple average sorting method. For reasons explained by [this article](http://www.evanmiller.org/how-not-to-sort-by-average-rating.html), that is a bad idea.
+
+This could be improved by using a Bayesian Average, or some other formula.
+
+You can look at the `metric-types/range/functions.js` for an example of an implementation of the Bayesian Average formula.
 
 ## No-Javascript Fallbacks
 
-// TODO: Write this.
+Currently the system does not work without JavaScript. Although JavaScript is a reasonable expectation in this day and age, we could improve this.
+
+Currently the `/vote`, `/save`, and `/destroy` routes only work with AJAX. However, a simple change could make them work for GET requests as well, followed by a redirect back to the the `/embed` or `/edit` page.
+
+For example the `/vote` path could be implemented with a new handler which looks something like this.
+```javascript
+router.get( '/vote/:transaction_id', function( req, res, next ) {
+	// Get the vote data.
+	var vote = req.query;
+
+	// Perform normal saving actions.
+	// ...
+
+	// Redirect the request back to the /embed path.
+	var transaction_id = TRANSACTION.create( '/embed', req.params.transaction );
+	res.redirect( '/embed/' + transaction_id );
+} );
+```
+
+Note however that the above solution does not user `TRANSACTION.renew(...)` which would allow unlimited vote renewals. That is an issue which will also need to be addressed.
+
+Finally just make sure that when you click on a vote, there is an appropriate link that will load `/vote/:transaction_id` 
 
 ## Handle Unsorted Contexts
 
-// TODO: Write this.
+Right now the `/metrics/sort/:api_key` route will only include contexts which have been rated in the sorting.
+
+This is a major flaw as it entirely defeats the purpose of the [Better Metric Sorting](./Maintainers.md#metric-sorting) that we use. By not including the unrated contexts in our sorting, we force the end user to choose a location for them.
+
+Instead we need to define a default sorting value for unsorted contexts. This value should vary based on different metric settings. (Particularly with the Bayesian average, used by the Range metric type)
 
 ## Native Data Displays
 
-// TODO: Write this.
+The current platform only provides raw data using the `/data/:api_key` route. This means that every client has to parse and display the data themselves.
+
+In most cases the client displays will not differ much. We could offer a generic data display, much like our Metric editor, using the `/data/list/:transaction_id` route. Or any other routes.
