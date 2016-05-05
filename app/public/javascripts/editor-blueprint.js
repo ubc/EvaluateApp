@@ -17,6 +17,7 @@ var Evaluate_Editor_Blueprint = {
 
 		submetric_list.on( 'change', 'select.switch', Evaluate_Editor_Blueprint.on_submetric_switch_change );
 		jQuery('form').on( 'submit', Evaluate_Editor_Blueprint.on_form_submit );
+		jQuery(document).ajaxComplete( Evaluate_Editor_Blueprint.on_form_submit_complete );
 		console.log('Loaded editor-blueprint.js');
 	},
 
@@ -46,8 +47,6 @@ var Evaluate_Editor_Blueprint = {
 	/**
 	 * Triggers when the form is submitted.
 	 * This function will then make sure that each submetric has the appropriate names.
-	 * 
-	 * TODO: This function does not allow for the situation where a user wants to edit their rubric after saving, because it destructively edits the name.
 	 */
 	on_form_submit: function() {
 		// Disable the hidden form elements so that they are not included in the form submission.
@@ -67,8 +66,16 @@ var Evaluate_Editor_Blueprint = {
 				// Loop through each input and set it's name.
 				inputs.each( function( i, input ) {
 					var element = jQuery(input);
+					var name = element.data( 'raw-name' );
 
-					var name = element.prop( 'name' );
+					// This block exists to preserve the original format of the name, for future form submissions.
+					if ( ! name ) {
+						// If the name has not already been preserved in data-raw-name
+						name = element.prop( 'name' );
+						// Then preserve it.
+						element.data( 'raw-name', name );
+					}
+
 					var split = name.split( '[', 2 );
 
 					// Each submetric input must start with submetric[#], which is what we are setting up here.
@@ -85,6 +92,15 @@ var Evaluate_Editor_Blueprint = {
 			}
 		} );
 	},
+
+	/**
+	 * This triggers whenever an ajax request completes.
+	 * We expect that that only occurs when a blueprint is saved or destroyed.
+	 */
+	on_form_submit_complete: function() {
+		// Renable the empty inputs so that the user can continue editing
+		jQuery( '.submetric.empty *:input' ).prop( 'disabled', false );
+	}
 };
 
 jQuery(document).ready( Evaluate_Editor_Blueprint.init );
