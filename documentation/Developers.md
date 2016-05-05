@@ -124,7 +124,7 @@ These endpoints are available, but it is not necessary for you to support them, 
 
 ### Vote  /vote/:transaction_id
 **Method:** POST  
-**Response:** UUID | `false`  
+**Response:** UUID (v4) | `false`  
 **Transaction Payload:**
 * **metric_id**, The ID of the metric to vote on.
 * **context_id**, The url of the context to vote on.
@@ -142,15 +142,17 @@ Saves a vote to the system. Returns a renewed transaction id. Or false, if no re
 **Reponse:** `"inprogress"`  
 **Transaction Payload:**
 * **metrid_id**, The metric to be deleted.
+
 **POST Body:** None
 
 Removes a metric from the system.
 
 ### Save Metric  /metrics/save/:transaction_id
 **Method:** POST  
-**Response:** UUID | `false`  
+**Response:** UUID (v4) | `false`  
 **Transaction Payload:**
 * **metric_id**, (optional) The ID of the metric to save. If not provided, then a new metric will be created.
+
 **POST Body:**
 * The attributes for the new metric. If you really want to use this end point. Examine [views/metrics/editor.jade](../views/metrics/editor) for the appropriate values.
 
@@ -166,9 +168,10 @@ Removes a blueprint from the system.
 
 ### Save Blueprint  /blueprints/save/:transaction_id
 **Method:** POST  
-**Response:** UUID | `false`  
+**Response:** UUID (v4) | `false`  
 **Transaction Payload:**
 * **blueprint_id**, (optional) The ID of the blueprint to save. If not provided, then a new blueprint will be created.
+
 **POST Body:**
 * The attributes for the new blueprint. If you really want to use this end point. Examine [views/blueprints/editor.jade](../views/blueprints/editor) for the appropriate values.
 
