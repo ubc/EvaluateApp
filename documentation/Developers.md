@@ -4,7 +4,7 @@ These instructions are for people who are looking to write code to interface wit
 
 Overall the method is very simple. All authentication is done using an api key, which should be provided to you by the Administrator of your Evaluate Server.
 
-You can access the system by making requests to various paths on the server. All accesses will only provide access to data which is associated with your API Key.
+You can access the system by making requests to various endpoints (aka paths, routes) on the server. All accesses will only provide access to data which is associated with your API Key.
 
 ### Example Request (PHP) - Embed a Metric
 ```php
@@ -21,8 +21,8 @@ $embed_url = "http://localhost:3000/embed/" . $transaction_id;
 ```html
 <iframe src="<?php echo $embed_url; ?>"></iframe>
 ```
-a
-Each request is made to one of the endpoints below. Some endpoints can be accessed directly with an api key. While others require you to first establish a transaction. The reason for this is to avoid the API key being leaked to your end user.
+
+Each request is made to one of the server's endpoints below. Some endpoints can be accessed directly with an api key. While others require you to first establish a transaction. The reason for this is to avoid the API key being leaked to your end user.
 
 The api key or transaction id should be appended to the endpoint path, as noted below. All endpoints use appropriate HTTP status codes when responding.
 
