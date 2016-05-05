@@ -120,7 +120,7 @@ Retrieve lists of votes and scores, organized by metrics.
 
 
 ## Hidden Endpoints
-These access points are available, but it is not necessary for you to support them, as they are used indirectly by the public access points.
+These endpoints are available, but it is not necessary for you to support them, as they are used indirectly by the public endpoints.
 
 ### Vote  /vote/:transaction_id
 **Method:** POST  
