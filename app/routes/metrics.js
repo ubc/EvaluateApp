@@ -144,14 +144,22 @@ router.post( '/save/:transaction_id', function( req, res ) {
 		} );
 	} else {
 		DEBUG( "Updating Metric", metric_id, data );
-		// TODO: Check that the metric API key matches.
+		
 		METRIC.update( data, {
-			where: { metric_id: metric_id },
-		} ).then( function() {
-			// When successful renew the transaction to allow the client to continue editing, and return that transaction.
-			DEBUG( "Metric Updated", metric_id );
-			var transaction_id = TRANSACTION.renew( req.params.transaction_id );
-			res.status(200).json( { transaction_id: transaction_id } );
+			where: {
+				metric_id: metric_id
+				api_key: req.params.transaction.api_key,
+			},
+		} ).then( function( result ) {
+			if ( result[0] == 0 ) {
+				// If no rows were affected return an error.
+				res.status(404).send( "The metric you attempted to update does not exist." );
+			} else {
+				// When successful renew the transaction to allow the client to continue editing, and return that transaction.
+				DEBUG( "Metric Updated", metric_id );
+				var transaction_id = TRANSACTION.renew( req.params.transaction_id );
+				res.status(200).json( { transaction_id: transaction_id } );
+			}
 		} );
 	}
 } );
@@ -162,24 +170,18 @@ router.post( '/destroy/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['metric_id'], req.params.transaction, res ) ) { return; }
 	// Extract the metric id.
 	var metric_id = req.params.transaction.metric_id;
+	// Extract the api key.
+	var api_key = req.params.transaction.api_key;
 	
-	// TODO: Check that the Metric api key matches.
-
 	// Tell the database to destroy the metric.
 	METRIC.destroy( {
-		where: { metric_id: metric_id },
-	} ).then( function() {
+		where: {
+			metric_id: metric_id
+			api_key: api_key,
+		},
+	} ).then( function( affected_row_count ) {
 		DEBUG( "Destroyed Metric", req.params.transaction.metric_id );
-	} );
-
-	// Tell the database to destroy associated votes.
-	VOTE.destroy( {
-		where: { metric_id: metric_id },
-	} );
-
-	// Tell the database to destroy associated scores.
-	SCORE.destroy( {
-		where: { metric_id: metric_id },
+		// Related Vote and Score objects wil be destroyed via cascade.
 	} );
 	
 	// Tell the client that the destruction has been requested.

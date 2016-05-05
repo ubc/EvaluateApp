@@ -103,15 +103,29 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 	} else {
 		DEBUG( "Updating Blueprint", blueprint_id, data );
 		// Update the existing blueprint.
-		// TODO: Check that the blueprint API key matches.
 		promise = BLUEPRINT.update( data, {
-			where: { blueprint_id: blueprint_id },
+			where: {
+				blueprint_id: blueprint_id,
+				api_key: req.params.transaction.api_key,
+			},
 		} );
 	}
 
 	// When the creation or updating is finished, then we can save the submetrics.
-	promise.then( function( blueprint ) {
-		blueprint_id = blueprint_id || blueprint.blueprint_id;
+	promise.then( function( result ) {
+		if ( blueprint_id == null ) {
+			// If this was a create operation.
+			blueprint_id = result.blueprint_id;
+		} else {
+			// If this was an update operation.
+			affected_row_count = result[0]
+			
+			if ( affected_row_count < 1 ) {
+				res.status(404).send( "The blueprint you attempted to update does not exist." );
+				return;
+			}
+		}
+
 		DEBUG( "Blueprint Saved", blueprint_id, "with", submetrics.length, "submetrics" );
 
 		// Extract the IDs of each submetric.
@@ -160,12 +174,14 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 router.post( '/destroy/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['blueprint_id'], req.params.transaction, res ) ) { return; }
 
-	// TODO: Check that the blueprint api key matches.
-
 	BLUEPRINT.destroy( {
-		where: { blueprint_id: req.params.transaction.blueprint_id },
+		where: {
+			blueprint_id: req.params.transaction.blueprint_id,
+			api_key: req.params.api_key,
+		},
 	} ).then( function() {
 		DEBUG( "Destroyed Blueprint", req.params.transaction.blueprint_id );
+		// Related Submetric objects wil be destroyed via cascade.
 	} );
 
 	res.status(202).send("inprogress");
