@@ -6,7 +6,7 @@ Overall the method is very simple. All authentication is done using an api key, 
 
 You can access the system by making requests to various paths on the server. All accesses will only provide access to data which is associated with your API Key.
 
-### Example Request - Embed a Metric
+### Example Request (PHP) - Embed a Metric
 ```php
 $api_key = "4bfb4e2a-405d-4a85-872f-32764604f9cd";
 $query = http_build_query( array(
