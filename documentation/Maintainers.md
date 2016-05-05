@@ -22,6 +22,7 @@ In the design of this code base care has been taken to make it as extensible and
  * Each file has a clearly defined purpose.
  * Definitions for metric types are entirely encompassed in the 'metric-types' folder.
  * Whenever possible features are confined to one file, to make it easy to change.
+ * All configuration of the application is done in `config.js`
 
 ## Major Libraries Used
  * [Express](http://expressjs.com/) - a library for implementing our HTTP server.
