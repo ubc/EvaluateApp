@@ -4,9 +4,9 @@ These instructions are for people who are looking to write code to interface wit
 
 Overall the method is very simple. All authentication is done using an api key, which should be provided to you by the Administrator of your Evaluate Server.
 
-You can access the system by making requests to various paths on the server. All accesses will only provide access to data which is associated with your API Key.
+You can access the system by making requests to various endpoints (aka paths, routes) on the server. All accesses will only provide access to data which is associated with your API Key.
 
-### Example Request - Embed a Metric
+### Example Request (PHP) - Embed a Metric
 ```php
 $api_key = "4bfb4e2a-405d-4a85-872f-32764604f9cd";
 $query = http_build_query( array(
@@ -21,8 +21,8 @@ $embed_url = "http://localhost:3000/embed/" . $transaction_id;
 ```html
 <iframe src="<?php echo $embed_url; ?>"></iframe>
 ```
-a
-Each request is made to one of the endpoints below. Some endpoints can be accessed directly with an api key. While others require you to first establish a transaction. The reason for this is to avoid the API key being leaked to your end user.
+
+Each request is made to one of the server's endpoints below. Some endpoints can be accessed directly with an api key. While others require you to first establish a transaction. The reason for this is to avoid the API key being leaked to your end user.
 
 The api key or transaction id should be appended to the endpoint path, as noted below. All endpoints use appropriate HTTP status codes when responding.
 
@@ -120,11 +120,11 @@ Retrieve lists of votes and scores, organized by metrics.
 
 
 ## Hidden Endpoints
-These access points are available, but it is not necessary for you to support them, as they are used indirectly by the public access points.
+These endpoints are available, but it is not necessary for you to support them, as they are used indirectly by the public endpoints.
 
 ### Vote  /vote/:transaction_id
 **Method:** POST  
-**Response:** UUID | `false`  
+**Response:** UUID (v4) | `false`  
 **Transaction Payload:**
 * **metric_id**, The ID of the metric to vote on.
 * **context_id**, The url of the context to vote on.
@@ -142,15 +142,17 @@ Saves a vote to the system. Returns a renewed transaction id. Or false, if no re
 **Reponse:** `"inprogress"`  
 **Transaction Payload:**
 * **metrid_id**, The metric to be deleted.
+
 **POST Body:** None
 
 Removes a metric from the system.
 
 ### Save Metric  /metrics/save/:transaction_id
 **Method:** POST  
-**Response:** UUID | `false`  
+**Response:** UUID (v4) | `false`  
 **Transaction Payload:**
 * **metric_id**, (optional) The ID of the metric to save. If not provided, then a new metric will be created.
+
 **POST Body:**
 * The attributes for the new metric. If you really want to use this end point. Examine [views/metrics/editor.jade](../views/metrics/editor) for the appropriate values.
 
@@ -166,9 +168,10 @@ Removes a blueprint from the system.
 
 ### Save Blueprint  /blueprints/save/:transaction_id
 **Method:** POST  
-**Response:** UUID | `false`  
+**Response:** UUID (v4) | `false`  
 **Transaction Payload:**
 * **blueprint_id**, (optional) The ID of the blueprint to save. If not provided, then a new blueprint will be created.
+
 **POST Body:**
 * The attributes for the new blueprint. If you really want to use this end point. Examine [views/blueprints/editor.jade](../views/blueprints/editor) for the appropriate values.
 
