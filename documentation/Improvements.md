@@ -1,5 +1,6 @@
 # Possible Future Improvements
 
+- [SSL Support](#ssl-support)
 - [LTI Integration](#lti-integration)
 - [Pre-Written Clients](#pre-written-clients)
 - [Additional Metric Types](#additional-metric-types)
@@ -9,6 +10,10 @@
 - [No-Javascript Fallbacks](#no-javascript-fallbacks)
 - [Handle Unsorted Contexts](#handle-unsorted-contexts)
 - [Native Data Displays](#native-data-displays)
+
+## SSL Support
+
+Since we are sending API keys in the URL of various requests, we should really support SSL on the Evaluate server to ensure that the API key is not leaked. Otherwise a malicious user could gain access to the entire metric library associated with that API key, and make unrestricted modifications to it.
 
 ## LTI Integration
 As this platform reached version 1.0.0, the LTI integration feature was stripped out. This was a major simplification move, however there might be a good basis for including it.
