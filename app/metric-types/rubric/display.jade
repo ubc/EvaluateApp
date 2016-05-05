@@ -14,7 +14,7 @@ form
 		-
 			submetric_id = submetric.id
 			title = submetric.options['title'] || ""
-			score = rubric_score.data ? rubric_score.data[submetric_id] : {}
+			score = rubric_score.data ? rubric_score.data[submetric_id] || {} : {}
 
 			// Get the html for the submetric.
 			html = submetric.type.render_display( {
@@ -22,7 +22,7 @@ form
 				metric: submetric,
 				input_name: 'submetric-' + submetric_id,
 				user_vote: rubric_user_vote[submetric_id],
-				score: score != null ? rubric_score.data[submetric_id] : {},
+				score: score,
 			} );
 
 		div.submetric(id= "submetric-" + submetric_id, class= "metric-"+submetric.type.slug, data-id= submetric_id)

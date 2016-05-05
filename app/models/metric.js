@@ -7,9 +7,6 @@
 const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 const TYPES = require('../metric-types');
-const DEBUG = require('debug')('eval:database');
-
-DEBUG("Metric types", Object.keys(TYPES));
 
 module.exports = DATABASE.define( 'metric', {
 	metric_id: {

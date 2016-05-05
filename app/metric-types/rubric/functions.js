@@ -65,8 +65,6 @@ module.exports.adjust_score = function( score, new_value, old_value, metric, sub
 	// Get the scoring data for the submetrics.
 	var submetric_data = score.data || {};
 
-	// TODO: Check that the score is being set properly for rubrics.
-
 	// Adjust the vote count.	
 	if ( new_value !== old_value ) {
 		if ( new_value === null ) {

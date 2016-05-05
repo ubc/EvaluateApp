@@ -85,20 +85,35 @@ var Evaluate_Editor = {
 		jQuery( '.options:hidden *:input' ).prop( 'disabled', true );
 
 		// Send an ajax request with the data.
-		jQuery.post( form.prop( 'action' ), form.serialize(), function( response ) {
+		jQuery.post( form.prop( 'action' ), form.serialize(), function( response, textStatus, xhr ) {
 			console.log( "Received", response, typeof response );
 
 			// Parse out the base path that this form uses for it's ajax request.
 			var path = form.prop( 'action' );
 			path = path.split("/");
-			path.pop();
+			path.pop(); // Remove the transaction_id from the end.
+			path.pop(); // Remove the "save" part of the path.
 			path = path.join("/");
 
-			// Save the path with the new transaction id.
-			form.prop( 'action', path + "/" + response.transaction_id );
-
-			// Set the save button to show that the values have been saved.
-			submit_button.val("Saved");
+			switch ( xhr.status ) {
+				case 200:
+					// Save the path with the new transaction id.
+					form.prop( 'action', path + "/save/" + response.save_transaction_id );
+					// Refresh the preview, if there is one.
+					if ( response.embed_transaction_id ) {
+						jQuery( '#preview' ).prop( 'src', "/embed/" + response.embed_transaction_id );
+					}
+					// Set the save button to show that the values have been saved.
+					submit_button.val("Saved");
+					break;
+				case 201:
+					// Reload the page with a new editor.
+					window.location.href = path + "/edit/" + response.edit_transaction_id;
+					break;
+				default:
+					jQuery( '#error-display' ).text( response );
+					break;
+			}
 		}, 'json' ).fail( function( error ) {
 			// On a failure, reset the save button, showing that data still needs to be saved.
 			submit_button.val("Save");

@@ -4,6 +4,8 @@
  * It is designed to extend the existing `editor.js` file.
  */
 
+ // TODO: Fix this bug: Currently if you add submetrics, then save, add more submetrics, and save again. The first set of submetrics will be duplicated. This is because the saved submetrics are only assigned a submetric id, if the page is reloaded.
+
 var Evaluate_Editor_Blueprint = {
 
 	// Holds the html element where submetrics are listed.
@@ -27,17 +29,17 @@ var Evaluate_Editor_Blueprint = {
 	on_submetric_switch_change: function() {
 		var element = jQuery(this);
 		var value = element.val();
-		var submetric = element.closest('.submetric');
+		var submetric = element.closest( '.submetric' );
 
 		if ( value == '' ) {
 			// If the new type is empty, then remove this submetric.
 			submetric.remove();
-		} else if ( submetric.hasClass('empty') ) {
+		} else if ( submetric.hasClass( 'empty' ) ) {
 			// If this is a new submetric.
-			submetric.removeClass('empty');
+			submetric.removeClass( 'empty' );
 
 			// Change the text of the first switch element, to signal that switching back will delete this submetric.
-			element.children().first().text("- Delete -");
+			element.children().first().text( "- Delete -" );
 
 			// Add a new submetric to the list.
 			submetric_list.append( submetric_template.clone() );

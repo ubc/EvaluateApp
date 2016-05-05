@@ -8,6 +8,7 @@
 const EXPRESS = require('express');
 const PROMISE = require('sequelize').Promise;
 const METRIC = require('../models/metric');
+const SUBMETRIC = require('../models/submetric');
 const VOTE = require('../models/vote');
 const SCORE = require('../models/score');
 const TRANSACTION = require('../includes/transaction');

@@ -9,6 +9,7 @@ const LOGGER = require('morgan');
 const COOKIEPARSER = require('cookie-parser');
 const BODYPARSER = require('body-parser');
 
+const CONFIG = require('./config');
 const MODELS = require('./models');
 const UTIL = require('./includes/util');
 

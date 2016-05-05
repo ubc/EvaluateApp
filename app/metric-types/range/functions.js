@@ -77,7 +77,7 @@ module.exports.adjust_score = function( score, new_value, old_value, metric ) {
 		vote_diff = new_value - old_value;
 
 		// Adjust the average with the new vote diff.
-		score.average = () ( score.average * score.count ) + vote_diff ) / score.count;
+		score.average = ( ( score.average * score.count ) + vote_diff ) / score.count;
 		score.display = score.average; // The value to display.
 
 		// For sorting, we use a special function to better approximate the true average.

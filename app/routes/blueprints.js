@@ -85,16 +85,18 @@ router.get('/edit/:transaction_id', function( req, res ) {
 router.post( '/save/:transaction_id', function( req, res, next ) {
 	// Get the blueprint id from the transaction.
 	var blueprint_id = req.params.transaction.blueprint_id || null;
+	// Is this going to be a new blueprint?
+	var is_new_blueprint = blueprint_id == null
 	// Get the data that defines this new blueprint.
 	var data = req.body;
 	// Extract the submetrics to save from the data.
-	var submetrics = data.submetrics;
+	var submetrics = data.submetrics || [];
 	delete data.submetrics;
 
 	// The promise from our database request.
 	var promise = null;
 
-	if ( blueprint_id == null ) {
+	if ( is_new_blueprint ) {
 		// If there is no blueprint_id then create a new one.
 		DEBUG( "Creating Blueprint", data );
 		data.api_key = req.params.transaction.api_key;
@@ -113,7 +115,7 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 
 	// When the creation or updating is finished, then we can save the submetrics.
 	promise.then( function( result ) {
-		if ( blueprint_id == null ) {
+		if ( is_new_blueprint ) {
 			// If this was a create operation.
 			blueprint_id = result.blueprint_id;
 		} else {
@@ -161,10 +163,20 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 
 			// Wait for all submetrics to complete
 			PROMISE.all( promises ).spread( function() {
-				// Renew their transaction so that they can save again if they want.
-				var transaction_id = TRANSACTION.renew( req.params.transaction_id );
-				// And send the new transacton_id back to the client.
-				res.status(200).json( { transaction_id: transaction_id } );
+				if ( is_new_blueprint ) {
+					var transaction_data = req.params.transaction;
+					transaction_data.blueprint_id = blueprint_id;
+
+					res.status(201).json( {
+						// Send them an editor transaction.
+						edit_transaction_id: TRANSACTION.create( "/blueprints/edit", transaction_data ),
+					} );
+				} else {
+					res.status(200).json( {
+						// Renew their transaction so that they can save again if they want.
+						save_transaction_id: TRANSACTION.renew( req.params.transaction_id ),
+					} );
+				}
 			} );
 		} );
 	} );
@@ -173,15 +185,23 @@ router.post( '/save/:transaction_id', function( req, res, next ) {
 // Destroys a blueprint, given a valid transaction id.
 router.post( '/destroy/:transaction_id', function( req, res ) {
 	if ( UTIL.is_missing_attributes( ['blueprint_id'], req.params.transaction, res ) ) { return; }
+	// Extract the blueprint id.
+	var blueprint_id = req.params.transaction.blueprint_id;
+	// Extract the api key.
+	var api_key = req.params.transaction.api_key;
 
 	BLUEPRINT.destroy( {
 		where: {
-			blueprint_id: req.params.transaction.blueprint_id,
-			api_key: req.params.api_key,
+			blueprint_id: blueprint_id,
+			api_key: api_key,
 		},
-	} ).then( function() {
-		DEBUG( "Destroyed Blueprint", req.params.transaction.blueprint_id );
-		// Related Submetric objects wil be destroyed via cascade.
+	} ).then( function( affected_row_count ) {
+		if ( affected_row_count > 0 ) {
+			DEBUG( "Destroyed Blueprint", blueprint_id );
+			// Related Submetric objects wil be destroyed via cascade.
+		} else {
+			DEBUG( "No Blueprint Destroyed", blueprint_id );
+		}
 	} );
 
 	res.status(202).send("inprogress");

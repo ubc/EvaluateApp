@@ -5,7 +5,7 @@ const UTIL = require('../../includes/util');
 // Define some variables for this metric type.
 module.exports = {
 	title: "Two Way",
-	description: "A simple positive/negative metric. Users can vote either +1 or -1."
+	description: "A simple positive/negative metric. Users can vote either +1 or -1.",
 	slug: "two-way",
 	// These values are also implicit
 	// valid_as_submetric: true,

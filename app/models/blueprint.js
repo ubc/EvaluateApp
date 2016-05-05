@@ -8,6 +8,7 @@ const SEQUELIZE = require('sequelize');
 const DATABASE = require('../includes/database');
 
 module.exports = DATABASE.define( 'blueprint', {
+	// TODO: Consider switching the blueprint ID to a UUID, as the blueprint ID may occasionally be visible.
 	blueprint_id: {
 		type: SEQUELIZE.INTEGER(11),
 		autoIncrement: true,

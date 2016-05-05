@@ -10,7 +10,8 @@ const DEBUG = require('debug')('eval:http');
 const HTTP = require('http');
 
 // Get port from the configuration and store in Express.
-APP.set( 'port', config.site.port );
+var port = CONFIG.site.port;
+APP.set( 'port', port );
 
 // Create an HTTP server.
 var server = HTTP.createServer(APP);

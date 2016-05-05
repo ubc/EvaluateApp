@@ -63,7 +63,7 @@ block content
 		br
 		strong= "Preview"
 		hr
-		iframe(src="/embed/#{transactions.embed_id}", frameborder="0")
+		iframe#preview(src="/embed/#{transactions.embed_id}", frameborder="0")
 
 
 mixin options(slug, active_type)

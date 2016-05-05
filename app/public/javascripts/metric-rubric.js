@@ -28,6 +28,8 @@ var Evaluate_Metric_Rubric = {
 	reset_form: function() {
 		// This will reset all inputs to their default.
 		jQuery( 'form' )[0].reset();
+		jQuery( '*:checkbox' ).removeAttr( 'checked' );		
+		Evaluate_Metric_Rubric.on_form_submit();
 	},
 
 	/**

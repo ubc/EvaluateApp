@@ -16,6 +16,8 @@ const TRANSACTION = require('../includes/transaction');
 const UTIL = require('../includes/util');
 const DEBUG = require('debug')('eval:metrics');
 
+DEBUG( "Metric Types", Object.keys( METRIC_TYPES ) );
+
 var router = EXPRESS.Router();
 
 // Sort a list of contexts, given a valid api key.
@@ -106,8 +108,13 @@ router.get( '/edit/:transaction_id', function( req, res ) {
 			var transactions = {
 				submit_id: TRANSACTION.create( "/metrics/save", transaction_data ),
 				delete_id: TRANSACTION.create( "/metrics/destroy", transaction_data ),
-				embed_id: TRANSACTION.create( "/embed", transaction_data ), // This one is for embedding the metric preview.
 			};
+
+			if ( metric_id ) {
+				// Only include an embed id, if we are editing an existing metric.
+				transactions.embed_id = TRANSACTION.create( "/embed", transaction_data );
+				// This one is for embedding the metric preview.
+			}
 
 			// Render the metric editor.
 			res.status(200).render( 'metrics/editor', {
@@ -125,6 +132,8 @@ router.get( '/edit/:transaction_id', function( req, res ) {
 router.post( '/save/:transaction_id', function( req, res ) {
 	// Pull out the metric id.
 	var metric_id = req.params.transaction.metric_id || null;
+	// Pull out the api key.
+	var api_key = req.params.transaction.api_key;
 	// Get the data to update this metric with.
 	var data = req.body;
 
@@ -133,22 +142,27 @@ router.post( '/save/:transaction_id', function( req, res ) {
 		DEBUG( "Creating Metric", data );
 
 		// Add the current api key to this metric's data, so that they are associated.
-		data.api_key = req.params.transaction.api_key;
+		data.api_key = api_key;
 
 		// Tell the database to create the metric.
 		METRIC.create( data ).then( function( metric ) {
 			// When successful renew the transaction to allow the client to continue editing, and return that transaction.
 			DEBUG( "Metric Created", metric.metric_id );
-			var transaction_id = TRANSACTION.renew( req.params.transaction_id, { metric_id: metric.metric_id } );
-			res.status(201).json( { transaction_id: transaction_id } );
+			var transaction_data = req.params.transaction;
+			transaction_data.metric_id = metric.metric_id;
+
+			res.status(201).json( {
+				// Send them an editor transaction.
+				edit_transaction_id: TRANSACTION.create( "/metrics/edit", transaction_data ),
+			} );
 		} );
 	} else {
 		DEBUG( "Updating Metric", metric_id, data );
 		
 		METRIC.update( data, {
 			where: {
-				metric_id: metric_id
-				api_key: req.params.transaction.api_key,
+				metric_id: metric_id,
+				api_key: api_key,
 			},
 		} ).then( function( result ) {
 			if ( result[0] == 0 ) {
@@ -157,8 +171,15 @@ router.post( '/save/:transaction_id', function( req, res ) {
 			} else {
 				// When successful renew the transaction to allow the client to continue editing, and return that transaction.
 				DEBUG( "Metric Updated", metric_id );
-				var transaction_id = TRANSACTION.renew( req.params.transaction_id );
-				res.status(200).json( { transaction_id: transaction_id } );
+
+				res.status(200).json( {
+					// Renew their transaction so that they can save again if they want.
+					save_transaction_id: TRANSACTION.renew( req.params.transaction_id ),
+					embed_transaction_id: TRANSACTION.create( "/embed", {
+						metric_id: metric_id,
+						api_key: api_key,
+					} )
+				} );
 			}
 		} );
 	}
@@ -176,12 +197,16 @@ router.post( '/destroy/:transaction_id', function( req, res ) {
 	// Tell the database to destroy the metric.
 	METRIC.destroy( {
 		where: {
-			metric_id: metric_id
+			metric_id: metric_id,
 			api_key: api_key,
 		},
 	} ).then( function( affected_row_count ) {
-		DEBUG( "Destroyed Metric", req.params.transaction.metric_id );
-		// Related Vote and Score objects wil be destroyed via cascade.
+		if ( affected_row_count > 0 ) {
+			DEBUG( "Destroyed Metric", metric_id, affected_row_count );
+			// Related Vote and Score objects wil be destroyed via cascade.
+		} else {
+			DEBUG( "No Metric Destroyed", metric_id );
+		}
 	} );
 	
 	// Tell the client that the destruction has been requested.
