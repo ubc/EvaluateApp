@@ -8,6 +8,7 @@ const FAVICON = require('serve-favicon');
 const LOGGER = require('morgan');
 const COOKIEPARSER = require('cookie-parser');
 const BODYPARSER = require('body-parser');
+const FORCE_SSL = require('express-ssl');
 
 const CONFIG = require('./config');
 const MODELS = require('./models');
@@ -33,6 +34,10 @@ app.use( FAVICON( PATH.join( __dirname, 'public', 'favicon.ico' ) ) );
 
 if ( CONFIG.http_logging ) {
 	app.use( LOGGER( CONFIG.http_logging ) );
+}
+
+if ( CONFIG.ssl ) {
+	app.use( FORCE_SSL() );
 }
 
 app.use( COOKIEPARSER() );

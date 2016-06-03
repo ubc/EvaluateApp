@@ -7,14 +7,26 @@
 const CONFIG = require('../config');
 const APP = require('../app');
 const DEBUG = require('debug')('eval:http');
-const HTTP = require('http');
 
 // Get port from the configuration and store in Express.
 var port = CONFIG.site.port;
 APP.set( 'port', port );
 
 // Create an HTTP server.
-var server = HTTP.createServer(APP);
+var server;
+
+if ( CONFIG.ssl ) {
+	const HTTPS = require('https');
+
+	server = HTTPS.createServer({
+		key: CONFIG.ssl.private_key,
+		cert: CONFIG.ssl.certificate,
+	}, APP);
+} else {
+	const HTTP = require('http');
+
+	server = HTTP.createServer(APP);
+}
 
 // Listen on provided port, on all network interfaces.
 server.listen(port);

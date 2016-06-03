@@ -13,11 +13,22 @@ module.exports = {
 		port: 3000, // The port on which to start the server.
 		url: "http://localhost:3000", // This url should point to the root folder of your Evaluate installation.
 	},
+
+	// SSL settings
+	ssl: false,
+	/*
+	ssl: {
+		private_key: fs.readFileSync( __dirname + '/includes/certs/privatekey.pem' ),
+		certificate: fs.readFileSync( __dirname + '/includes/certs/certificate.pem' ),
+	},
+	*/
+
 	// This is the HTTP request logging mode.
 	// See here for options https://github.com/expressjs/morgan#predefined-formats
 	// Or set false to disable http logging.
 	//http_logging: 'dev',
 	http_logging: 'combined',
+
 	// These are the configuration options for the database connection.
 	database: {
 		host: 'localhost',
@@ -27,6 +38,7 @@ module.exports = {
 		database: 'evaluate', // The database name that Evaluate will operate in.
 		dialect: 'mysql', // One of the following dialects: mysql, mariadb, sqlite, postgres, mssql
 	},
+
 	// A list of API Keys that will be accepted by this server.
 	// It is highly recommended that you use a UUID v4 for all your API Keys.
 	// You can generate a UUID at this url, https://www.uuidgenerator.net/version4
@@ -34,6 +46,7 @@ module.exports = {
 	api_keys: [
 		"4bfb4e2a-405d-4a85-872f-32764604f9cd", // Example key. Make sure you remove this!
 	],
+
 	// These are the configuration options for a Learning Record Store.
 	// If you do not want an LRS, simple set this option to false.
 	lrs: {
@@ -43,6 +56,7 @@ module.exports = {
 			password: "5UIRXbnEu8riMqT-eAU",
 		},
 	},
+	
 	// Configuration options for transactions.
 	// Transactions are used to keep the system safe by only authorizing users to perform certain actions.
 	// Be careful with how you set these values.
